@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Player Rating Calculator — Soccer, Basketball & Cricket Stats to a Score Out of 10</title>
+<meta name="description" content="Enter match stats — goals, assists, points, rebounds, runs, wickets — and get an honest player rating out of 10, calculated per position or role. Free tool for soccer, basketball, and cricket.">
+<meta name="keywords" content="player rating calculator, football rating out of 10, basketball player rating, cricket player rating, match rating generator, soccer stats calculator">
+<link rel="canonical" href="https://matchgrade.example.com/">
+
+<meta property="og:title" content="MatchGrade — Rate Any Player's Performance">
+<meta property="og:description" content="Turn match stats into an honest rating out of 10, for soccer, basketball, or cricket.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://matchgrade.example.com/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MatchGrade — Rate Any Player's Performance">
+<meta name="twitter:description" content="Stat sheet in, honest rating out. Soccer, basketball, cricket.">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "MatchGrade",
+  "applicationCategory": "SportsApplication",
+  "operatingSystem": "Any",
+  "description": "A stat-based player rating calculator for soccer, basketball, and cricket. Enter match stats and get a rating out of 10 based on position or role.",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Special+Elite&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#EDEAE2;
+    --paper-dark:#E3DFD3;
+    --ink:#1B1B18;
+    --ink-soft:#4A473F;
+    --pitch:#2F5233;
+    --pitch-deep:#20391F;
+    --red:#B23A2F;
+    --gold:#B8933F;
+    --line:#c9c3b2;
+    --accent: var(--pitch);
+    --accent-deep: var(--pitch-deep);
+  }
+
+  *{box-sizing:border-box;}
+
+  html,body{
+    margin:0;
+    padding:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Source Serif 4', serif;
+  }
+
+  body{
+    background-image:
+      radial-gradient(ellipse at top left, rgba(47,82,51,0.05), transparent 45%),
+      repeating-linear-gradient(0deg, rgba(0,0,0,0.015) 0px, rgba(0,0,0,0.015) 1px, transparent 1px, transparent 3px);
+  }
+
+  .wrap{
+    max-width:960px;
+    margin:0 auto;
+    padding:32px 20px 60px;
+  }
+
+  /* ---------- MASTHEAD ---------- */
+  .masthead{
+    border-bottom:3px solid var(--ink);
+    padding-bottom:14px;
+    margin-bottom:20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    flex-wrap:wrap;
+    gap:10px;
+  }
+
+  .masthead h1{
+    font-family:'Oswald', sans-serif;
+    font-weight:700;
+    font-size:2.5rem;
+    letter-spacing:-0.5px;
+    margin:0;
+    line-height:0.95;
+  }
+
+  .masthead h1 span{
+    color:var(--accent);
+  }
+
+  .masthead .tagline{
+    font-family:'Special Elite', monospace;
+    font-size:0.78rem;
+    color:var(--ink-soft);
+    text-align:right;
+    max-width:220px;
+    line-height:1.4;
+  }
+
+  /* ---------- SPORT SWITCHER ---------- */
+  .sport-switch{
+    display:flex;
+    gap:0;
+    border:1.5px solid var(--ink);
+    margin-bottom:22px;
+  }
+
+  .sport-switch button{
+    flex:1;
+    background:transparent;
+    border:none;
+    border-right:1.5px solid var(--ink);
+    padding:12px 6px;
+    font-family:'Oswald', sans-serif;
+    font-size:0.92rem;
+    letter-spacing:0.3px;
+    color:var(--ink-soft);
+    cursor:pointer;
+  }
+
+  .sport-switch button:last-child{border-right:none;}
+
+  .sport-switch button.active{
+    background:var(--ink);
+    color:var(--paper);
+  }
+
+  /* ---------- LAYOUT ---------- */
+  .board{
+    display:grid;
+    grid-template-columns:1.3fr 1fr;
+    gap:0;
+    border:1px solid var(--ink);
+  }
+
+  @media (max-width:760px){
+    .board{grid-template-columns:1fr;}
+  }
+
+  .sheet{
+    padding:26px 28px 30px;
+    border-right:1px solid var(--ink);
+  }
+
+  @media (max-width:760px){
+    .sheet{border-right:none; border-bottom:1px solid var(--ink);}
+  }
+
+  .sheet-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    margin-bottom:18px;
+    border-bottom:1px dashed var(--line);
+    padding-bottom:10px;
+  }
+
+  .sheet-head h2{
+    font-family:'Oswald', sans-serif;
+    font-size:1.05rem;
+    text-transform:uppercase;
+    letter-spacing:0.5px;
+    margin:0;
+    font-weight:600;
+  }
+
+  .sheet-no{
+    font-family:'Special Elite', monospace;
+    font-size:0.72rem;
+    color:var(--ink-soft);
+  }
+
+  .field-row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+    margin-bottom:14px;
+  }
+
+  .field{
+    margin-bottom:14px;
+  }
+
+  .field label{
+    display:block;
+    font-size:0.85rem;
+    color:var(--ink-soft);
+    margin-bottom:4px;
+    font-family:'Source Serif 4', serif;
+  }
+
+  select, input[type="number"], input[type="text"]{
+    width:100%;
+    background:transparent;
+    border:none;
+    border-bottom:1.5px solid var(--ink);
+    padding:6px 2px;
+    font-family:'Source Serif 4', serif;
+    font-size:1.05rem;
+    color:var(--ink);
+    outline:none;
+    appearance:none;
+    -webkit-appearance:none;
+  }
+
+  select{
+    background-image:linear-gradient(45deg, transparent 50%, var(--ink-soft) 50%), linear-gradient(135deg, var(--ink-soft) 50%, transparent 50%);
+    background-position: calc(100% - 10px) 14px, calc(100% - 4px) 14px;
+    background-size:6px 6px;
+    background-repeat:no-repeat;
+    padding-right:22px;
+    cursor:pointer;
+  }
+
+  input:focus, select:focus{
+    border-bottom-color:var(--accent);
+  }
+
+  .section-label{
+    font-family:'Oswald', sans-serif;
+    font-size:0.72rem;
+    letter-spacing:0.6px;
+    color:var(--accent);
+    margin:22px 0 10px;
+    padding-top:8px;
+    border-top:1px solid var(--line);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  }
+
+  .section-label:first-of-type{
+    margin-top:0;
+    border-top:none;
+    padding-top:0;
+  }
+
+  .optional-tag{
+    font-family:'Special Elite', monospace;
+    font-size:0.65rem;
+    color:#8a8578;
+    letter-spacing:0;
+  }
+
+  .collapse-toggle{
+    background:none;
+    border:none;
+    font-family:'Special Elite', monospace;
+    font-size:0.7rem;
+    color:var(--ink-soft);
+    cursor:pointer;
+    text-decoration:underline;
+    padding:0;
+  }
+
+  .optional-block{
+    display:none;
+  }
+  .optional-block.open{
+    display:block;
+  }
+
+  .checkline{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-bottom:10px;
+    font-size:0.95rem;
+  }
+
+  .checkline input[type="checkbox"]{
+    width:16px;
+    height:16px;
+    accent-color:var(--accent);
+  }
+
+  .result-toggle{
+    display:flex;
+    gap:0;
+    border:1.5px solid var(--ink);
+    margin-bottom:16px;
+  }
+
+  .result-toggle button{
+    flex:1;
+    background:transparent;
+    border:none;
+    padding:9px 4px;
+    font-family:'Oswald', sans-serif;
+    font-size:0.8rem;
+    letter-spacing:0.4px;
+    color:var(--ink-soft);
+    cursor:pointer;
+    border-right:1.5px solid var(--ink);
+  }
+
+  .result-toggle button:last-child{border-right:none;}
+
+  .result-toggle button.active{
+    background:var(--ink);
+    color:var(--paper);
+  }
+
+  .go-btn{
+    width:100%;
+    margin-top:22px;
+    background:var(--accent);
+    color:var(--paper);
+    border:none;
+    padding:14px;
+    font-family:'Oswald', sans-serif;
+    font-size:1rem;
+    letter-spacing:0.5px;
+    font-weight:600;
+    cursor:pointer;
+    transition:background 0.15s ease;
+  }
+
+  .go-btn:hover{
+    background:var(--accent-deep);
+  }
+
+  .go-btn:active{
+    transform:translateY(1px);
+  }
+
+  /* ---------- RESULT PANE ---------- */
+  .result{
+    padding:26px 28px 30px;
+    background:var(--paper-dark);
+    display:flex;
+    flex-direction:column;
+    position:relative;
+    overflow:hidden;
+  }
+
+  .result::before{
+    content:"";
+    position:absolute;
+    top:0; left:0; right:0; bottom:0;
+    background-image: repeating-linear-gradient(90deg, transparent, transparent 38px, rgba(0,0,0,0.02) 38px, rgba(0,0,0,0.02) 39px);
+    pointer-events:none;
+  }
+
+  .result-empty{
+    margin:auto;
+    text-align:center;
+    color:var(--ink-soft);
+    font-family:'Special Elite', monospace;
+    font-size:0.85rem;
+    line-height:1.7;
+    max-width:220px;
+  }
+
+  .result-empty .big-q{
+    font-family:'Oswald', sans-serif;
+    font-size:3rem;
+    color:var(--line);
+    display:block;
+    margin-bottom:6px;
+  }
+
+  .result-body{display:none;}
+  .result-body.show{display:block;}
+
+  .player-line{
+    font-family:'Oswald', sans-serif;
+    font-size:0.95rem;
+    text-transform:uppercase;
+    letter-spacing:0.3px;
+    color:var(--ink-soft);
+    margin-bottom:2px;
+  }
+
+  .pos-line{
+    font-family:'Special Elite', monospace;
+    font-size:0.75rem;
+    color:var(--ink-soft);
+    margin-bottom:20px;
+  }
+
+  .stamp{
+    position:relative;
+    margin:10px auto 18px;
+    width:160px;
+    height:160px;
+    border:5px solid var(--stamp-color, var(--accent));
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transform:rotate(-6deg);
+    flex-direction:column;
+  }
+
+  .stamp::before{
+    content:"";
+    position:absolute;
+    inset:8px;
+    border:1.5px solid var(--stamp-color, var(--accent));
+    border-radius:50%;
+  }
+
+  .stamp .num{
+    font-family:'Oswald', sans-serif;
+    font-weight:700;
+    font-size:3.1rem;
+    color:var(--stamp-color, var(--accent));
+    line-height:1;
+  }
+
+  .stamp .ten{
+    font-family:'Oswald', sans-serif;
+    font-size:0.95rem;
+    color:var(--stamp-color, var(--accent));
+    margin-top:-2px;
+  }
+
+  .verdict{
+    font-family:'Oswald', sans-serif;
+    text-align:center;
+    font-size:1.15rem;
+    font-weight:600;
+    margin-bottom:4px;
+  }
+
+  .verdict-sub{
+    text-align:center;
+    font-size:0.88rem;
+    color:var(--ink-soft);
+    margin-bottom:22px;
+    font-style:italic;
+  }
+
+  .breakdown{
+    border-top:1px dashed var(--line);
+    padding-top:14px;
+  }
+
+  .breakdown-title{
+    font-family:'Oswald', sans-serif;
+    font-size:0.68rem;
+    letter-spacing:0.6px;
+    color:var(--ink-soft);
+    margin-bottom:10px;
+  }
+
+  .bd-row{
+    display:flex;
+    justify-content:space-between;
+    font-size:0.88rem;
+    padding:4px 0;
+    border-bottom:1px dotted var(--line);
+    gap:10px;
+  }
+
+  .bd-row .amt{
+    font-family:'Oswald', sans-serif;
+    font-weight:500;
+    white-space:nowrap;
+  }
+
+  .bd-row .amt.pos{color:var(--accent);}
+  .bd-row .amt.neg{color:var(--red);}
+  .bd-row .amt.zero{color:var(--ink-soft);}
+
+  /* ---------- ABOUT / SEO COPY ---------- */
+  .about{
+    margin-top:36px;
+    border-top:1px solid var(--ink);
+    padding-top:22px;
+  }
+
+  .about h2{
+    font-family:'Oswald', sans-serif;
+    font-size:1.1rem;
+    margin:0 0 10px;
+  }
+
+  .about p{
+    font-size:0.95rem;
+    line-height:1.65;
+    color:var(--ink-soft);
+    max-width:78ch;
+    margin:0 0 14px;
+  }
+
+  .about h3{
+    font-family:'Oswald', sans-serif;
+    font-size:0.95rem;
+    margin:18px 0 6px;
+  }
+
+  /* ---------- FOOTER ---------- */
+  .footnote{
+    margin-top:22px;
+    font-size:0.8rem;
+    color:var(--ink-soft);
+    text-align:center;
+    line-height:1.6;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="masthead">
+    <h1>Match<span>Grade</span></h1>
+    <div class="tagline">stat sheet in, honest number out — no highlights required</div>
+  </div>
+
+  <div class="sport-switch" id="sportSwitch">
+    <button data-sport="soccer" class="active">Soccer</button>
+    <button data-sport="basketball">Basketball</button>
+    <button data-sport="cricket">Cricket</button>
+  </div>
+
+  <div class="board">
+
+    <!-- LEFT: INPUT SHEET -->
+    <div class="sheet">
+      <div class="sheet-head">
+        <h2 id="sheetTitle">Stat Sheet</h2>
+        <div class="sheet-no" id="sheetNo">form 02-B</div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label>Player name</label>
+          <input type="text" id="playerName" placeholder="e.g. Marcus">
+        </div>
+        <div class="field">
+          <label id="roleLabel">Position</label>
+          <select id="role"></select>
+        </div>
+      </div>
+
+      <div class="field" id="minutesField">
+        <label id="minutesLabel">Minutes played <span style="font-size:0.75rem; color:#8a8578;">(out of 90)</span></label>
+        <input type="number" id="minutes" value="90" min="1" max="120">
+      </div>
+
+      <div id="statFields"></div>
+      <div id="optionalFields"></div>
+      <div id="contextFields"></div>
+
+      <button class="go-btn" onclick="grade()">Grade the performance</button>
+    </div>
+
+    <!-- RIGHT: RESULT -->
+    <div class="result">
+      <div class="result-empty" id="emptyState">
+        <span class="big-q">?</span>
+        fill in the sheet<br>and the rating drops here
+      </div>
+
+      <div class="result-body" id="resultBody">
+        <div class="player-line" id="rPlayerName">—</div>
+        <div class="pos-line" id="rPosLine">—</div>
+
+        <div class="stamp" id="stamp">
+          <div class="num" id="rNum">6.0</div>
+          <div class="ten">/ 10</div>
+        </div>
+
+        <div class="verdict" id="rVerdict">Solid</div>
+        <div class="verdict-sub" id="rVerdictSub">did the job</div>
+
+        <div class="breakdown">
+          <div class="breakdown-title">HOW WE GOT THERE</div>
+          <div id="bdList"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footnote">
+    Baseline is 6.0 — an anonymous, did-their-job performance. Everything else is earned or lost from there.
+  </div>
+
+  <div class="about">
+    <h2>How the player rating is calculated</h2>
+    <p>MatchGrade turns a match stat line into a single rating out of 10, using the same starting point professional rating services use: a 6.0 baseline represents an anonymous, did-their-job performance. From there, the score moves up or down based on how each stat compares to what's typical for that specific position or role — a center-back's rating leans on tackles and clearances, a striker's leans on goals and shot quality, a point guard's leans on assists and turnovers, and a bowler's leans on wickets and economy rather than runs scored.</p>
+    <p>Every sport has its own scoring model, because the same raw number means something different depending on the role. Ten tackles is an outstanding game for a full-back and an odd stat line for a striker. MatchGrade only asks for the numbers that role actually generates, and shows exactly which stats pushed the rating up or down so the score is never a black box.</p>
+
+    <h3>Soccer ratings</h3>
+    <p>Choose from goalkeeper, centre-back, full-back, defensive mid, central mid, attacking mid, winger, or striker. Core stats are tailored to the role, with optional extras like dribbles, aerial duels, and errors leading to a goal for a more precise score.</p>
+
+    <h3>Basketball ratings</h3>
+    <p>Choose point guard, shooting guard, small forward, power forward, or center. The rating weighs shooting efficiency, rebounding, assists, and turnovers differently by position, with optional plus-minus and steal/block stats available for a sharper number.</p>
+
+    <h3>Cricket ratings</h3>
+    <p>Choose batter, bowler, all-rounder, or wicket-keeper. Batting rating factors in runs, balls faced, and strike rate; bowling factors in overs, wickets, and economy rate; wicket-keepers get credit for catches and stumpings on top of their batting line.</p>
+  </div>
+
+</div>
+
+<script>
+/* =========================================================
+   SPORT CONFIGS
+   Each sport defines: roles, stat field groups (core + optional),
+   context fields, minutes/innings label, and a rating function.
+========================================================= */
+
+let currentSport = 'soccer';
+let resultVal = 'win';
+let optionalOpen = false;
+
+/* ---------------- SOCCER ---------------- */
+const SOCCER_ROLES = {
+  GK: 'Goalkeeper', CB:'Centre-back', FB:'Full-back / wing-back', DM:'Defensive mid',
+  CM:'Central mid', AM:'Attacking mid', WNG:'Winger', ST:'Striker'
+};
+
+const SOCCER_CORE = {
+  GK: [ {id:'saves', label:'Saves made', def:3}, {id:'shotsFaced', label:'Shots faced', def:4} ],
+  CB: [ {id:'tackles', label:'Tackles won', def:2}, {id:'interceptions', label:'Interceptions', def:2}, {id:'clearances', label:'Clearances', def:3}, {id:'passAcc', label:'Pass accuracy %', def:85} ],
+  FB: [ {id:'tackles', label:'Tackles won', def:2}, {id:'interceptions', label:'Interceptions', def:1}, {id:'keyPasses', label:'Key passes / crosses', def:1}, {id:'passAcc', label:'Pass accuracy %', def:80} ],
+  DM: [ {id:'tackles', label:'Tackles won', def:3}, {id:'interceptions', label:'Interceptions', def:2}, {id:'passAcc', label:'Pass accuracy %', def:87}, {id:'passesCompleted', label:'Passes completed', def:35} ],
+  CM: [ {id:'passAcc', label:'Pass accuracy %', def:84}, {id:'keyPasses', label:'Key passes', def:1}, {id:'goals', label:'Goals', def:0}, {id:'assists', label:'Assists', def:0} ],
+  AM: [ {id:'keyPasses', label:'Key passes', def:2}, {id:'dribbles', label:'Successful dribbles', def:2}, {id:'goals', label:'Goals', def:0}, {id:'assists', label:'Assists', def:0} ],
+  WNG: [ {id:'dribbles', label:'Successful dribbles', def:2}, {id:'keyPasses', label:'Key passes / crosses', def:1}, {id:'goals', label:'Goals', def:0}, {id:'assists', label:'Assists', def:0} ],
+  ST: [ {id:'goals', label:'Goals', def:0}, {id:'assists', label:'Assists', def:0}, {id:'shotsTotal', label:'Shots taken', def:2}, {id:'shotsOnTarget', label:'Shots on target', def:1} ],
+};
+
+const SOCCER_OPTIONAL = {
+  GK: [ {id:'claims', label:'Crosses claimed', def:0}, {id:'penSaved', label:'Penalties saved', def:0}, {id:'cleanSheet', label:'Clean sheet?', type:'check'} ],
+  CB: [ {id:'duelsWon', label:'Duels won', def:4}, {id:'duelsTotal', label:'Duels contested', def:6}, {id:'aerialsWon', label:'Aerials won', def:2} ],
+  FB: [ {id:'duelsWon', label:'Duels won', def:3}, {id:'duelsTotal', label:'Duels contested', def:5}, {id:'assists', label:'Assists', def:0}, {id:'dribbles', label:'Successful dribbles', def:1} ],
+  DM: [ {id:'duelsWon', label:'Duels won', def:3}, {id:'duelsTotal', label:'Duels contested', def:5}, {id:'keyPasses', label:'Key passes', def:0} ],
+  CM: [ {id:'passesCompleted', label:'Passes completed', def:30}, {id:'tackles', label:'Tackles won', def:1}, {id:'interceptions', label:'Interceptions', def:1}, {id:'dribbles', label:'Successful dribbles', def:1} ],
+  AM: [ {id:'passAcc', label:'Pass accuracy %', def:80}, {id:'shotsOnTarget', label:'Shots on target', def:1}, {id:'dispossessed', label:'Times dispossessed', def:1} ],
+  WNG: [ {id:'shotsOnTarget', label:'Shots on target', def:1}, {id:'touchesBox', label:'Touches in the box', def:3}, {id:'dispossessed', label:'Times dispossessed', def:2} ],
+  ST: [ {id:'touchesBox', label:'Touches in the box', def:4}, {id:'holdUp', label:'Duels won (hold-up play)', def:2}, {id:'dispossessed', label:'Times dispossessed', def:2} ],
+};
+
+const SOCCER_BENCH = {
+  GK: { saveRatio:{bench:0.68, weight:3.5}, claims:{bench:1, weight:0.15}, penSaved:{bench:0, weight:1.2} },
+  CB: { tackles:{bench:2, weight:0.18}, interceptions:{bench:2, weight:0.18}, clearances:{bench:3, weight:0.10}, duelRatio:{bench:0.6, weight:1.6}, passAcc:{bench:85, weight:0.035}, aerialsWon:{bench:2, weight:0.15} },
+  FB: { tackles:{bench:2, weight:0.16}, interceptions:{bench:1, weight:0.16}, duelRatio:{bench:0.55, weight:1.3}, passAcc:{bench:80, weight:0.03}, keyPasses:{bench:1, weight:0.35}, assists:{bench:0, weight:1.1}, dribbles:{bench:1, weight:0.2} },
+  DM: { tackles:{bench:3, weight:0.16}, interceptions:{bench:2, weight:0.16}, passAcc:{bench:87, weight:0.04}, passesCompleted:{bench:35, weight:0.02}, duelRatio:{bench:0.6, weight:1.2}, keyPasses:{bench:0, weight:0.3} },
+  CM: { passAcc:{bench:84, weight:0.035}, passesCompleted:{bench:30, weight:0.02}, keyPasses:{bench:1, weight:0.4}, tackles:{bench:1, weight:0.15}, interceptions:{bench:1, weight:0.15}, dribbles:{bench:1, weight:0.2}, goals:{bench:0, weight:1.4}, assists:{bench:0, weight:1.1} },
+  AM: { keyPasses:{bench:2, weight:0.4}, passAcc:{bench:80, weight:0.03}, dribbles:{bench:2, weight:0.22}, shotsOnTarget:{bench:1, weight:0.3}, goals:{bench:0, weight:1.5}, assists:{bench:0, weight:1.2}, dispossessed:{bench:1, weight:-0.2} },
+  WNG: { dribbles:{bench:2, weight:0.25}, keyPasses:{bench:1, weight:0.4}, shotsOnTarget:{bench:1, weight:0.3}, goals:{bench:0, weight:1.5}, assists:{bench:0, weight:1.2}, touchesBox:{bench:3, weight:0.12}, dispossessed:{bench:2, weight:-0.15} },
+  ST: { goals:{bench:0, weight:1.6}, assists:{bench:0, weight:1.0}, shotConv:{bench:0.3, weight:1.8}, shotsOnTarget:{bench:1, weight:0.25}, touchesBox:{bench:4, weight:0.1}, holdUp:{bench:2, weight:0.15}, dispossessed:{bench:2, weight:-0.15} },
+};
+
+/* ---------------- BASKETBALL ---------------- */
+const BBALL_ROLES = { PG:'Point guard', SG:'Shooting guard', SF:'Small forward', PF:'Power forward', C:'Center' };
+
+const BBALL_CORE = {
+  PG: [ {id:'points', label:'Points', def:12}, {id:'assists', label:'Assists', def:6}, {id:'turnovers', label:'Turnovers', def:2}, {id:'fgPct', label:'Field goal %', def:45} ],
+  SG: [ {id:'points', label:'Points', def:16}, {id:'fgPct', label:'Field goal %', def:44}, {id:'threePct', label:'3-point %', def:35}, {id:'assists', label:'Assists', def:2} ],
+  SF: [ {id:'points', label:'Points', def:14}, {id:'rebounds', label:'Rebounds', def:5}, {id:'assists', label:'Assists', def:3}, {id:'fgPct', label:'Field goal %', def:46} ],
+  PF: [ {id:'points', label:'Points', def:12}, {id:'rebounds', label:'Rebounds', def:8}, {id:'fgPct', label:'Field goal %', def:48}, {id:'blocks', label:'Blocks', def:1} ],
+  C: [ {id:'points', label:'Points', def:10}, {id:'rebounds', label:'Rebounds', def:10}, {id:'blocks', label:'Blocks', def:1.5}, {id:'fgPct', label:'Field goal %', def:52} ],
+};
+
+const BBALL_OPTIONAL = {
+  PG: [ {id:'steals', label:'Steals', def:1}, {id:'threePct', label:'3-point %', def:33}, {id:'plusMinus', label:'Plus / minus', def:0} ],
+  SG: [ {id:'turnovers', label:'Turnovers', def:2}, {id:'steals', label:'Steals', def:1}, {id:'plusMinus', label:'Plus / minus', def:0} ],
+  SF: [ {id:'threePct', label:'3-point %', def:34}, {id:'steals', label:'Steals', def:1}, {id:'turnovers', label:'Turnovers', def:2}, {id:'plusMinus', label:'Plus / minus', def:0} ],
+  PF: [ {id:'assists', label:'Assists', def:1.5}, {id:'turnovers', label:'Turnovers', def:1.5}, {id:'plusMinus', label:'Plus / minus', def:0} ],
+  C: [ {id:'assists', label:'Assists', def:1}, {id:'turnovers', label:'Turnovers', def:1.5}, {id:'freeThrowPct', label:'Free throw %', def:65}, {id:'plusMinus', label:'Plus / minus', def:0} ],
+};
+
+const BBALL_BENCH = {
+  PG: { points:{bench:12, weight:0.10}, assists:{bench:6, weight:0.22}, turnovers:{bench:2, weight:-0.35}, fgPct:{bench:45, weight:0.03}, steals:{bench:1, weight:0.25}, plusMinus:{bench:0, weight:0.05} },
+  SG: { points:{bench:16, weight:0.10}, fgPct:{bench:44, weight:0.035}, threePct:{bench:35, weight:0.03}, assists:{bench:2, weight:0.18}, turnovers:{bench:2, weight:-0.3}, steals:{bench:1, weight:0.2}, plusMinus:{bench:0, weight:0.05} },
+  SF: { points:{bench:14, weight:0.09}, rebounds:{bench:5, weight:0.15}, assists:{bench:3, weight:0.18}, fgPct:{bench:46, weight:0.03}, threePct:{bench:34, weight:0.02}, steals:{bench:1, weight:0.2}, turnovers:{bench:2, weight:-0.3}, plusMinus:{bench:0, weight:0.05} },
+  PF: { points:{bench:12, weight:0.09}, rebounds:{bench:8, weight:0.14}, fgPct:{bench:48, weight:0.03}, blocks:{bench:1, weight:0.3}, assists:{bench:1.5, weight:0.15}, turnovers:{bench:1.5, weight:-0.3}, plusMinus:{bench:0, weight:0.05} },
+  C: { points:{bench:10, weight:0.09}, rebounds:{bench:10, weight:0.13}, blocks:{bench:1.5, weight:0.3}, fgPct:{bench:52, weight:0.03}, assists:{bench:1, weight:0.15}, turnovers:{bench:1.5, weight:-0.3}, freeThrowPct:{bench:65, weight:0.01}, plusMinus:{bench:0, weight:0.05} },
+};
+
+/* ---------------- CRICKET ---------------- */
+const CRICKET_ROLES = { BAT:'Batter', BWL:'Bowler', AR:'All-rounder', WK:'Wicket-keeper' };
+
+const CRICKET_CORE = {
+  BAT: [ {id:'runs', label:'Runs scored', def:35}, {id:'balls', label:'Balls faced', def:40} ],
+  BWL: [ {id:'overs', label:'Overs bowled', def:8}, {id:'runsConceded', label:'Runs conceded', def:32}, {id:'wickets', label:'Wickets taken', def:1} ],
+  AR: [ {id:'runs', label:'Runs scored', def:20}, {id:'balls', label:'Balls faced', def:22}, {id:'overs', label:'Overs bowled', def:6}, {id:'runsConceded', label:'Runs conceded', def:26}, {id:'wickets', label:'Wickets taken', def:1} ],
+  WK: [ {id:'runs', label:'Runs scored', def:25}, {id:'balls', label:'Balls faced', def:28}, {id:'catches', label:'Catches taken', def:1}, {id:'stumpings', label:'Stumpings', def:0} ],
+};
+
+const CRICKET_OPTIONAL = {
+  BAT: [ {id:'fours', label:'Boundaries (4s)', def:3}, {id:'sixes', label:'Sixes', def:0}, {id:'dismissed', label:'Got out?', type:'check'} ],
+  BWL: [ {id:'maidens', label:'Maiden overs', def:0}, {id:'wides', label:'Wides + no-balls', def:1} ],
+  AR: [ {id:'fours', label:'Boundaries (4s)', def:2}, {id:'sixes', label:'Sixes', def:0}, {id:'maidens', label:'Maiden overs', def:0}, {id:'dismissed', label:'Got out?', type:'check'} ],
+  WK: [ {id:'fours', label:'Boundaries (4s)', def:2}, {id:'sixes', label:'Sixes', def:0}, {id:'byes', label:'Byes conceded', def:2}, {id:'dismissed', label:'Got out?', type:'check'} ],
+};
+
+/* =========================================================
+   FIELD RENDERING
+========================================================= */
+
+function fieldHtml(d){
+  if(d.type === 'check'){
+    return `<div class="field"><label style="margin-bottom:8px;">${d.label}</label>
+      <div class="checkline" style="margin-bottom:0;">
+        <input type="checkbox" id="stat_${d.id}">
+        <label for="stat_${d.id}" style="margin:0; font-size:0.9rem;">Yes</label>
+      </div></div>`;
+  }
+  return `<div class="field"><label>${d.label}</label>
+    <input type="number" id="stat_${d.id}" value="${d.def}" min="0" step="any"></div>`;
+}
+
+function renderFieldGroup(defs, containerId, label, optionalWrap){
+  const container = document.getElementById(containerId);
+  let html = '';
+  if(label){
+    if(optionalWrap){
+      html += `<div class="section-label">${label} <button type="button" class="collapse-toggle" onclick="toggleOptional()">${optionalOpen ? 'hide' : 'show'}</button></div>`;
+    } else {
+      html += `<div class="section-label">${label}</div>`;
+    }
+  }
+  let inner = '';
+  for(let i=0; i<defs.length; i+=2){
+    const pair = defs.slice(i, i+2);
+    inner += `<div class="field-row">${pair.map(fieldHtml).join('')}</div>`;
+  }
+  if(optionalWrap){
+    html += `<div class="optional-block ${optionalOpen ? 'open' : ''}" id="optionalBlockInner">${inner}</div>`;
+  } else {
+    html += inner;
+  }
+  container.innerHTML = html;
+}
+
+function toggleOptional(){
+  optionalOpen = !optionalOpen;
+  renderSport(currentSport, true);
+}
+
+function renderRoleOptions(roleMap){
+  const sel = document.getElementById('role');
+  sel.innerHTML = Object.entries(roleMap).map(([k,v])=>`<option value="${k}">${v}</option>`).join('');
+}
+
+function renderContextFields(){
+  const container = document.getElementById('contextFields');
+  if(currentSport === 'soccer'){
+    container.innerHTML = `
+      <div class="section-label">Match context</div>
+      <div class="field-row">
+        <div class="field"><label>Goals conceded by team</label><input type="number" id="goalsConceded" value="0" min="0"></div>
+        <div class="field"><label>Errors leading to a goal</label><input type="number" id="errorsToGoal" value="0" min="0"></div>
+      </div>
+      <label style="display:block; font-size:0.85rem; color:var(--ink-soft); margin-bottom:6px;">Result</label>
+      <div class="result-toggle" id="resultToggle">
+        <button data-val="win" class="active">Won</button>
+        <button data-val="draw">Drew</button>
+        <button data-val="loss">Lost</button>
+      </div>
+      <div class="checkline"><input type="checkbox" id="sentOff"><label for="sentOff" style="margin:0; font-size:0.9rem;">Sent off (red card)</label></div>
+      <div class="checkline"><input type="checkbox" id="yellow"><label for="yellow" style="margin:0; font-size:0.9rem;">Booked (yellow card)</label></div>
+    `;
+  } else if(currentSport === 'basketball'){
+    container.innerHTML = `
+      <div class="section-label">Match context</div>
+      <label style="display:block; font-size:0.85rem; color:var(--ink-soft); margin-bottom:6px;">Result</label>
+      <div class="result-toggle" id="resultToggle">
+        <button data-val="win" class="active">Won</button>
+        <button data-val="loss">Lost</button>
+      </div>
+      <div class="checkline"><input type="checkbox" id="fouledOut"><label for="fouledOut" style="margin:0; font-size:0.9rem;">Fouled out</label></div>
+    `;
+  } else if(currentSport === 'cricket'){
+    container.innerHTML = `
+      <div class="section-label">Match context</div>
+      <label style="display:block; font-size:0.85rem; color:var(--ink-soft); margin-bottom:6px;">Result</label>
+      <div class="result-toggle" id="resultToggle">
+        <button data-val="win" class="active">Won</button>
+        <button data-val="loss">Lost</button>
+      </div>
+    `;
+  }
+  attachResultToggle();
+}
+
+function attachResultToggle(){
+  const el = document.getElementById('resultToggle');
+  if(!el) return;
+  el.addEventListener('click', (e)=>{
+    if(e.target.tagName === 'BUTTON'){
+      el.querySelectorAll('button').forEach(b=>b.classList.remove('active'));
+      e.target.classList.add('active');
+      resultVal = e.target.dataset.val;
+    }
+  });
+}
+
+function renderSport(sport, keepOptionalState){
+  currentSport = sport;
+  document.querySelectorAll('#sportSwitch button').forEach(b=>{
+    b.classList.toggle('active', b.dataset.sport === sport);
+  });
+
+  const root = document.documentElement;
+  if(sport === 'soccer') { root.style.setProperty('--accent', '#2F5233'); root.style.setProperty('--accent-deep', '#20391F'); }
+  if(sport === 'basketball') { root.style.setProperty('--accent', '#B8562E'); root.style.setProperty('--accent-deep', '#8C3F1F'); }
+  if(sport === 'cricket') { root.style.setProperty('--accent', '#2E5C8A'); root.style.setProperty('--accent-deep', '#1E3E5C'); }
+
+  const minutesField = document.getElementById('minutesField');
+  const sheetTitle = document.getElementById('sheetTitle');
+  const roleLabel = document.getElementById('roleLabel');
+  const minutesLabel = document.getElementById('minutesLabel');
+
+  if(sport === 'soccer'){
+    sheetTitle.textContent = 'Stat Sheet — Soccer';
+    roleLabel.textContent = 'Position';
+    minutesField.style.display = 'block';
+    minutesLabel.innerHTML = 'Minutes played <span style="font-size:0.75rem; color:#8a8578;">(out of 90)</span>';
+    document.getElementById('minutes').value = 90;
+    renderRoleOptions(SOCCER_ROLES);
+    renderFieldGroup(SOCCER_CORE[document.getElementById('role').value] || SOCCER_CORE.CM, 'statFields', 'Match numbers');
+  } else if(sport === 'basketball'){
+    sheetTitle.textContent = 'Stat Sheet — Basketball';
+    roleLabel.textContent = 'Position';
+    minutesField.style.display = 'block';
+    minutesLabel.innerHTML = 'Minutes played <span style="font-size:0.75rem; color:#8a8578;">(out of 48)</span>';
+    document.getElementById('minutes').value = 32;
+    renderRoleOptions(BBALL_ROLES);
+    renderFieldGroup(BBALL_CORE[document.getElementById('role').value] || BBALL_CORE.PG, 'statFields', 'Box score');
+  } else if(sport === 'cricket'){
+    sheetTitle.textContent = 'Stat Sheet — Cricket';
+    roleLabel.textContent = 'Role';
+    minutesField.style.display = 'none';
+    renderRoleOptions(CRICKET_ROLES);
+    renderFieldGroup(CRICKET_CORE[document.getElementById('role').value] || CRICKET_CORE.BAT, 'statFields', 'Innings numbers');
+  }
+
+  document.getElementById('role').onchange = () => renderRoleFields();
+  renderOptionalForCurrentRole();
+  renderContextFields();
+
+  document.getElementById('emptyState').style.display = 'block';
+  document.getElementById('resultBody').classList.remove('show');
+}
+
+function renderRoleFields(){
+  const role = document.getElementById('role').value;
+  if(currentSport === 'soccer') renderFieldGroup(SOCCER_CORE[role], 'statFields', 'Match numbers');
+  if(currentSport === 'basketball') renderFieldGroup(BBALL_CORE[role], 'statFields', 'Box score');
+  if(currentSport === 'cricket') renderFieldGroup(CRICKET_CORE[role], 'statFields', 'Innings numbers');
+  renderOptionalForCurrentRole();
+}
+
+function renderOptionalForCurrentRole(){
+  const role = document.getElementById('role').value;
+  let defs = [];
+  if(currentSport === 'soccer') defs = SOCCER_OPTIONAL[role] || [];
+  if(currentSport === 'basketball') defs = BBALL_OPTIONAL[role] || [];
+  if(currentSport === 'cricket') defs = CRICKET_OPTIONAL[role] || [];
+  renderFieldGroup(defs, 'optionalFields', 'Optional extra stats', true);
+}
+
+document.getElementById('sportSwitch').addEventListener('click', (e)=>{
+  if(e.target.tagName === 'BUTTON'){
+    optionalOpen = false;
+    renderSport(e.target.dataset.sport);
+  }
+});
+
+renderSport('soccer');
+
+/* =========================================================
+   HELPERS
+========================================================= */
+function val(id, fallback){
+  const el = document.getElementById(id);
+  if(!el) return fallback ?? 0;
+  if(el.type === 'checkbox') return el.checked;
+  const n = parseFloat(el.value);
+  return isNaN(n) ? (fallback ?? 0) : n;
+}
+
+function verdictFor(rating){
+  if(rating >= 9.0) return ['Match-winner', 'the kind of display people bring up for years'];
+  if(rating >= 8.0) return ['Excellent', 'stood out from everyone else'];
+  if(rating >= 7.2) return ['Very good', 'well above what was needed'];
+  if(rating >= 6.4) return ['Solid', 'did their job, a bit more besides'];
+  if(rating >= 5.6) return ['Average', 'neither helped nor hurt much'];
+  if(rating >= 4.5) return ['Below par', 'off the pace today'];
+  if(rating >= 3.0) return ['Poor', 'a costly outing'];
+  return ['Nightmare', 'one to forget entirely'];
+}
+
+function renderResult(rating, breakdown, roleLabelText){
+  document.getElementById('emptyState').style.display = 'none';
+  const body = document.getElementById('resultBody');
+  body.classList.add('show');
+
+  const name = document.getElementById('playerName').value.trim() || 'Unnamed player';
+  document.getElementById('rPlayerName').textContent = name;
+  document.getElementById('rPosLine').textContent = roleLabelText;
+
+  document.getElementById('rNum').textContent = rating.toFixed(1);
+
+  const [verdict, sub] = verdictFor(rating);
+  document.getElementById('rVerdict').textContent = verdict;
+  document.getElementById('rVerdictSub').textContent = sub;
+
+  const stamp = document.getElementById('stamp');
+  let color = 'var(--accent)';
+  if(rating < 5.6) color = 'var(--red)';
+  else if(rating >= 8.0) color = 'var(--gold)';
+  stamp.style.setProperty('--stamp-color', color);
+
+  const list = document.getElementById('bdList');
+  list.innerHTML = '';
+
+  const baseDiv = document.createElement('div');
+  baseDiv.className = 'bd-row';
+  baseDiv.innerHTML = `<span style="font-style:italic;">Started from baseline</span><span class="amt zero">6.00</span>`;
+  list.appendChild(baseDiv);
+
+  breakdown
+    .sort((a,b)=>Math.abs(b.amount)-Math.abs(a.amount))
+    .forEach(row=>{
+      const cls = row.amount > 0.02 ? 'pos' : row.amount < -0.02 ? 'neg' : 'zero';
+      const sign = row.amount > 0 ? '+' : '';
+      const div = document.createElement('div');
+      div.className = 'bd-row';
+      div.innerHTML = `<span>${row.label}</span><span class="amt ${cls}">${sign}${row.amount.toFixed(2)}</span>`;
+      list.appendChild(div);
+    });
+}
+
+/* =========================================================
+   RATING ENGINES
+========================================================= */
+
+function gradeSoccer(){
+  const role = document.getElementById('role').value;
+  const minutes = Math.max(1, val('minutes', 90));
+  const scale90 = 90 / minutes;
+  const breakdown = [];
+  let rating = 6.0;
+
+  const allDefs = [...(SOCCER_CORE[role]||[]), ...(SOCCER_OPTIONAL[role]||[])];
+  const raw = {};
+  allDefs.forEach(d=>{ raw[d.id] = d.type === 'check' ? val('stat_'+d.id, false) : val('stat_'+d.id, d.def); });
+
+  const b = SOCCER_BENCH[role];
+
+  function add(amount, label){
+    if(Math.abs(amount) < 0.02) return;
+    rating += amount;
+    breakdown.push({label, amount});
+  }
+
+  if(role === 'GK'){
+    const saves = raw.saves||0, faced = Math.max(raw.shotsFaced||0, saves, 0.0001);
+    const ratio = saves/faced;
+    add((ratio - b.saveRatio.bench) * b.saveRatio.weight, `Save ratio ${(ratio*100).toFixed(0)}% (${saves}/${faced})`);
+    if(raw.claims !== undefined) add((raw.claims - b.claims.bench)*b.claims.weight, `Crosses claimed: ${raw.claims}`);
+    if(raw.penSaved > 0) add(raw.penSaved * b.penSaved.weight, `Penalty save x${raw.penSaved}`);
+    if(raw.cleanSheet) add(0.6, 'Clean sheet');
+  } else {
+    Object.keys(raw).forEach(key=>{
+      if(['duelsWon','duelsTotal','cleanSheet'].includes(key)) return;
+      if(key === 'passAcc' && b.passAcc){ add((raw[key]-b.passAcc.bench)*b.passAcc.weight, `Pass accuracy: ${raw[key]}%`); return; }
+      if(b[key]){
+        const scaled = raw[key] * scale90;
+        const nice = allDefs.find(d=>d.id===key)?.label || key;
+        add((scaled - b[key].bench)*b[key].weight, `${nice}: ${raw[key]}`);
+      }
+    });
+    if(raw.duelsTotal !== undefined && b.duelRatio){
+      const total = Math.max(raw.duelsTotal, 0.0001);
+      const ratio = (raw.duelsWon||0)/total;
+      add((ratio - b.duelRatio.bench)*b.duelRatio.weight, `Duels won ${(ratio*100).toFixed(0)}% (${raw.duelsWon}/${raw.duelsTotal})`);
+    }
+    if(role === 'ST' && b.shotConv && raw.shotsTotal > 0){
+      const conv = (raw.goals||0)/raw.shotsTotal;
+      add((conv - b.shotConv.bench)*b.shotConv.weight*0.5, `Shot conversion ${(conv*100).toFixed(0)}%`);
+    }
+  }
+
+  const conceded = val('goalsConceded', 0);
+  const errors = val('errorsToGoal', 0);
+  const sentOff = val('sentOff', false);
+  const yellow = val('yellow', false);
+  const concededWeight = (role === 'GK') ? 0.45 : (['CB','FB','DM'].includes(role)) ? 0.3 : 0.12;
+
+  if(conceded > 0) add(-(conceded*concededWeight), `Goals conceded: ${conceded}`);
+  else if(['GK','CB','FB','DM'].includes(role)) add(0.3, 'No goals conceded');
+
+  if(errors > 0) add(-(errors*1.3), `Error(s) leading to goal: ${errors}`);
+  if(sentOff) add(-2.2, 'Sent off');
+  else if(yellow) add(-0.2, 'Booked');
+
+  if(resultVal === 'win') add(0.25, 'Team won');
+  else if(resultVal === 'loss') add(-0.25, 'Team lost');
+
+  if(minutes < 45){
+    const pull = (6.0 - rating) * 0.3;
+    rating += pull;
+    breakdown.push({label:`Limited minutes (${minutes}') — pulled toward neutral`, amount: pull});
+  }
+
+  rating = Math.max(1.0, Math.min(10.0, rating));
+  renderResult(rating, breakdown, `${SOCCER_ROLES[role]} · full time`);
+}
+
+function gradeBasketball(){
+  const role = document.getElementById('role').value;
+  const minutes = Math.max(1, val('minutes', 32));
+  const scale32 = 32 / minutes;
+  const breakdown = [];
+  let rating = 6.0;
+
+  const allDefs = [...(BBALL_CORE[role]||[]), ...(BBALL_OPTIONAL[role]||[])];
+  const raw = {};
+  allDefs.forEach(d=>{ raw[d.id] = val('stat_'+d.id, d.def); });
+  const b = BBALL_BENCH[role];
+
+  function add(amount, label){
+    if(Math.abs(amount) < 0.02) return;
+    rating += amount;
+    breakdown.push({label, amount});
+  }
+
+  Object.keys(raw).forEach(key=>{
+    if(!b[key]) return;
+    const isPercent = key.toLowerCase().includes('pct');
+    const scaled = isPercent ? raw[key] : raw[key] * scale32;
+    const nice = allDefs.find(d=>d.id===key)?.label || key;
+    add((scaled - b[key].bench) * b[key].weight, `${nice}: ${raw[key]}${isPercent ? '%' : ''}`);
+  });
+
+  const fouledOut = val('fouledOut', false);
+  if(fouledOut) add(-0.8, 'Fouled out');
+
+  if(resultVal === 'win') add(0.25, 'Team won');
+  else if(resultVal === 'loss') add(-0.25, 'Team lost');
+
+  if(minutes < 15){
+    const pull = (6.0 - rating) * 0.35;
+    rating += pull;
+    breakdown.push({label:`Limited minutes (${minutes}') — pulled toward neutral`, amount: pull});
+  }
+
+  rating = Math.max(1.0, Math.min(10.0, rating));
+  renderResult(rating, breakdown, `${BBALL_ROLES[role]} · final box score`);
+}
+
+function gradeCricket(){
+  const role = document.getElementById('role').value;
+  const breakdown = [];
+  let rating = 6.0;
+
+  const allDefs = [...(CRICKET_CORE[role]||[]), ...(CRICKET_OPTIONAL[role]||[])];
+  const raw = {};
+  allDefs.forEach(d=>{ raw[d.id] = d.type === 'check' ? val('stat_'+d.id, false) : val('stat_'+d.id, d.def); });
+
+  function add(amount, label){
+    if(Math.abs(amount) < 0.02) return;
+    rating += amount;
+    breakdown.push({label, amount});
+  }
+
+  // Batting component
+  if(['BAT','AR','WK'].includes(role) && raw.balls > 0){
+    const sr = (raw.runs / raw.balls) * 100;
+    // runs contribution: roughly 1 point per 20 runs above a baseline expectation
+    const runBaseline = role === 'BAT' ? 30 : role === 'WK' ? 20 : 15;
+    add((raw.runs - runBaseline) * 0.045, `Runs: ${raw.runs} off ${raw.balls}`);
+    const srBaseline = 110; // reasonable baseline strike rate
+    if(raw.balls >= 10){
+      add((sr - srBaseline) * 0.01, `Strike rate ${sr.toFixed(0)}`);
+    }
+    if(raw.fours) add(raw.fours * 0.06, `Boundaries: ${raw.fours} fours`);
+    if(raw.sixes) add(raw.sixes * 0.15, `Sixes: ${raw.sixes}`);
+    if(raw.dismissed) add(-0.3, 'Got out');
+  }
+
+  // Bowling component
+  if(['BWL','AR'].includes(role) && raw.overs > 0){
+    const econ = raw.runsConceded / raw.overs;
+    const econBaseline = 7.0;
+    add((econBaseline - econ) * 0.35, `Economy ${econ.toFixed(1)} (${raw.runsConceded}/${raw.overs} overs)`);
+    add(raw.wickets * 0.9, `Wickets: ${raw.wickets}`);
+    if(raw.maidens) add(raw.maidens * 0.2, `Maiden overs: ${raw.maidens}`);
+    if(raw.wides) add(-(raw.wides * 0.08), `Wides/no-balls: ${raw.wides}`);
+  }
+
+  // Keeper component
+  if(role === 'WK'){
+    if(raw.catches) add(raw.catches * 0.35, `Catches: ${raw.catches}`);
+    if(raw.stumpings) add(raw.stumpings * 0.5, `Stumpings: ${raw.stumpings}`);
+    if(raw.byes) add(-(raw.byes * 0.03), `Byes conceded: ${raw.byes}`);
+  }
+
+  if(resultVal === 'win') add(0.25, 'Team won');
+  else if(resultVal === 'loss') add(-0.25, 'Team lost');
+
+  rating = Math.max(1.0, Math.min(10.0, rating));
+  renderResult(rating, breakdown, `${CRICKET_ROLES[role]} · match complete`);
+}
+
+function grade(){
+  if(currentSport === 'soccer') gradeSoccer();
+  else if(currentSport === 'basketball') gradeBasketball();
+  else if(currentSport === 'cricket') gradeCricket();
+}
+</script>
+</body>
+</html>
