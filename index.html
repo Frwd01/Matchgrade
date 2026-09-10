@@ -34,6 +34,127 @@
 }
 </script>
 
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is MatchGrade?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "MatchGrade is a free player rating calculator that turns match statistics into an honest rating out of 10 for soccer, basketball, and cricket. Enter the numbers from a game and get a transparent score based on position or role."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How does the MatchGrade player rating calculator work?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Every rating starts at a 6.0 baseline, which represents an anonymous, did-their-job performance. The score then moves up or down depending on how each stat compares to what is typical for that specific position or role. The tool shows exactly which stats pushed the rating higher or lower."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is MatchGrade free to use?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. MatchGrade is completely free. There are no accounts, subscriptions, or hidden fees. Enter stats, get a rating, and share the card if you want."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Which sports does MatchGrade support?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "MatchGrade currently supports three sports: soccer (football), basketball, and cricket. Each sport has its own position- or role-specific scoring model so the same raw number is interpreted differently depending on the role."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why does every rating start at 6.0?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A 6.0 baseline is the same starting point used by many professional rating services. It represents a neutral, anonymous performance where the player did their job without standing out positively or negatively. Everything above or below that is earned or lost from the stats."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do different positions use different weighting?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. A center-back is judged more on tackles, interceptions, clearances and aerials. A striker is judged more on goals, shot conversion and touches in the box. A point guard leans on assists and turnovers. A bowler is scored on wickets and economy. MatchGrade only asks for the stats that role actually produces."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I rate players from any league or level?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. MatchGrade works for any level — professional, amateur, youth, or recreational. The calculator does not require a specific league or competition. Just enter the stats from the match."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What stats do I need for a soccer player rating?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Core stats depend on position. Goalkeepers need saves and shots faced. Defenders need tackles, interceptions and clearances. Midfielders and attackers need key passes, goals, assists and dribbles. Optional extras such as duels, aerials, and errors leading to a goal can refine the score further."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How are basketball ratings calculated?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Basketball ratings start at 6.0 and adjust based on points, shooting percentages, rebounds, assists, turnovers, steals, blocks and plus-minus. Each position (point guard, shooting guard, small forward, power forward, center) weights these stats differently to reflect typical contributions."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do cricket ratings work on MatchGrade?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Choose batter, bowler, all-rounder or wicket-keeper. Batting factors in runs, balls faced and strike rate. Bowling factors in overs, wickets and economy. Wicket-keepers also receive credit for catches and stumpings. Optional stats such as boundaries, maidens and byes can be added for more precision."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I share my MatchGrade rating?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. After grading a performance you can open a shareable rating card. The card can be saved as an image or shared directly from supported devices. It includes the player name, position, rating, verdict and key contributing stats."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is MatchGrade the same as WhoScored or SofaScore ratings?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "MatchGrade uses a similar 6.0 baseline philosophy but is an independent tool. It is designed to be transparent: every rating shows exactly which stats moved the score up or down. It is not affiliated with any major data provider and works from the numbers you enter yourself."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do I need an account to use MatchGrade?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. MatchGrade is a free, no-login tool. Open the page, select the sport, enter the stats and get the rating instantly. Nothing is stored on a server unless you choose to share the rating card."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does playing time affect the rating?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Soccer and basketball ratings scale stats to a full-match equivalent (90 minutes or 32 minutes) so short appearances are not unfairly punished or rewarded. Very limited minutes also gently pull the final rating toward the neutral 6.0 baseline."
+      }
+    }
+  ]
+}
+</script>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Special+Elite&display=swap" rel="stylesheet">
 <style>
@@ -509,6 +630,25 @@
     margin:18px 0 6px;
   }
 
+  .faq-item{
+    margin-bottom:18px;
+  }
+
+  .faq-item h3{
+    font-family:'Oswald', sans-serif;
+    font-size:0.95rem;
+    margin:0 0 6px;
+    color:var(--ink);
+  }
+
+  .faq-item p{
+    font-size:0.95rem;
+    line-height:1.65;
+    color:var(--ink-soft);
+    max-width:78ch;
+    margin:0;
+  }
+
   /* ---------- FOOTER ---------- */
   .footnote{
     margin-top:22px;
@@ -620,6 +760,80 @@
     <p>Choose batter, bowler, all-rounder, or wicket-keeper. Batting rating factors in runs, balls faced, and strike rate; bowling factors in overs, wickets, and economy rate; wicket-keepers get credit for catches and stumpings on top of their batting line.</p>
   </div>
 
+  <div class="about">
+    <h2>Frequently asked questions</h2>
+
+    <div class="faq-item">
+      <h3>What is MatchGrade?</h3>
+      <p>MatchGrade is a free player rating calculator that turns match statistics into an honest rating out of 10 for soccer, basketball, and cricket. Enter the numbers from a game and get a transparent score based on position or role.</p>
+    </div>
+
+    <div class="faq-item">
+      <h3>How does the MatchGrade player rating calculator work?</h3>
+      <p>Every rating starts at a 6.0 baseline, which represents an anonymous, did-their-job performance. The score then moves up or down depending on how each stat compares to what is typical for that specific position or role. The tool shows exactly which stats pushed the rating higher or lower so nothing is a black box.</p>
+    </div>
+
+    <div class="faq-item">
+      <h3>Is MatchGrade free to use?</h3>
+      <p>Yes. MatchGrade is completely free. There are no accounts, subscriptions, or hidden fees. Enter stats, get a rating, and share the card if you want.</p>
+    </div>
+
+    <div class="faq-item">
+      <h3>Which sports does MatchGrade support?</h3>
+      <p>MatchGrade currently supports three sports: soccer (football), basketball, and cricket. Each sport has its own position- or role-specific scoring model so the same raw number is interpreted differently depending on the role.</p>
+    </div>
+
+    <div class="faq-item">
+      <h3>Why does every rating start at 6.0?</h3>
+      <p>A 6.0 baseline is the same starting point used by many professional rating services. It represents a neutral, anonymous performance where the player did their job without standing out positively or negatively. Everything above or below that is earned or lost from the stats.</p>
+    </div>
+
+    <div class="faq-item">
+      <h3>Do different positions use different weighting?</h3>
+      <p>Yes. A center-back is judged more on tackles, interceptions, clearances and aerials. A striker is judged more on goals, shot conversion and touches in the box. A point guard leans on assists and turnovers. A bowler is scored on wickets and economy. MatchGrade only asks for the stats that role actually produces.</p>
+    </div>
+
+    <div class="faq-item">
+      <h3>Can I rate players from any league or level?</h3>
+      <p>Yes. MatchGrade works for any level — professional, amateur, youth, or recreational. The calculator does not require a specific league or competition. Just enter the stats from the match.</p>
+    </div>
+
+    <div class="faq-item">
+      <h3>What stats do I need for a soccer player rating?</h3>
+      <p>Core stats depend on position. Goalkeepers need saves and shots faced. Defenders need tackles, interceptions and clearances. Midfielders and attackers need key passes, goals, assists and dribbles. Optional extras such as duels, aerials, and errors leading to a goal can refine the score further.</p>
+    </div>
+
+    <div class="faq-item">
+      <h3>How are basketball ratings calculated?</h3>
+      <p>Basketball ratings start at 6.0 and adjust based on points, shooting percentages, rebounds, assists, turnovers, steals, blocks and plus-minus. Each position (point guard, shooting guard, small forward, power forward, center) weights these stats differently to reflect typical contributions.</p>
+    </div>
+
+    <div class="faq-item">
+      <h3>How do cricket ratings work on MatchGrade?</h3>
+      <p>Choose batter, bowler, all-rounder or wicket-keeper. Batting factors in runs, balls faced and strike rate. Bowling factors in overs, wickets and economy. Wicket-keepers also receive credit for catches and stumpings. Optional stats such as boundaries, maidens and byes can be added for more precision.</p>
+    </div>
+
+    <div class="faq-item">
+      <h3>Can I share my MatchGrade rating?</h3>
+      <p>Yes. After grading a performance you can open a shareable rating card. The card can be saved as an image or shared directly from supported devices. It includes the player name, position, rating, verdict and key contributing stats.</p>
+    </div>
+
+    <div class="faq-item">
+      <h3>Is MatchGrade the same as WhoScored or SofaScore ratings?</h3>
+      <p>MatchGrade uses a similar 6.0 baseline philosophy but is an independent tool. It is designed to be transparent: every rating shows exactly which stats moved the score up or down. It is not affiliated with any major data provider and works from the numbers you enter yourself.</p>
+    </div>
+
+    <div class="faq-item">
+      <h3>Do I need an account to use MatchGrade?</h3>
+      <p>No. MatchGrade is a free, no-login tool. Open the page, select the sport, enter the stats and get the rating instantly. Nothing is stored on a server unless you choose to share the rating card.</p>
+    </div>
+
+    <div class="faq-item">
+      <h3>Does playing time affect the rating?</h3>
+      <p>Yes. Soccer and basketball ratings scale stats to a full-match equivalent (90 minutes or 32 minutes) so short appearances are not unfairly punished or rewarded. Very limited minutes also gently pull the final rating toward the neutral 6.0 baseline.</p>
+    </div>
+  </div>
+
 </div>
 
 <script>
@@ -664,12 +878,12 @@ const SOCCER_OPTIONAL = {
 const SOCCER_BENCH = {
   GK: { saveRatio:{bench:0.68, weight:3.5}, claims:{bench:1, weight:0.15}, penSaved:{bench:0, weight:1.2} },
   CB: { tackles:{bench:2, weight:0.18}, interceptions:{bench:2, weight:0.18}, clearances:{bench:3, weight:0.10}, duelRatio:{bench:0.6, weight:1.6}, passAcc:{bench:85, weight:0.035}, aerialsWon:{bench:2, weight:0.15} },
-  FB: { tackles:{bench:2, weight:0.16}, interceptions:{bench:1, weight:0.16}, duelRatio:{bench:0.55, weight:1.3}, passAcc:{bench:80, weight:0.03}, keyPasses:{bench:1, weight:0.35}, assists:{bench:0, weight:1.1}, dribbles:{bench:1, weight:0.2} },
-  DM: { tackles:{bench:3, weight:0.16}, interceptions:{bench:2, weight:0.16}, passAcc:{bench:87, weight:0.04}, passesCompleted:{bench:35, weight:0.02}, duelRatio:{bench:0.6, weight:1.2}, keyPasses:{bench:0, weight:0.3} },
-  CM: { passAcc:{bench:84, weight:0.035}, passesCompleted:{bench:30, weight:0.02}, keyPasses:{bench:1, weight:0.4}, tackles:{bench:1, weight:0.15}, interceptions:{bench:1, weight:0.15}, dribbles:{bench:1, weight:0.2}, goals:{bench:0, weight:1.4}, assists:{bench:0, weight:1.1} },
-  AM: { keyPasses:{bench:2, weight:0.4}, passAcc:{bench:80, weight:0.03}, dribbles:{bench:2, weight:0.22}, shotsOnTarget:{bench:1, weight:0.3}, goals:{bench:0, weight:1.5}, assists:{bench:0, weight:1.2}, dispossessed:{bench:1, weight:-0.2} },
-  WNG: { dribbles:{bench:2, weight:0.25}, keyPasses:{bench:1, weight:0.4}, shotsOnTarget:{bench:1, weight:0.3}, goals:{bench:0, weight:1.5}, assists:{bench:0, weight:1.2}, touchesBox:{bench:3, weight:0.12}, dispossessed:{bench:2, weight:-0.15} },
-  ST: { goals:{bench:0, weight:1.6}, assists:{bench:0, weight:1.0}, shotConv:{bench:0.3, weight:1.8}, shotsOnTarget:{bench:1, weight:0.25}, touchesBox:{bench:4, weight:0.1}, holdUp:{bench:2, weight:0.15}, dispossessed:{bench:2, weight:-0.15} },
+  FB: { tackles:{bench:2, weight:0.16}, interceptions:{bench:1, weight:0.16}, duelRatio:{bench:0.55, weight:1.3}, passAcc:{bench:80, weight:0.03}, keyPasses:{bench:1, weight:0.32}, dribbles:{bench:1, weight:0.2} },
+  DM: { tackles:{bench:3, weight:0.16}, interceptions:{bench:2, weight:0.16}, passAcc:{bench:87, weight:0.04}, passesCompleted:{bench:35, weight:0.02}, duelRatio:{bench:0.6, weight:1.2}, keyPasses:{bench:0, weight:0.28} },
+  CM: { passAcc:{bench:84, weight:0.035}, passesCompleted:{bench:30, weight:0.02}, keyPasses:{bench:1, weight:0.38}, tackles:{bench:1, weight:0.15}, interceptions:{bench:1, weight:0.15}, dribbles:{bench:1, weight:0.2} },
+  AM: { keyPasses:{bench:2, weight:0.38}, passAcc:{bench:80, weight:0.03}, dribbles:{bench:2, weight:0.22}, shotsOnTarget:{bench:1, weight:0.28}, dispossessed:{bench:1, weight:-0.2} },
+  WNG: { dribbles:{bench:2, weight:0.25}, keyPasses:{bench:1, weight:0.38}, shotsOnTarget:{bench:1, weight:0.28}, touchesBox:{bench:3, weight:0.12}, dispossessed:{bench:2, weight:-0.15} },
+  ST: { shotConv:{bench:0.3, weight:1.5}, shotsOnTarget:{bench:1, weight:0.22}, touchesBox:{bench:4, weight:0.1}, holdUp:{bench:2, weight:0.15}, dispossessed:{bench:2, weight:-0.15} },
 };
 
 /* ---------------- BASKETBALL ---------------- */
@@ -1067,6 +1281,23 @@ function gradeSoccer(){
     breakdown.push({label, amount});
   }
 
+  /* Diminishing returns for high-impact stats (goals / assists).
+     Linear weighting made 3 goals auto-10. This keeps a hat-trick elite
+     (~9.2–9.5) without hitting the ceiling unless the rest of the game
+     is also outstanding. */
+  function diminish(count, first, second, third, rest){
+    count = Math.max(0, Math.round(count));
+    if(count === 0) return 0;
+    let total = 0;
+    for(let i = 1; i <= count; i++){
+      if(i === 1) total += first;
+      else if(i === 2) total += second;
+      else if(i === 3) total += third;
+      else total += rest;
+    }
+    return total;
+  }
+
   if(role === 'GK'){
     const saves = raw.saves||0, faced = Math.max(raw.shotsFaced||0, saves, 0.0001);
     const ratio = saves/faced;
@@ -1075,8 +1306,30 @@ function gradeSoccer(){
     if(raw.penSaved > 0) add(raw.penSaved * b.penSaved.weight, `Penalty save x${raw.penSaved}`);
     if(raw.cleanSheet) add(0.6, 'Clean sheet');
   } else {
+    // Goals – role-aware diminishing returns
+    const goals = (raw.goals || 0) * scale90;
+    if(goals > 0){
+      let gBonus;
+      if(role === 'ST'){
+        gBonus = diminish(goals, 1.40, 1.05, 0.72, 0.42);   // 3 goals ≈ +3.17
+      } else if(role === 'AM' || role === 'WNG'){
+        gBonus = diminish(goals, 1.30, 0.95, 0.65, 0.38);
+      } else {
+        gBonus = diminish(goals, 1.15, 0.85, 0.55, 0.32);   // midfield / full-back goals still valuable
+      }
+      add(gBonus, `Goals: ${raw.goals}${scale90 !== 1 ? ' (scaled)' : ''}`);
+    }
+
+    // Assists – milder diminishing returns
+    const assists = (raw.assists || 0) * scale90;
+    if(assists > 0){
+      const aBonus = diminish(assists, 1.05, 0.80, 0.55, 0.32);
+      add(aBonus, `Assists: ${raw.assists}${scale90 !== 1 ? ' (scaled)' : ''}`);
+    }
+
+    // Remaining stats (skip goals/assists – already handled)
     Object.keys(raw).forEach(key=>{
-      if(['duelsWon','duelsTotal','cleanSheet'].includes(key)) return;
+      if(['duelsWon','duelsTotal','cleanSheet','goals','assists'].includes(key)) return;
       if(key === 'passAcc' && b.passAcc){ add((raw[key]-b.passAcc.bench)*b.passAcc.weight, `Pass accuracy: ${raw[key]}%`); return; }
       if(b[key]){
         const scaled = raw[key] * scale90;
@@ -1084,14 +1337,19 @@ function gradeSoccer(){
         add((scaled - b[key].bench)*b[key].weight, `${nice}: ${raw[key]}`);
       }
     });
+
     if(raw.duelsTotal !== undefined && b.duelRatio){
       const total = Math.max(raw.duelsTotal, 0.0001);
       const ratio = (raw.duelsWon||0)/total;
       add((ratio - b.duelRatio.bench)*b.duelRatio.weight, `Duels won ${(ratio*100).toFixed(0)}% (${raw.duelsWon}/${raw.duelsTotal})`);
     }
-    if(role === 'ST' && b.shotConv && raw.shotsTotal > 0){
-      const conv = (raw.goals||0)/raw.shotsTotal;
-      add((conv - b.shotConv.bench)*b.shotConv.weight*0.5, `Shot conversion ${(conv*100).toFixed(0)}%`);
+
+    // Shot conversion – only meaningful for strikers / attackers with volume
+    if((role === 'ST' || role === 'AM' || role === 'WNG') && b.shotConv && raw.shotsTotal > 0){
+      const conv = (raw.goals||0) / raw.shotsTotal;
+      // Cap the conversion bonus so clinical finishing helps but doesn't explode the score
+      const convBonus = Math.min(0.9, (conv - b.shotConv.bench) * b.shotConv.weight * 0.45);
+      add(convBonus, `Shot conversion ${(conv*100).toFixed(0)}%`);
     }
   }
 
@@ -1115,6 +1373,13 @@ function gradeSoccer(){
     const pull = (6.0 - rating) * 0.3;
     rating += pull;
     breakdown.push({label:`Limited minutes (${minutes}')  pulled toward neutral`, amount: pull});
+  }
+
+  // Soft ceiling: ratings above 9.6 require exceptional all-round contribution.
+  // Pure goal tallies alone should rarely touch 10.
+  if(rating > 9.6){
+    const excess = rating - 9.6;
+    rating = 9.6 + excess * 0.55;
   }
 
   rating = Math.max(1.0, Math.min(10.0, rating));
