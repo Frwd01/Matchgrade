@@ -6,7 +6,7 @@
 <meta name="google-site-verification" content="06ROWv6yXa7peG6nR8M0_ezNxSk9r70rW6S9qY5qa_0" />
 
 <title>Player Rating Calculator — Soccer, Basketball & Cricket Stats to a Score Out of 10</title>
-<meta name="description" content="Enter match stats  goals, assists, points, rebounds, runs, wickets  and get an honest player rating out of 10, calculated per position or role. Free tool for soccer, basketball, and cricket.">
+<meta name="description" content="Enter match stats — goals, assists, points, rebounds, runs, wickets — and get an honest player rating out of 10, calculated per position or role. Free tool for soccer, basketball, and cricket.">
 <meta name="keywords" content="player rating calculator, football rating out of 10, basketball player rating, cricket player rating, match rating generator, soccer stats calculator">
 <link rel="canonical" href="https://matchgrade.netlify.app/">
 
@@ -911,14 +911,61 @@ function val(id, fallback){
 }
 
 function verdictFor(rating){
-  if(rating >= 9.0) return ['Match-winner', 'the kind of display people bring up for years'];
-  if(rating >= 8.0) return ['Excellent', 'stood out from everyone else'];
-  if(rating >= 7.2) return ['Very good', 'well above what was needed'];
-  if(rating >= 6.4) return ['Solid', 'did their job, a bit more besides'];
-  if(rating >= 5.6) return ['Average', 'neither helped nor hurt much'];
-  if(rating >= 4.5) return ['Below par', 'off the pace today'];
-  if(rating >= 3.0) return ['Poor', 'a costly outing'];
-  return ['Nightmare', 'one to forget entirely'];
+  const verdicts = {
+    "0.0": ["Nightmare", "nothing went right"],
+    "0.2": ["Disastrous", "almost everything fell apart"],
+    "0.4": ["Abysmal", "a performance to erase from memory"],
+    "0.6": ["Terrible", "struggled from start to finish"],
+    "0.8": ["Woeful", "almost nothing came off"],
+    "1.0": ["Awful", "barely made an impact"],
+    "1.2": ["Very poor", "far below the required level"],
+    "1.4": ["Rough", "constantly fighting an uphill battle"],
+    "1.6": ["Struggling", "could not find a way into the game"],
+    "1.8": ["Underwhelming", "very little came together"],
+    "2.0": ["Poor", "a difficult outing"],
+    "2.2": ["Shaky", "too many things went wrong"],
+    "2.4": ["Unconvincing", "never really settled"],
+    "2.6": ["Weak", "not enough influence on the game"],
+    "2.8": ["Substandard", "needed much more"],
+    "3.0": ["Costly", "mistakes made the difference"],
+    "3.2": ["Disappointing", "never reached their level"],
+    "3.4": ["Below standard", "too many weaknesses showed"],
+    "3.6": ["Off-colour", "looked short of confidence"],
+    "3.8": ["Frustrating", "had moments but not enough"],
+    "4.0": ["Under par", "more negatives than positives"],
+    "4.2": ["Strained", "worked hard without enough reward"],
+    "4.4": ["Mediocre", "never really got going"],
+    "4.6": ["Below par", "off the pace today"],
+    "4.8": ["Unsteady", "some good moments, too many flaws"],
+    "5.0": ["Inconsistent", "mixed moments throughout"],
+    "5.2": ["Ordinary", "nothing particularly stood out"],
+    "5.4": ["Serviceable", "did some things right"],
+    "5.6": ["Average", "neither helped nor hurt much"],
+    "5.8": ["Decent", "quietly did enough"],
+    "6.0": ["Useful", "made a respectable contribution"],
+    "6.2": ["Steady", "kept things moving"],
+    "6.4": ["Solid", "did their job, a bit more besides"],
+    "6.6": ["Reliable", "provided a dependable performance"],
+    "6.8": ["Good", "made a positive contribution"],
+    "7.0": ["Strong", "consistently added value"],
+    "7.2": ["Very good", "well above what was needed"],
+    "7.4": ["Impressive", "made their presence felt"],
+    "7.6": ["Influential", "played a major part in the performance"],
+    "7.8": ["Outstanding", "one of the better performers"],
+    "8.0": ["Excellent", "stood out from everyone else"],
+    "8.2": ["Brilliant", "made a serious difference"],
+    "8.4": ["Exceptional", "a performance worth remembering"],
+    "8.6": ["Superb", "consistently delivered at a high level"],
+    "8.8": ["Dominant", "controlled the game with quality"],
+    "9.0": ["Match-winner", "the kind of display people bring up for years"],
+    "9.2": ["Phenomenal", "almost impossible to fault"],
+    "9.4": ["Masterclass", "made elite performance look effortless"],
+    "9.6": ["Extraordinary", "delivered at an almost perfect level"],
+    "9.8": ["Near-perfect", "one tiny step from perfection"],
+    "10.0": ["Perfect", "a performance with nothing left to improve"]
+  };
+
+  return verdicts[rating.toFixed(1)] || ["Unrated", "rating could not be determined"];
 }
 
 function renderResult(rating, breakdown, roleLabelText){
