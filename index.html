@@ -183,9 +183,12 @@
   }
 
   body{
+    background-color: var(--paper);
     background-image:
       radial-gradient(ellipse at top left, rgba(47,82,51,0.05), transparent 45%),
+      linear-gradient(180deg, var(--paper) 0%, var(--paper) 58%, var(--paper-dark) 100%),
       repeating-linear-gradient(0deg, rgba(0,0,0,0.015) 0px, rgba(0,0,0,0.015) 1px, transparent 1px, transparent 3px);
+    background-attachment: fixed;
   }
 
   .wrap{
@@ -204,6 +207,19 @@
     align-items:flex-end;
     flex-wrap:wrap;
     gap:10px;
+  }
+
+  .masthead-brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+
+  .masthead-logo{
+    height:52px;
+    width:auto;
+    display:block;
+    flex-shrink:0;
   }
 
   .masthead h1{
@@ -226,6 +242,11 @@
     text-align:right;
     max-width:220px;
     line-height:1.4;
+  }
+
+  @media(max-width:520px){
+    .masthead-logo{height:40px;}
+    .masthead h1{font-size:2rem;}
   }
 
   /* ---------- SPORT SWITCHER ---------- */
@@ -999,7 +1020,10 @@
 <div class="wrap">
 
   <div class="masthead">
-    <h1>Match<span>Grade</span></h1>
+    <div class="masthead-brand">
+      <img class="masthead-logo" src="mg-logo.png" alt="MatchGrade logo" width="120" height="64">
+      <h1>Match<span>Grade</span></h1>
+    </div>
     <div class="tagline">stat sheet in, honest number out  no highlights required</div>
   </div>
 
