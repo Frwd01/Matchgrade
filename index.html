@@ -3,8 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" type="image/png" href="mg-logo.png">
-<link rel="apple-touch-icon" href="mg-logo.png">
 <meta name="google-site-verification" content="06ROWv6yXa7peG6nR8M0_ezNxSk9r70rW6S9qY5qa_0" />
 
 <title>Player Rating Calculator  Soccer, Basketball & Cricket Stats to a Score Out of 10</title>
@@ -994,10 +992,78 @@
   }
   .auth-tabs button:last-child{border-right:none;}
   .auth-tabs button.active{background:var(--ink);color:var(--paper);}
+
+  /* ---------- FIRST-VISIT VIDEO POPUP ---------- */
+  .welcome-video-modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:2000;
+    background:rgba(27,27,24,.82);
+    padding:20px;
+    align-items:center;
+    justify-content:center;
+  }
+  .welcome-video-modal.show{display:flex;}
+  .welcome-video-dialog{
+    width:min(760px,100%);
+    background:var(--paper);
+    border:1px solid var(--ink);
+    padding:16px;
+    position:relative;
+    box-shadow:0 12px 40px rgba(0,0,0,.22);
+  }
+  .welcome-video-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+    margin-bottom:12px;
+  }
+  .welcome-video-title{
+    font-family:'Oswald',sans-serif;
+    font-size:1.2rem;
+    font-weight:600;
+    margin:0;
+  }
+  .welcome-video-close{
+    border:1px solid var(--ink);
+    background:transparent;
+    color:var(--ink);
+    padding:6px 10px;
+    font-family:'Oswald',sans-serif;
+    cursor:pointer;
+  }
+  .welcome-video-close:hover{background:var(--ink);color:var(--paper);}
+  .welcome-video{
+    width:100%;
+    display:block;
+    max-height:70vh;
+    background:#000;
+  }
+  @media(max-width:600px){
+    .welcome-video-modal{padding:10px;}
+    .welcome-video-dialog{padding:12px;}
+  }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
+
+  <!-- First-visit welcome video -->
+  <div class="welcome-video-modal" id="welcomeVideoModal" aria-hidden="true">
+    <div class="welcome-video-dialog" role="dialog" aria-modal="true" aria-labelledby="welcomeVideoTitle">
+      <div class="welcome-video-head">
+        <h2 class="welcome-video-title" id="welcomeVideoTitle">Welcome to MatchGrade</h2>
+        <button type="button" class="welcome-video-close" onclick="closeWelcomeVideo()">Close</button>
+      </div>
+      <video class="welcome-video" id="welcomeVideo" controls muted playsinline preload="metadata">
+        <source src="welcome-video.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+  </div>
+
 <div class="wrap">
 
   <div class="masthead">
@@ -2904,6 +2970,61 @@ function downloadComparisonCard(blob){
 
 // Init compare roles on load
 setCompareSport('soccer');
+
+/* =========================================================
+   FIRST-VISIT WELCOME VIDEO
+   Shows once per browser/device using localStorage.
+========================================================= */
+const WELCOME_VIDEO_KEY = 'matchgrade_welcome_video_seen_v1';
+
+function openWelcomeVideo(){
+  const modal = document.getElementById('welcomeVideoModal');
+  const video = document.getElementById('welcomeVideo');
+  if(!modal || !video) return;
+
+  modal.classList.add('show');
+  modal.setAttribute('aria-hidden','false');
+
+  // Muted autoplay is used because browsers commonly block unmuted autoplay.
+  video.currentTime = 0;
+  const playAttempt = video.play();
+  if(playAttempt && typeof playAttempt.catch === 'function'){
+    playAttempt.catch(()=>{});
+  }
+}
+
+function closeWelcomeVideo(){
+  const modal = document.getElementById('welcomeVideoModal');
+  const video = document.getElementById('welcomeVideo');
+  if(!modal) return;
+
+  if(video) video.pause();
+  modal.classList.remove('show');
+  modal.setAttribute('aria-hidden','true');
+
+  try{ localStorage.setItem(WELCOME_VIDEO_KEY,'1'); }catch(e){}
+}
+
+document.addEventListener('DOMContentLoaded', function(){
+  let seen = false;
+  try{ seen = localStorage.getItem(WELCOME_VIDEO_KEY) === '1'; }catch(e){}
+
+  if(!seen){
+    setTimeout(openWelcomeVideo, 250);
+  }
+});
+
+document.getElementById('welcomeVideoModal')?.addEventListener('click', function(e){
+  if(e.target === this) closeWelcomeVideo();
+});
+
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape'){
+    const modal = document.getElementById('welcomeVideoModal');
+    if(modal && modal.classList.contains('show')) closeWelcomeVideo();
+  }
+});
+
 </script>
 </body>
 </html>
