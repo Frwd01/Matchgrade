@@ -1474,32 +1474,33 @@ const SOCCER_CORE = {
   CB: [ {id:'tackles', label:'Tackles won', def:2}, {id:'interceptions', label:'Interceptions', def:2}, {id:'clearances', label:'Clearances', def:3}, {id:'passAcc', label:'Pass accuracy %', def:85} ],
   FB: [ {id:'tackles', label:'Tackles won', def:2}, {id:'interceptions', label:'Interceptions', def:1}, {id:'keyPasses', label:'Key passes / crosses', def:1}, {id:'passAcc', label:'Pass accuracy %', def:80} ],
   DM: [ {id:'tackles', label:'Tackles won', def:3}, {id:'interceptions', label:'Interceptions', def:2}, {id:'passAcc', label:'Pass accuracy %', def:87}, {id:'passesCompleted', label:'Passes completed', def:35} ],
-  CM: [ {id:'passAcc', label:'Pass accuracy %', def:84}, {id:'keyPasses', label:'Key passes', def:1}, {id:'goals', label:'Goals', def:0}, {id:'assists', label:'Assists', def:0} ],
-  AM: [ {id:'keyPasses', label:'Key passes', def:2}, {id:'dribbles', label:'Successful dribbles', def:2}, {id:'goals', label:'Goals', def:0}, {id:'assists', label:'Assists', def:0} ],
-  WNG: [ {id:'dribbles', label:'Successful dribbles', def:2}, {id:'keyPasses', label:'Key passes / crosses', def:1}, {id:'goals', label:'Goals', def:0}, {id:'assists', label:'Assists', def:0} ],
-  ST: [ {id:'goals', label:'Goals', def:0}, {id:'assists', label:'Assists', def:0}, {id:'shotsTotal', label:'Shots taken', def:2}, {id:'shotsOnTarget', label:'Shots on target', def:1} ],
+  CM: [ {id:'passAcc', label:'Pass accuracy %', def:84}, {id:'keyPasses', label:'Key passes', def:1} ],
+  AM: [ {id:'keyPasses', label:'Key passes', def:2}, {id:'dribbles', label:'Successful dribbles', def:2} ],
+  WNG: [ {id:'dribbles', label:'Successful dribbles', def:2}, {id:'keyPasses', label:'Key passes / crosses', def:1} ],
+  ST: [ {id:'shotsTotal', label:'Shots taken', def:2}, {id:'shotsOnTarget', label:'Shots on target', def:1} ],
 };
 
+
 const SOCCER_OPTIONAL = {
-  GK: [ {id:'claims', label:'Crosses claimed', def:0}, {id:'penSaved', label:'Penalties saved', def:0}, {id:'cleanSheet', label:'Clean sheet?', type:'check'} ],
-  CB: [ {id:'duelsWon', label:'Duels won', def:4}, {id:'duelsTotal', label:'Duels contested', def:6}, {id:'aerialsWon', label:'Aerials won', def:2} ],
-  FB: [ {id:'duelsWon', label:'Duels won', def:3}, {id:'duelsTotal', label:'Duels contested', def:5}, {id:'assists', label:'Assists', def:0}, {id:'dribbles', label:'Successful dribbles', def:1} ],
-  DM: [ {id:'duelsWon', label:'Duels won', def:3}, {id:'duelsTotal', label:'Duels contested', def:5}, {id:'keyPasses', label:'Key passes', def:0} ],
-  CM: [ {id:'passesCompleted', label:'Passes completed', def:30}, {id:'tackles', label:'Tackles won', def:1}, {id:'interceptions', label:'Interceptions', def:1}, {id:'dribbles', label:'Successful dribbles', def:1} ],
-  AM: [ {id:'passAcc', label:'Pass accuracy %', def:80}, {id:'shotsOnTarget', label:'Shots on target', def:1}, {id:'dispossessed', label:'Times dispossessed', def:1} ],
-  WNG: [ {id:'shotsOnTarget', label:'Shots on target', def:1}, {id:'touchesBox', label:'Touches in the box', def:3}, {id:'dispossessed', label:'Times dispossessed', def:2} ],
-  ST: [ {id:'touchesBox', label:'Touches in the box', def:4}, {id:'holdUp', label:'Duels won (hold-up play)', def:2}, {id:'dispossessed', label:'Times dispossessed', def:2} ],
+  GK: [ {id:'claims', label:'Crosses claimed', def:0, ignored:true}, {id:'penSaved', label:'Penalties saved', def:0}, {id:'cleanSheet', label:'Clean sheet?', type:'check'} ],
+  CB: [ {id:'duelsWon', label:'Duels won', def:4}, {id:'duelsTotal', label:'Duels contested', def:6}, {id:'aerialsWon', label:'Aerials won', def:2}, {id:'goals', label:'Goals', def:0}, {id:'assists', label:'Assists', def:0} ],
+  FB: [ {id:'duelsWon', label:'Duels won', def:3}, {id:'duelsTotal', label:'Duels contested', def:5}, {id:'assists', label:'Assists', def:0}, {id:'goals', label:'Goals', def:0}, {id:'dribbles', label:'Successful dribbles', def:1} ],
+  DM: [ {id:'duelsWon', label:'Duels won', def:3}, {id:'duelsTotal', label:'Duels contested', def:5}, {id:'keyPasses', label:'Key passes', def:0}, {id:'goals', label:'Goals', def:0}, {id:'assists', label:'Assists', def:0} ],
+  CM: [ {id:'passesCompleted', label:'Passes completed', def:30}, {id:'tackles', label:'Tackles won', def:1}, {id:'interceptions', label:'Interceptions', def:1}, {id:'dribbles', label:'Successful dribbles', def:1}, {id:'goals', label:'Goals', def:0}, {id:'assists', label:'Assists', def:0} ],
+  AM: [ {id:'goals', label:'Goals', def:0}, {id:'assists', label:'Assists', def:0}, {id:'dispossessed', label:'Times dispossessed', def:1} ],
+  WNG: [ {id:'goals', label:'Goals', def:0}, {id:'assists', label:'Assists', def:0}, {id:'dispossessed', label:'Times dispossessed', def:2} ],
+  ST: [ {id:'goals', label:'Goals', def:0}, {id:'assists', label:'Assists', def:0}, {id:'holdUp', label:'Duels won (hold-up play)', def:2}, {id:'dispossessed', label:'Times dispossessed', def:2} ],
 };
 
 const SOCCER_BENCH = {
-  GK: { saveRatio:{bench:0.68, weight:3.5}, claims:{bench:1, weight:0.15}, penSaved:{bench:0, weight:1.2} },
-  CB: { tackles:{bench:2, weight:0.18}, interceptions:{bench:2, weight:0.18}, clearances:{bench:3, weight:0.10}, duelRatio:{bench:0.6, weight:1.6}, passAcc:{bench:85, weight:0.035}, aerialsWon:{bench:2, weight:0.15} },
-  FB: { tackles:{bench:2, weight:0.16}, interceptions:{bench:1, weight:0.16}, duelRatio:{bench:0.55, weight:1.3}, passAcc:{bench:80, weight:0.03}, keyPasses:{bench:1, weight:0.32}, dribbles:{bench:1, weight:0.2} },
-  DM: { tackles:{bench:3, weight:0.16}, interceptions:{bench:2, weight:0.16}, passAcc:{bench:87, weight:0.04}, passesCompleted:{bench:35, weight:0.02}, duelRatio:{bench:0.6, weight:1.2}, keyPasses:{bench:0, weight:0.28} },
-  CM: { passAcc:{bench:84, weight:0.035}, passesCompleted:{bench:30, weight:0.02}, keyPasses:{bench:1, weight:0.38}, tackles:{bench:1, weight:0.15}, interceptions:{bench:1, weight:0.15}, dribbles:{bench:1, weight:0.2} },
-  AM: { keyPasses:{bench:2, weight:0.38}, passAcc:{bench:80, weight:0.03}, dribbles:{bench:2, weight:0.22}, shotsOnTarget:{bench:1, weight:0.28}, dispossessed:{bench:1, weight:-0.2} },
-  WNG: { dribbles:{bench:2, weight:0.25}, keyPasses:{bench:1, weight:0.38}, shotsOnTarget:{bench:1, weight:0.28}, touchesBox:{bench:3, weight:0.12}, dispossessed:{bench:2, weight:-0.15} },
-  ST: { shotConv:{bench:0.3, weight:1.5}, shotsOnTarget:{bench:1, weight:0.22}, touchesBox:{bench:4, weight:0.1}, holdUp:{bench:2, weight:0.15}, dispossessed:{bench:2, weight:-0.15} },
+  GK: { saveRatio:{bench:0.68, weight:3.4}, penSaved:{bench:0, weight:1.1} },
+  CB: { tackles:{bench:2, weight:0.18}, interceptions:{bench:2, weight:0.20}, clearances:{bench:3, weight:0.09}, duelRatio:{bench:0.60, weight:1.45}, passAcc:{bench:85, weight:0.035}, aerialsWon:{bench:2, weight:0.16} },
+  FB: { tackles:{bench:2, weight:0.16}, interceptions:{bench:1, weight:0.16}, duelRatio:{bench:0.55, weight:1.25}, passAcc:{bench:80, weight:0.03}, keyPasses:{bench:1, weight:0.30}, dribbles:{bench:1, weight:0.22} },
+  DM: { tackles:{bench:3, weight:0.17}, interceptions:{bench:2, weight:0.17}, passAcc:{bench:87, weight:0.04}, passesCompleted:{bench:35, weight:0.018}, duelRatio:{bench:0.60, weight:1.20}, keyPasses:{bench:0, weight:0.28} },
+  CM: { passAcc:{bench:84, weight:0.035}, passesCompleted:{bench:30, weight:0.018}, keyPasses:{bench:1, weight:0.36}, tackles:{bench:1, weight:0.14}, interceptions:{bench:1, weight:0.14}, dribbles:{bench:1, weight:0.20} },
+  AM: { keyPasses:{bench:2, weight:0.36}, passAcc:{bench:80, weight:0.03}, dribbles:{bench:2, weight:0.22}, shotsOnTarget:{bench:1, weight:0.26}, dispossessed:{bench:1, weight:-0.18} },
+  WNG: { dribbles:{bench:2, weight:0.24}, keyPasses:{bench:1, weight:0.36}, shotsOnTarget:{bench:1, weight:0.25}, touchesBox:{bench:3, weight:0.12}, dispossessed:{bench:2, weight:-0.15} },
+  ST: { shotConv:{bench:0.30, weight:1.35}, shotsOnTarget:{bench:1, weight:0.24}, touchesBox:{bench:4, weight:0.11}, holdUp:{bench:2, weight:0.15}, dispossessed:{bench:2, weight:-0.15} },
 };
 
 /* ---------------- BASKETBALL ---------------- */
@@ -1550,7 +1551,7 @@ const CRICKET_OPTIONAL = {
    FIELD RENDERING
 ========================================================= */
 
-function fieldHtml(d){
+function fieldHtml(d, isOptional=false){
   if(d.type === 'check'){
     return `<div class="field"><label style="margin-bottom:8px;">${d.label}</label>
       <div class="checkline" style="margin-bottom:0;">
@@ -1558,8 +1559,10 @@ function fieldHtml(d){
         <label for="stat_${d.id}" style="margin:0; font-size:0.9rem;">Yes</label>
       </div></div>`;
   }
-  return `<div class="field"><label>${d.label}</label>
-    <input type="number" id="stat_${d.id}" value="${d.def}" min="0" step="any"></div>`;
+  const value = isOptional ? '' : d.def;
+  const placeholder = isOptional ? 'optional' : '';
+  return `<div class="field"><label>${d.label}${isOptional ? ' <span class="optional-tag">(optional)</span>' : ''}</label>
+    <input type="number" id="stat_${d.id}" value="${value}" placeholder="${placeholder}" min="0" step="any"></div>`;
 }
 
 function renderFieldGroup(defs, containerId, label, optionalWrap){
@@ -1575,7 +1578,7 @@ function renderFieldGroup(defs, containerId, label, optionalWrap){
   let inner = '';
   for(let i=0; i<defs.length; i+=2){
     const pair = defs.slice(i, i+2);
-    inner += `<div class="field-row">${pair.map(fieldHtml).join('')}</div>`;
+    inner += `<div class="field-row">${pair.map(d=>fieldHtml(d, !!optionalWrap)).join('')}</div>`;
   }
   if(optionalWrap){
     html += `<div class="optional-block ${optionalOpen ? 'open' : ''}" id="optionalBlockInner">${inner}</div>`;
@@ -2016,128 +2019,180 @@ function downloadRatingCard(blob){const url=URL.createObjectURL(blob),a=document
    RATING ENGINES
 ========================================================= */
 
-function gradeSoccer(){
-  const role = document.getElementById('role').value;
-  const minutes = Math.max(1, val('minutes', 90));
-  const scale90 = 90 / minutes;
+function calculateSoccerRating(role, minutes, raw, provided, context, result){
   const breakdown = [];
   let rating = 6.0;
+  const b = SOCCER_BENCH[role] || {};
 
-  const allDefs = [...(SOCCER_CORE[role]||[]), ...(SOCCER_OPTIONAL[role]||[])];
-  const raw = {};
-  allDefs.forEach(d=>{ raw[d.id] = d.type === 'check' ? val('stat_'+d.id, false) : val('stat_'+d.id, d.def); });
-
-  const b = SOCCER_BENCH[role];
+  // Exposure adjustment is deliberately capped. Linear full-match scaling can
+  // make a short cameo with one big action look like a five-goal performance.
+  const exposure = Math.min(2.25, Math.sqrt(90 / Math.max(1, minutes)));
 
   function add(amount, label){
-    if(Math.abs(amount) < 0.02) return;
+    if(!Number.isFinite(amount) || Math.abs(amount) < 0.02) return;
     rating += amount;
     breakdown.push({label, amount});
   }
 
-  /* Diminishing returns for high-impact stats (goals / assists).
-     Linear weighting made 3 goals auto-10. This keeps a hat-trick elite
-     (~9.2–9.5) without hitting the ceiling unless the rest of the game
-     is also outstanding. */
-  function diminish(count, first, second, third, rest){
-    count = Math.max(0, Math.round(count));
-    if(count === 0) return 0;
+  function has(key){
+    return provided && provided[key] === true;
+  }
+
+  function diminishing(count, first, second, third, rest){
+    count = Math.max(0, count);
+    if(count <= 0) return 0;
+    const whole = Math.floor(count);
+    const frac = count - whole;
     let total = 0;
-    for(let i = 1; i <= count; i++){
-      if(i === 1) total += first;
-      else if(i === 2) total += second;
-      else if(i === 3) total += third;
-      else total += rest;
+    for(let i=1; i<=whole; i++){
+      total += i===1 ? first : i===2 ? second : i===3 ? third : rest;
+    }
+    if(frac > 0){
+      total += frac * (whole===0 ? first : whole===1 ? second : whole===2 ? third : rest);
     }
     return total;
   }
 
   if(role === 'GK'){
-    const saves = raw.saves||0, faced = Math.max(raw.shotsFaced||0, saves, 0.0001);
-    const ratio = saves/faced;
-    add((ratio - b.saveRatio.bench) * b.saveRatio.weight, `Save ratio ${(ratio*100).toFixed(0)}% (${saves}/${faced})`);
-    if(raw.claims !== undefined) add((raw.claims - b.claims.bench)*b.claims.weight, `Crosses claimed: ${raw.claims}`);
-    if(raw.penSaved > 0) add(raw.penSaved * b.penSaved.weight, `Penalty save x${raw.penSaved}`);
-    if(raw.cleanSheet) add(0.6, 'Clean sheet');
+    const saves = Math.max(0, Number(raw.saves)||0);
+    const faced = Math.max(0, Number(raw.shotsFaced)||0);
+    if(faced > 0){
+      const ratio = Math.min(1, saves / faced);
+      add((ratio - b.saveRatio.bench) * b.saveRatio.weight, `Save ratio ${(ratio*100).toFixed(0)}% (${saves}/${faced})`);
+      // Reward difficult workload separately, but cap it so volume cannot dominate.
+      const saveVolume = Math.min(0.45, Math.max(0, saves - 3) * 0.07 * exposure);
+      add(saveVolume, `Shot-stopping volume: ${saves} saves`);
+    }
+    if(has('penSaved') && raw.penSaved > 0) add(Math.min(1.5, raw.penSaved * b.penSaved.weight), `Penalty save x${raw.penSaved}`);
+    if(has('cleanSheet') && raw.cleanSheet) add(0.55, 'Clean sheet');
+    // Crosses claimed is intentionally display-only and never changes the rating.
   } else {
-    // Goals – role-aware diminishing returns
-    const goals = (raw.goals || 0) * scale90;
-    if(goals > 0){
+    // High-impact attacking actions. Goals/assists are optional for every
+    // outfield role, so they only contribute when the user actually enters them.
+    if(has('goals') && raw.goals > 0){
+      const goals = raw.goals * exposure;
       let gBonus;
-      if(role === 'ST'){
-        gBonus = diminish(goals, 1.40, 1.05, 0.72, 0.42);   // 3 goals ≈ +3.17
-      } else if(role === 'AM' || role === 'WNG'){
-        gBonus = diminish(goals, 1.30, 0.95, 0.65, 0.38);
-      } else {
-        gBonus = diminish(goals, 1.15, 0.85, 0.55, 0.32);   // midfield / full-back goals still valuable
-      }
-      add(gBonus, `Goals: ${raw.goals}${scale90 !== 1 ? ' (scaled)' : ''}`);
+      if(role === 'ST') gBonus = diminishing(goals, 1.45, 1.00, 0.68, 0.34);
+      else if(role === 'AM' || role === 'WNG') gBonus = diminishing(goals, 1.30, 0.92, 0.60, 0.32);
+      else if(role === 'CM') gBonus = diminishing(goals, 1.18, 0.82, 0.54, 0.30);
+      else if(role === 'FB' || role === 'DM') gBonus = diminishing(goals, 1.10, 0.76, 0.50, 0.28);
+      else gBonus = diminishing(goals, 1.15, 0.80, 0.52, 0.28);
+      add(Math.min(3.2, gBonus), `Goals: ${raw.goals}${exposure !== 1 ? ' (adjusted)' : ''}`);
     }
 
-    // Assists – milder diminishing returns
-    const assists = (raw.assists || 0) * scale90;
-    if(assists > 0){
-      const aBonus = diminish(assists, 1.05, 0.80, 0.55, 0.32);
-      add(aBonus, `Assists: ${raw.assists}${scale90 !== 1 ? ' (scaled)' : ''}`);
+    if(has('assists') && raw.assists > 0){
+      const assists = raw.assists * exposure;
+      let aFirst = 1.0;
+      if(role === 'AM' || role === 'WNG') aFirst = 1.08;
+      else if(role === 'ST') aFirst = 0.92;
+      else if(role === 'CB' || role === 'FB' || role === 'DM') aFirst = 0.85;
+      add(Math.min(2.4, diminishing(assists, aFirst, 0.72, 0.48, 0.28)), `Assists: ${raw.assists}${exposure !== 1 ? ' (adjusted)' : ''}`);
     }
 
-    // Remaining stats (skip goals/assists – already handled)
+    // Role-specific core/optional production stats.
     Object.keys(raw).forEach(key=>{
-      if(['duelsWon','duelsTotal','cleanSheet','goals','assists'].includes(key)) return;
-      if(key === 'passAcc' && b.passAcc){ add((raw[key]-b.passAcc.bench)*b.passAcc.weight, `Pass accuracy: ${raw[key]}%`); return; }
+      if(['goals','assists','duelsWon','duelsTotal','cleanSheet','claims','penSaved'].includes(key)) return;
+      if(!has(key)) return;
+
+      if(key === 'passAcc' && b.passAcc){
+        const acc = Math.max(0, Math.min(100, Number(raw[key])||0));
+        // Accuracy is bounded so a very high percentage cannot overpower all other work.
+        add(Math.max(-0.75, Math.min(0.75, (acc - b.passAcc.bench) * b.passAcc.weight)), `Pass accuracy: ${acc}%`);
+        return;
+      }
+
       if(b[key]){
-        const scaled = raw[key] * scale90;
-        const nice = allDefs.find(d=>d.id===key)?.label || key;
-        add((scaled - b[key].bench)*b[key].weight, `${nice}: ${raw[key]}`);
+        const scaled = Math.max(0, Number(raw[key])||0) * exposure;
+        const delta = (scaled - b[key].bench) * b[key].weight;
+        add(Math.max(-0.9, Math.min(0.9, delta)), `${key}: ${raw[key]}`);
       }
     });
 
-    if(raw.duelsTotal !== undefined && b.duelRatio){
-      const total = Math.max(raw.duelsTotal, 0.0001);
-      const ratio = (raw.duelsWon||0)/total;
-      add((ratio - b.duelRatio.bench)*b.duelRatio.weight, `Duels won ${(ratio*100).toFixed(0)}% (${raw.duelsWon}/${raw.duelsTotal})`);
+    if(has('duelsTotal') && has('duelsWon') && b.duelRatio){
+      const total = Math.max(0, Number(raw.duelsTotal)||0);
+      if(total > 0){
+        const ratio = Math.max(0, Math.min(1, (Number(raw.duelsWon)||0) / total));
+        const reliability = Math.min(1, total / 5);
+        add((ratio - b.duelRatio.bench) * b.duelRatio.weight * reliability,
+            `Duels won ${(ratio*100).toFixed(0)}% (${raw.duelsWon}/${raw.duelsTotal})`);
+      }
     }
 
-    // Shot conversion – only meaningful for strikers / attackers with volume
-    if((role === 'ST' || role === 'AM' || role === 'WNG') && b.shotConv && raw.shotsTotal > 0){
-      const conv = (raw.goals||0) / raw.shotsTotal;
-      // Cap the conversion bonus so clinical finishing helps but doesn't explode the score
-      const convBonus = Math.min(0.9, (conv - b.shotConv.bench) * b.shotConv.weight * 0.45);
+    if((role === 'ST' || role === 'AM' || role === 'WNG') &&
+       b.shotConv && has('shotsTotal') && has('goals') && raw.shotsTotal > 0){
+      const conv = Math.max(0, Math.min(1, raw.goals / raw.shotsTotal));
+      const volumeFactor = Math.min(1, raw.shotsTotal / 3);
+      const convBonus = Math.max(-0.35, Math.min(0.65,
+        (conv - b.shotConv.bench) * b.shotConv.weight * 0.5 * volumeFactor));
       add(convBonus, `Shot conversion ${(conv*100).toFixed(0)}%`);
     }
   }
 
-  const conceded = val('goalsConceded', 0);
-  const errors = val('errorsToGoal', 0);
-  const sentOff = val('sentOff', false);
-  const yellow = val('yellow', false);
-  const concededWeight = (role === 'GK') ? 0.45 : (['CB','FB','DM'].includes(role)) ? 0.3 : 0.12;
+  const conceded = Math.max(0, Number(context?.goalsConceded)||0);
+  const errors = Math.max(0, Number(context?.errorsToGoal)||0);
+  const sentOff = !!context?.sentOff;
+  const yellow = !!context?.yellow;
+  const concededWeight = role === 'GK' ? 0.42 :
+    ['CB','FB','DM'].includes(role) ? 0.25 :
+    role === 'CM' ? 0.14 : 0.10;
 
-  if(conceded > 0) add(-(conceded*concededWeight), `Goals conceded: ${conceded}`);
-  else if(['GK','CB','FB','DM'].includes(role)) add(0.3, 'No goals conceded');
+  if(conceded > 0) add(-Math.min(1.8, conceded * concededWeight), `Goals conceded: ${conceded}`);
+  else if(['GK','CB','FB','DM'].includes(role)) add(0.22, 'No goals conceded');
 
-  if(errors > 0) add(-(errors*1.3), `Error(s) leading to goal: ${errors}`);
-  if(sentOff) add(-2.2, 'Sent off');
-  else if(yellow) add(-0.2, 'Booked');
+  if(errors > 0) add(-Math.min(2.0, errors * 1.15), `Error(s) leading to goal: ${errors}`);
+  if(sentOff) add(-2.0, 'Sent off');
+  else if(yellow) add(-0.18, 'Booked');
 
-  if(resultVal === 'win') add(0.25, 'Team won');
-  else if(resultVal === 'loss') add(-0.25, 'Team lost');
+  if(result === 'win') add(0.22, 'Team won');
+  else if(result === 'loss') add(-0.22, 'Team lost');
 
+  // Very short appearances carry less statistical confidence.
   if(minutes < 45){
-    const pull = (6.0 - rating) * 0.3;
+    const confidence = Math.max(0.45, minutes / 45);
+    const pull = (6.0 - rating) * (1 - confidence) * 0.65;
     rating += pull;
-    breakdown.push({label:`Limited minutes (${minutes}')  pulled toward neutral`, amount: pull});
+    if(Math.abs(pull) >= 0.02) breakdown.push({label:`Limited minutes (${minutes}')  rating confidence reduced`, amount:pull});
   }
 
-  // Soft ceiling: ratings above 9.6 require exceptional all-round contribution.
-  // Pure goal tallies alone should rarely touch 10.
-  if(rating > 9.6){
-    const excess = rating - 9.6;
-    rating = 9.6 + excess * 0.55;
+  // Keep elite scores difficult without making 10.0 impossible.
+  if(rating > 9.55){
+    rating = 9.55 + (rating - 9.55) * 0.45;
   }
 
   rating = Math.max(1.0, Math.min(10.0, rating));
-  renderResult(rating, breakdown, `${SOCCER_ROLES[role]} · full time`);
+  return {rating, breakdown};
+}
+
+function gradeSoccer(){
+  const role = document.getElementById('role').value;
+  const minutes = Math.max(1, val('minutes', 90));
+  const allDefs = [...(SOCCER_CORE[role]||[]), ...(SOCCER_OPTIONAL[role]||[])];
+  const raw = {};
+  const provided = {};
+
+  allDefs.forEach(d=>{
+    const el = document.getElementById('stat_'+d.id);
+    if(d.type === 'check'){
+      raw[d.id] = !!(el && el.checked);
+      provided[d.id] = true;
+    } else {
+      const hasInput = !!el && el.value.trim() !== '';
+      raw[d.id] = hasInput ? parseFloat(el.value) : (d.def ?? 0);
+      if(!Number.isFinite(raw[d.id])) raw[d.id] = d.def ?? 0;
+      // Core fields are always part of the model. Optional fields only count
+      // when the user actually enters a value.
+      provided[d.id] = !SOCCER_OPTIONAL[role]?.some(o=>o.id===d.id) || hasInput;
+    }
+  });
+
+  const result = calculateSoccerRating(role, minutes, raw, provided, {
+    goalsConceded: val('goalsConceded', 0),
+    errorsToGoal: val('errorsToGoal', 0),
+    sentOff: val('sentOff', false),
+    yellow: val('yellow', false)
+  }, resultVal);
+
+  renderResult(result.rating, result.breakdown, `${SOCCER_ROLES[role]} · full time`);
 }
 
 function gradeBasketball(){
@@ -2640,8 +2695,12 @@ function setCompareSport(sport){
       minsInput.value = sport==='soccer' ? 90 : 32;
       minsInput.max = sport==='soccer' ? 120 : 48;
     }
-    renderCompareStats(side, core[sel.value]||Object.values(core)[0]);
-    sel.onchange = ()=> renderCompareStats(side, core[sel.value]||[]);
+    const defsForRole = ()=>{
+      const base = core[sel.value] || Object.values(core)[0] || [];
+      return sport==='soccer' ? [...base, ...(SOCCER_OPTIONAL[sel.value]||[])] : base;
+    };
+    renderCompareStats(side, defsForRole());
+    sel.onchange = ()=> renderCompareStats(side, defsForRole());
   });
   document.getElementById('compareResult').style.display = 'none';
 }
@@ -2650,7 +2709,8 @@ function renderCompareStats(side, defs){
   const box = document.getElementById('cmp'+side+'_stats');
   box.innerHTML = (defs||[]).map(d=>{
     if(d.type==='check') return '';
-    return `<div class="field"><label>${d.label}</label><input type="number" id="cmp${side}_${d.id}" value="${d.def}" min="0" step="any"></div>`;
+    const isOptional = d.optional === true || ['goals','assists','claims','penSaved','cleanSheet','duelsWon','duelsTotal','aerialsWon','dribbles','dispossessed','touchesBox','holdUp','passAcc'].includes(d.id) && compareSport==='soccer' && (SOCCER_OPTIONAL[document.getElementById('cmp'+side+'_role').value]||[]).some(o=>o.id===d.id);
+    return `<div class="field"><label>${d.label}${isOptional ? ' <span class="optional-tag">(optional)</span>' : ''}</label><input type="number" id="cmp${side}_${d.id}" value="${isOptional ? '' : d.def}" placeholder="${isOptional ? 'optional' : ''}" min="0" step="any"></div>`;
   }).join('');
 }
 
@@ -2669,18 +2729,33 @@ function cmpVal(side, id, fallback){
 }
 
 function rateFromInputs(side, sport){
-  // Build a temporary rating using the same engines by temporarily
-  // writing into the main form is risky. Instead we reuse the core
-  // logic with a lightweight adapter for the most important stats.
   const role = document.getElementById('cmp'+side+'_role').value;
   const minutes = Math.max(1, cmpVal(side,'minutes', sport==='soccer'?90:32));
   const name = document.getElementById('cmp'+side+'_name').value.trim() || ('Player '+side);
 
-  // Collect raw stats present in the compare form
   const raw = {};
+  const provided = {};
   const core = sport==='soccer' ? SOCCER_CORE[role] : sport==='basketball' ? BBALL_CORE[role] : CRICKET_CORE[role];
-  (core||[]).forEach(d=>{ if(d.type!=='check') raw[d.id] = cmpVal(side, d.id, d.def); });
+  const optional = sport==='soccer' ? (SOCCER_OPTIONAL[role]||[]) : [];
+  const defs = [...(core||[]), ...optional];
 
+  defs.forEach(d=>{
+    if(d.type==='check') return;
+    const el = document.getElementById('cmp'+side+'_'+d.id);
+    const hasInput = !!el && el.value.trim() !== '';
+    raw[d.id] = hasInput ? parseFloat(el.value) : (d.def ?? 0);
+    if(!Number.isFinite(raw[d.id])) raw[d.id] = d.def ?? 0;
+    provided[d.id] = sport==='soccer'
+      ? (!(optional.some(o=>o.id===d.id)) || hasInput)
+      : true;
+  });
+
+  if(sport==='soccer'){
+    const result = calculateSoccerRating(role, minutes, raw, provided, {}, 'draw');
+    return {name, role, rating:result.rating, breakdown:result.breakdown, raw, minutes};
+  }
+
+  // Existing basketball/cricket comparison model.
   let rating = 6.0;
   const breakdown = [];
   function add(amount, label){
@@ -2698,34 +2773,7 @@ function rateFromInputs(side, sport){
     return total;
   }
 
-  if(sport==='soccer'){
-    const scale90 = 90/minutes;
-    const b = SOCCER_BENCH[role]||{};
-    if(role==='GK'){
-      const saves=raw.saves||0, faced=Math.max(raw.shotsFaced||0,saves,0.0001);
-      const ratio=saves/faced;
-      if(b.saveRatio) add((ratio-b.saveRatio.bench)*b.saveRatio.weight, `Save ratio ${(ratio*100).toFixed(0)}%`);
-    } else {
-      const goals=(raw.goals||0)*scale90;
-      if(goals>0){
-        let gBonus;
-        if(role==='ST') gBonus=diminish(goals,1.40,1.05,0.72,0.42);
-        else if(role==='AM'||role==='WNG') gBonus=diminish(goals,1.30,0.95,0.65,0.38);
-        else gBonus=diminish(goals,1.15,0.85,0.55,0.32);
-        add(gBonus, `Goals: ${raw.goals||0}`);
-      }
-      const assists=(raw.assists||0)*scale90;
-      if(assists>0) add(diminish(assists,1.05,0.80,0.55,0.32), `Assists: ${raw.assists||0}`);
-      Object.keys(raw).forEach(key=>{
-        if(['goals','assists'].includes(key)) return;
-        if(key==='passAcc' && b.passAcc){ add((raw[key]-b.passAcc.bench)*b.passAcc.weight, `Pass accuracy: ${raw[key]}%`); return; }
-        if(b[key]){
-          const scaled=raw[key]*scale90;
-          add((scaled-b[key].bench)*b[key].weight, `${key}: ${raw[key]}`);
-        }
-      });
-    }
-  } else if(sport==='basketball'){
+  if(sport==='basketball'){
     const scale32 = 32/minutes;
     const b = BBALL_BENCH[role]||{};
     Object.keys(raw).forEach(key=>{
@@ -2735,7 +2783,6 @@ function rateFromInputs(side, sport){
       add((scaled-b[key].bench)*b[key].weight, `${key}: ${raw[key]}`);
     });
   } else {
-    // cricket simplified
     if(['BAT','AR','WK'].includes(role) && (raw.balls||0)>0){
       const runBaseline = role==='BAT'?30:role==='WK'?20:15;
       add(((raw.runs||0)-runBaseline)*0.045, `Runs: ${raw.runs||0}`);
@@ -2755,8 +2802,6 @@ function rateFromInputs(side, sport){
 
   rating = Math.max(1, Math.min(10, rating));
   if(rating>9.6){ const excess=rating-9.6; rating=9.6+excess*0.55; }
-  rating = Math.max(1, Math.min(10, rating));
-
   return { name, role, rating, breakdown, raw, minutes };
 }
 
