@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How Player Ratings Work — The Method Behind MatchGrade's Scores</title>
+<meta name="description" content="A deep dive into how MatchGrade calculates player ratings out of 10 for soccer, basketball, and cricket — the 6.0 baseline, position weighting, and context modifiers explained.">
+<meta name="keywords" content="how player ratings work, how are match ratings calculated, player rating methodology, sports rating algorithm explained">
+<link rel="canonical" href="https://matchgrade.netlify.app/how-player-ratings-work">
+<meta property="og:title" content="How Player Ratings Work — MatchGrade">
+<meta property="og:description" content="The methodology behind MatchGrade's transparent, position-weighted player ratings.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://matchgrade.netlify.app/how-player-ratings-work">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type":"Question","name":"Why does every rating start at 6.0?","acceptedAnswer":{"@type":"Answer","text":"A 6.0 baseline is the standard starting point used by many professional match-rating services. It represents a neutral, anonymous performance where a player did their job without standing out positively or negatively in either direction."}},
+    {"@type":"Question","name":"Why do different positions get different stat weightings?","acceptedAnswer":{"@type":"Answer","text":"Because the same raw stat means something different depending on role. Ten tackles is an excellent game for a full-back and a strange stat line for a striker. Weighting by position keeps the rating meaningful across every role on the pitch or court."}},
+    {"@type":"Question","name":"What happens with a short substitute appearance?","acceptedAnswer":{"@type":"Answer","text":"Stats are scaled to a full-match equivalent (90 minutes for soccer, 32 for basketball) so a 20-minute cameo is judged fairly. Very short appearances are also pulled gently back toward the neutral 6.0 baseline, since a handful of minutes isn't enough to fully judge a performance."}},
+    {"@type":"Question","name":"Is this the same formula WhoScored or SofaScore use?","acceptedAnswer":{"@type":"Answer","text":"MatchGrade uses a similar 6.0 baseline philosophy but is an independent, transparent implementation. It is not affiliated with any major data provider, and the full calculation is visible in the breakdown rather than hidden behind a proprietary score."}}
+  ]
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Special+Elite&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#EDEAE2; --paper-dark:#E3DFD3; --ink:#1B1B18; --ink-soft:#4A473F;
+  --accent:#2F5233; --accent-deep:#20391F; --red:#B23A2F; --gold:#B8933F; --line:#c9c3b2;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;background:var(--paper);color:var(--ink);font-family:'Source Serif 4',serif;}
+body{background-image:radial-gradient(ellipse at top left, rgba(47,82,51,0.05), transparent 45%),repeating-linear-gradient(0deg, rgba(0,0,0,0.015) 0px, rgba(0,0,0,0.015) 1px, transparent 1px, transparent 3px);}
+.wrap{max-width:820px;margin:0 auto;padding:32px 20px 70px;}
+.masthead{border-bottom:3px solid var(--ink);padding-bottom:14px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:10px;}
+.masthead h1{font-family:'Oswald',sans-serif;font-weight:700;font-size:2.1rem;letter-spacing:-0.5px;margin:0;line-height:0.95;}
+.masthead h1 span{color:var(--accent);}
+.masthead .tagline{font-family:'Special Elite',monospace;font-size:0.75rem;color:var(--ink-soft);text-align:right;max-width:220px;line-height:1.4;}
+.breadcrumb{font-family:'Special Elite',monospace;font-size:0.72rem;color:var(--ink-soft);margin:14px 0 22px;}
+.breadcrumb a{color:var(--accent);text-decoration:none;}
+.breadcrumb a:hover{text-decoration:underline;}
+.hero{margin-bottom:28px;}
+.hero h2{font-family:'Oswald',sans-serif;font-size:1.7rem;margin:0 0 12px;line-height:1.2;}
+.hero p{font-size:1.02rem;line-height:1.65;color:var(--ink-soft);max-width:70ch;margin:0 0 14px;}
+.cta-box{border:1.5px solid var(--ink);background:var(--paper-dark);padding:20px 22px;margin:24px 0;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;}
+.cta-box p{margin:0;font-size:0.95rem;color:var(--ink-soft);max-width:44ch;}
+.cta-box a.btn{background:var(--accent);color:var(--paper);text-decoration:none;font-family:'Oswald',sans-serif;font-size:0.9rem;letter-spacing:0.4px;padding:12px 22px;white-space:nowrap;}
+.cta-box a.btn:hover{background:var(--accent-deep);}
+.section{margin-top:34px;border-top:1px solid var(--ink);padding-top:22px;}
+.section h2{font-family:'Oswald',sans-serif;font-size:1.15rem;margin:0 0 12px;}
+.section h3{font-family:'Oswald',sans-serif;font-size:1rem;margin:20px 0 8px;}
+.section p{font-size:0.96rem;line-height:1.65;color:var(--ink-soft);max-width:74ch;margin:0 0 14px;}
+.section ul, .section ol{color:var(--ink-soft);font-size:0.96rem;line-height:1.7;max-width:72ch;padding-left:22px;}
+.section li{margin-bottom:6px;}
+table.stat-table{width:100%;border-collapse:collapse;margin:16px 0 20px;font-size:0.9rem;}
+table.stat-table th{text-align:left;font-family:'Oswald',sans-serif;font-size:0.78rem;letter-spacing:0.3px;text-transform:uppercase;color:var(--ink-soft);border-bottom:2px solid var(--ink);padding:8px 10px 8px 0;}
+table.stat-table td{padding:9px 10px 9px 0;border-bottom:1px dotted var(--line);color:var(--ink-soft);}
+table.stat-table td:first-child, table.stat-table th:first-child{color:var(--ink);font-weight:600;}
+.faq-item{margin-bottom:18px;}
+.faq-item h3{font-family:'Oswald',sans-serif;font-size:0.95rem;margin:0 0 6px;}
+.faq-item p{font-size:0.92rem;line-height:1.6;color:var(--ink-soft);margin:0;}
+.footnote{margin-top:30px;font-size:0.8rem;color:var(--ink-soft);text-align:center;line-height:1.7;}
+.footnote a{color:var(--accent);}
+.pagelinks{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;}
+.pagelinks a{font-family:'Special Elite',monospace;font-size:0.75rem;color:var(--accent-deep);text-decoration:none;border:1px solid var(--line);padding:6px 12px;}
+.pagelinks a:hover{border-color:var(--accent);}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="masthead">
+    <h1><a href="/" style="color:inherit;text-decoration:none;">Match<span>Grade</span></a></h1>
+    <div class="tagline">stat sheet in, honest number out</div>
+  </div>
+  <div class="breadcrumb"><a href="/">Home</a> / How player ratings work</div>
+
+  <div class="hero">
+    <h2>How player ratings work</h2>
+    <p>Most match-rating services show you a number without showing their work. MatchGrade is built the other way around: every rating starts from the same transparent baseline, and every point gained or lost is visible in the breakdown.</p>
+    <p>This page explains the method in full — useful if you want to understand why a rating landed where it did, or if you're comparing MatchGrade to other rating systems you've seen.</p>
+  </div>
+
+  <div class="cta-box">
+    <p>See the method in action — grade a real performance.</p>
+    <a class="btn" href="/">Open the calculator</a>
+  </div>
+
+  <div class="section">
+    <h2>The three-step method</h2>
+    <h3>1. Start at a neutral baseline</h3>
+    <p>Every performance begins at 6.0 — not zero, not five, but a number representing an anonymous player who did their job. This matches the convention used across most professional rating systems, so a MatchGrade score is directly comparable to what people are used to seeing on matchday.</p>
+    <h3>2. Compare each stat to a position-specific benchmark</h3>
+    <p>Every stat entered is compared to a realistic expectation for that position, scaled to a full match. Outperforming the benchmark adds points; underperforming subtracts them. The weighting differs by stat and position — a goal is worth more for a rating than a single tackle, but a center-back's clean sheet and duel-win rate carry real weight too.</p>
+    <h3>3. Apply context modifiers</h3>
+    <p>Team result, cards, and — in soccer — goals conceded and errors leading to a goal all adjust the score on top of the individual stat line. These are kept deliberately small relative to personal performance, since an individual rating should reflect what a player actually did, not just whether their team won.</p>
+
+    <h2>Why transparency matters</h2>
+    <p>A rating you can't see the reasoning behind is hard to trust or argue with. MatchGrade shows every contributing stat and its exact point value, so if a rating looks surprising, you can see precisely why — whether that's a heavily weighted defensive stat, a diminishing-returns goal bonus, or a minutes-played adjustment pulling a short cameo back toward neutral.</p>
+  </div>
+
+  <div class="section">
+    <h2>Related pages</h2>
+    <div class="pagelinks">
+      <a href="/">Home — all three sports</a>
+      <a href="/soccer-player-rating-calculator">Soccer player rating calculator</a>
+      <a href="/football-player-rating-calculator">Football player rating calculator</a>
+      <a href="/basketball-player-rating-calculator">Basketball player rating calculator</a>
+      <a href="/cricket-player-rating-calculator">Cricket player rating calculator</a>
+    </div>
+  </div>
+
+  <div class="footnote">
+    <a href="/">MatchGrade</a> — free player rating calculator for soccer, basketball, and cricket.
+  </div>
+</div>
+</body>
+</html>
