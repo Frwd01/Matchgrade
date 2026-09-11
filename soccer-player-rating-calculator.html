@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Soccer Player Rating Calculator — Rate Any Football Performance Out of 10</title>
+<meta name="description" content="Free soccer player rating calculator. Enter goals, tackles, passes and key stats and get a position-specific rating out of 10 — for goalkeepers, defenders, midfielders, and forwards.">
+<meta name="keywords" content="soccer player rating calculator, football player rating calculator, soccer rating out of 10, player rating soccer game">
+<link rel="canonical" href="https://matchgrade.netlify.app/soccer-player-rating-calculator">
+<meta property="og:title" content="Soccer Player Rating Calculator — MatchGrade">
+<meta property="og:description" content="Turn a soccer stat line into an honest rating out of 10, weighted by position.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://matchgrade.netlify.app/soccer-player-rating-calculator">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type":"Question","name":"How is a soccer player rating out of 10 calculated?","acceptedAnswer":{"@type":"Answer","text":"MatchGrade starts every player at a 6.0 baseline, representing an anonymous, did-their-job performance. The score then moves up or down based on stats compared to what is typical for that position — tackles and clearances for defenders, key passes and goals for attackers — plus context like goals conceded, cards, and result."}},
+    {"@type":"Question","name":"What stats do I need to rate a soccer player?","acceptedAnswer":{"@type":"Answer","text":"It depends on position. Goalkeepers need saves and shots faced. Defenders need tackles, interceptions, and clearances. Midfielders need pass accuracy and key passes. Forwards need goals, assists, and shots on target. MatchGrade only asks for stats relevant to the selected position."}},
+    {"@type":"Question","name":"Does a soccer rating calculator account for minutes played?","acceptedAnswer":{"@type":"Answer","text":"Yes. Stats are scaled to a 90-minute equivalent so a player coming on for 20 minutes isn't unfairly punished for having fewer total actions than someone who played the full match. Very short cameos are also pulled gently back toward the neutral 6.0 baseline."}},
+    {"@type":"Question","name":"Can I rate goalkeepers with this calculator?","acceptedAnswer":{"@type":"Answer","text":"Yes. Goalkeepers use a separate model based on save ratio (saves divided by shots faced), clean sheets, crosses claimed, and penalty saves, rather than the outfield stats used for other positions."}}
+  ]
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Special+Elite&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#EDEAE2; --paper-dark:#E3DFD3; --ink:#1B1B18; --ink-soft:#4A473F;
+  --accent:#2F5233; --accent-deep:#20391F; --red:#B23A2F; --gold:#B8933F; --line:#c9c3b2;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;background:var(--paper);color:var(--ink);font-family:'Source Serif 4',serif;}
+body{background-image:radial-gradient(ellipse at top left, rgba(47,82,51,0.05), transparent 45%),repeating-linear-gradient(0deg, rgba(0,0,0,0.015) 0px, rgba(0,0,0,0.015) 1px, transparent 1px, transparent 3px);}
+.wrap{max-width:820px;margin:0 auto;padding:32px 20px 70px;}
+.masthead{border-bottom:3px solid var(--ink);padding-bottom:14px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:10px;}
+.masthead h1{font-family:'Oswald',sans-serif;font-weight:700;font-size:2.1rem;letter-spacing:-0.5px;margin:0;line-height:0.95;}
+.masthead h1 span{color:var(--accent);}
+.masthead .tagline{font-family:'Special Elite',monospace;font-size:0.75rem;color:var(--ink-soft);text-align:right;max-width:220px;line-height:1.4;}
+.breadcrumb{font-family:'Special Elite',monospace;font-size:0.72rem;color:var(--ink-soft);margin:14px 0 22px;}
+.breadcrumb a{color:var(--accent);text-decoration:none;}
+.breadcrumb a:hover{text-decoration:underline;}
+.hero{margin-bottom:28px;}
+.hero h2{font-family:'Oswald',sans-serif;font-size:1.7rem;margin:0 0 12px;line-height:1.2;}
+.hero p{font-size:1.02rem;line-height:1.65;color:var(--ink-soft);max-width:70ch;margin:0 0 14px;}
+.cta-box{border:1.5px solid var(--ink);background:var(--paper-dark);padding:20px 22px;margin:24px 0;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;}
+.cta-box p{margin:0;font-size:0.95rem;color:var(--ink-soft);max-width:44ch;}
+.cta-box a.btn{background:var(--accent);color:var(--paper);text-decoration:none;font-family:'Oswald',sans-serif;font-size:0.9rem;letter-spacing:0.4px;padding:12px 22px;white-space:nowrap;}
+.cta-box a.btn:hover{background:var(--accent-deep);}
+.section{margin-top:34px;border-top:1px solid var(--ink);padding-top:22px;}
+.section h2{font-family:'Oswald',sans-serif;font-size:1.15rem;margin:0 0 12px;}
+.section h3{font-family:'Oswald',sans-serif;font-size:1rem;margin:20px 0 8px;}
+.section p{font-size:0.96rem;line-height:1.65;color:var(--ink-soft);max-width:74ch;margin:0 0 14px;}
+.section ul, .section ol{color:var(--ink-soft);font-size:0.96rem;line-height:1.7;max-width:72ch;padding-left:22px;}
+.section li{margin-bottom:6px;}
+table.stat-table{width:100%;border-collapse:collapse;margin:16px 0 20px;font-size:0.9rem;}
+table.stat-table th{text-align:left;font-family:'Oswald',sans-serif;font-size:0.78rem;letter-spacing:0.3px;text-transform:uppercase;color:var(--ink-soft);border-bottom:2px solid var(--ink);padding:8px 10px 8px 0;}
+table.stat-table td{padding:9px 10px 9px 0;border-bottom:1px dotted var(--line);color:var(--ink-soft);}
+table.stat-table td:first-child, table.stat-table th:first-child{color:var(--ink);font-weight:600;}
+.faq-item{margin-bottom:18px;}
+.faq-item h3{font-family:'Oswald',sans-serif;font-size:0.95rem;margin:0 0 6px;}
+.faq-item p{font-size:0.92rem;line-height:1.6;color:var(--ink-soft);margin:0;}
+.footnote{margin-top:30px;font-size:0.8rem;color:var(--ink-soft);text-align:center;line-height:1.7;}
+.footnote a{color:var(--accent);}
+.pagelinks{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;}
+.pagelinks a{font-family:'Special Elite',monospace;font-size:0.75rem;color:var(--accent-deep);text-decoration:none;border:1px solid var(--line);padding:6px 12px;}
+.pagelinks a:hover{border-color:var(--accent);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="masthead">
+    <h1><a href="/" style="color:inherit;text-decoration:none;">Match<span>Grade</span></a></h1>
+    <div class="tagline">stat sheet in, honest number out</div>
+  </div>
+  <div class="breadcrumb"><a href="/">Home</a> / Soccer player rating calculator</div>
+
+  <div class="hero">
+    <h2>Soccer player rating calculator</h2>
+    <p>Turn a match stat line into an honest rating out of 10. Every soccer position — goalkeeper, centre-back, full-back, defensive mid, central mid, attacking mid, winger, striker — has its own scoring model, because ten tackles means something different for a full-back than for a striker.</p>
+    <p>Enter the numbers from the game and MatchGrade shows exactly which stats pushed the rating up or down, so the score is never a black box.</p>
+  </div>
+
+  <div class="cta-box">
+    <p>Ready to rate a performance? Open the calculator, pick a position, and enter the stats.</p>
+    <a class="btn" href="/">Open the calculator</a>
+  </div>
+
+  <div class="section">
+    <h2>How soccer ratings are calculated</h2>
+    <p>Every rating starts at 6.0, the same neutral baseline used by professional match-rating services — a did-their-job performance, nothing special either way. From there, the score adjusts based on how the entered stats compare to what's typical for the selected position, scaled to a 90-minute equivalent so short appearances aren't unfairly judged.</p>
+    <p>Context matters too. Goals conceded pull a defender's or goalkeeper's rating down more than a striker's. A red card is a heavy penalty regardless of position. A clean sheet is rewarded for defensive roles. Winning the match adds a small bonus; losing subtracts one — small, because the individual stat line should carry most of the weight.</p>
+
+    <h3>What stats matter by position</h3>
+    <table class="stat-table">
+      <tr><th>Position</th><th>Primary stats</th></tr>
+      <tr><td>Goalkeeper</td><td>Saves, shots faced, clean sheets, penalties saved, crosses claimed</td></tr>
+      <tr><td>Centre-back</td><td>Tackles, interceptions, clearances, aerial duels, pass accuracy</td></tr>
+      <tr><td>Full-back</td><td>Tackles, interceptions, key passes / crosses, duels won, pass accuracy</td></tr>
+      <tr><td>Defensive mid</td><td>Tackles, interceptions, pass accuracy, passes completed</td></tr>
+      <tr><td>Central mid</td><td>Pass accuracy, key passes, goals, assists, dribbles</td></tr>
+      <tr><td>Attacking mid</td><td>Key passes, dribbles, goals, assists, shots on target</td></tr>
+      <tr><td>Winger</td><td>Dribbles, key passes / crosses, goals, assists, touches in the box</td></tr>
+      <tr><td>Striker</td><td>Goals, assists, shots on target, touches in the box, shot conversion</td></tr>
+    </table>
+
+    <h3>Worked example</h3>
+    <p>A striker plays the full 90 minutes, scores two goals, records one assist, and takes four shots with three on target. Starting from 6.0, the two goals add roughly 2.1 points using diminishing returns per goal, the assist adds around 0.9, and the shot accuracy adds a small bonus for conversion — landing the final rating around 8.6 to 9.0, in the "excellent" tier. A defender with three tackles, two interceptions, and a clean sheet in a 1-0 win would land closer to 7.2 to 7.6 — solidly "very good" without the ceiling a goal-scoring game gives an attacker.</p>
+  </div>
+
+  <div class="section">
+    <h2>Frequently asked questions</h2>
+    <div class="faq-item"><h3>How is a soccer player rating out of 10 calculated?</h3><p>MatchGrade starts every player at a 6.0 baseline, representing an anonymous, did-their-job performance. The score then moves up or down based on stats compared to what is typical for that position, plus context like goals conceded, cards, and result.</p></div>
+    <div class="faq-item"><h3>What stats do I need to rate a soccer player?</h3><p>It depends on position. Goalkeepers need saves and shots faced. Defenders need tackles, interceptions, and clearances. Midfielders need pass accuracy and key passes. Forwards need goals, assists, and shots on target.</p></div>
+    <div class="faq-item"><h3>Does the calculator account for minutes played?</h3><p>Yes. Stats are scaled to a 90-minute equivalent so a player coming on as a substitute isn't unfairly judged for having fewer total actions. Very short cameos are pulled gently back toward the neutral 6.0 baseline.</p></div>
+    <div class="faq-item"><h3>Can I rate goalkeepers with this calculator?</h3><p>Yes. Goalkeepers use a save-ratio model (saves divided by shots faced) plus clean sheets, crosses claimed, and penalty saves, instead of the outfield stats used for other positions.</p></div>
+  </div>
+
+  <div class="section">
+    <h2>Related pages</h2>
+    <div class="pagelinks">
+      <a href="/">Home — all three sports</a>
+      <a href="/basketball-player-rating-calculator">Basketball player rating calculator</a>
+      <a href="/cricket-player-rating-calculator">Cricket player rating calculator</a>
+      <a href="/how-player-ratings-work">How player ratings work</a>
+    </div>
+  </div>
+
+  <div class="footnote">
+    <a href="/">MatchGrade</a> — free player rating calculator for soccer, basketball, and cricket.
+  </div>
+</div>
+</body>
+</html>
