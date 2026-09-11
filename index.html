@@ -1443,16 +1443,20 @@ function attachResultToggle(){
   });
 }
 
+function applySportTheme(sport){
+  const root = document.documentElement;
+  if(sport === 'soccer') { root.style.setProperty('--accent', '#2F5233'); root.style.setProperty('--accent-deep', '#20391F'); }
+  else if(sport === 'basketball') { root.style.setProperty('--accent', '#B8562E'); root.style.setProperty('--accent-deep', '#8C3F1F'); }
+  else if(sport === 'cricket') { root.style.setProperty('--accent', '#2E5C8A'); root.style.setProperty('--accent-deep', '#1E3E5C'); }
+}
+
 function renderSport(sport, keepOptionalState){
   currentSport = sport;
   document.querySelectorAll('#sportSwitch button').forEach(b=>{
     b.classList.toggle('active', b.dataset.sport === sport);
   });
 
-  const root = document.documentElement;
-  if(sport === 'soccer') { root.style.setProperty('--accent', '#2F5233'); root.style.setProperty('--accent-deep', '#20391F'); }
-  if(sport === 'basketball') { root.style.setProperty('--accent', '#B8562E'); root.style.setProperty('--accent-deep', '#8C3F1F'); }
-  if(sport === 'cricket') { root.style.setProperty('--accent', '#2E5C8A'); root.style.setProperty('--accent-deep', '#1E3E5C'); }
+  applySportTheme(sport);
 
   const minutesField = document.getElementById('minutesField');
   const sheetTitle = document.getElementById('sheetTitle');
@@ -1942,8 +1946,8 @@ function grade(){
    Never put the service_role key here.
 ========================================================= */
 const SUPABASE_CONFIG = {
-  url: '',      // e.g. 'https://zecxovvwxzypxmamewjq.supabase.co'
-  anonKey: ''sb_publishable_XuNLeBAeNifK8Lm3FIl62Q_Qoha4NIK"   // anon public key from Project Settings → API
+  url: 'https://zecxovvwxzypxmamewjq.supabase.co',
+  anonKey: 'sb_publishable_XuNLeBAeNifK8Lm3FIl62Q_Qoha4NIK'
 };
 
 let sb = null;
@@ -1956,28 +1960,37 @@ function supabaseConfigured(){
 }
 
 function initSupabase(){
-  if(!supabaseConfigured()) return;
-  sb = window.supabase.createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey, {
-    auth: {
-      persistSession: true,
-      autoRefreshToken: true,
-      detectSessionInUrl: true
-    }
-  });
-  sb.auth.getSession().then(({data})=>{
-    currentUser = data.session?.user || null;
+  if(!supabaseConfigured()) {
     updateAuthUI();
-    if(currentUser) refreshCloudHistory();
-  });
-  sb.auth.onAuthStateChange((_event, session)=>{
-    currentUser = session?.user || null;
+    return;
+  }
+  try {
+    sb = window.supabase.createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey, {
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true
+      }
+    });
+    sb.auth.getSession().then(({data})=>{
+      currentUser = data.session?.user || null;
+      updateAuthUI();
+      if(currentUser) refreshCloudHistory();
+    }).catch(()=>{ updateAuthUI(); });
+    sb.auth.onAuthStateChange((_event, session)=>{
+      currentUser = session?.user || null;
+      updateAuthUI();
+      if(currentUser) refreshCloudHistory();
+      else {
+        historyCache = loadLocalHistory();
+        renderHistory();
+      }
+    });
+  } catch (err) {
+    console.warn('Supabase init failed — continuing without cloud sync:', err);
+    sb = null;
     updateAuthUI();
-    if(currentUser) refreshCloudHistory();
-    else {
-      historyCache = loadLocalHistory();
-      renderHistory();
-    }
-  });
+  }
 }
 
 function updateAuthUI(){
@@ -2014,17 +2027,28 @@ function closeAuthModal(){
   document.getElementById('authModal').classList.remove('show');
   document.getElementById('authModal').setAttribute('aria-hidden','true');
 }
-document.getElementById('authModal').addEventListener('click', e=>{
-  if(e.target.id==='authModal') closeAuthModal();
-});
-document.getElementById('authTabs').addEventListener('click', e=>{
-  if(e.target.tagName!=='BUTTON') return;
-  authMode = e.target.dataset.mode;
-  document.querySelectorAll('#authTabs button').forEach(b=>b.classList.toggle('active', b.dataset.mode===authMode));
-  document.getElementById('authTitle').textContent = authMode==='signup' ? 'Create account' : 'Sign in';
-  document.getElementById('authSubmitBtn').textContent = authMode==='signup' ? 'Create account' : 'Sign in';
-  document.getElementById('authError').textContent = '';
-});
+(function bindAuthUi(){
+  const modal = document.getElementById('authModal');
+  const tabs = document.getElementById('authTabs');
+  if(modal){
+    modal.addEventListener('click', e=>{
+      if(e.target.id==='authModal') closeAuthModal();
+    });
+  }
+  if(tabs){
+    tabs.addEventListener('click', e=>{
+      if(e.target.tagName!=='BUTTON') return;
+      authMode = e.target.dataset.mode;
+      tabs.querySelectorAll('button').forEach(b=>b.classList.toggle('active', b.dataset.mode===authMode));
+      const title = document.getElementById('authTitle');
+      const submit = document.getElementById('authSubmitBtn');
+      const err = document.getElementById('authError');
+      if(title) title.textContent = authMode==='signup' ? 'Create account' : 'Sign in';
+      if(submit) submit.textContent = authMode==='signup' ? 'Create account' : 'Sign in';
+      if(err) err.textContent = '';
+    });
+  }
+})();
 
 async function submitAuth(){
   if(!sb) return;
@@ -2074,6 +2098,7 @@ document.getElementById('mainNav').addEventListener('click', (e)=>{
   document.querySelectorAll('.app-section').forEach(s=>s.classList.toggle('active', s.id==='section-'+sec));
   if(sec === 'history') renderHistory();
   if(sec === 'compare') initCompare();
+  if(sec === 'calc') applySportTheme(currentSport);
 });
 
 /* =========================================================
@@ -2294,6 +2319,7 @@ function initCompare(){
 
 function setCompareSport(sport){
   compareSport = sport;
+  applySportTheme(sport);
   document.querySelectorAll('#compareSportSwitch button').forEach(b=>{
     b.classList.toggle('active', b.dataset.csport===sport);
   });
@@ -2325,9 +2351,12 @@ function renderCompareStats(side, defs){
   }).join('');
 }
 
-document.getElementById('compareSportSwitch').addEventListener('click', e=>{
-  if(e.target.tagName==='BUTTON') setCompareSport(e.target.dataset.csport);
-});
+(function(){
+  const el = document.getElementById('compareSportSwitch');
+  if(el) el.addEventListener('click', e=>{
+    if(e.target.tagName==='BUTTON') setCompareSport(e.target.dataset.csport);
+  });
+})();
 
 function cmpVal(side, id, fallback){
   const el = document.getElementById('cmp'+side+'_'+id);
