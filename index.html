@@ -657,7 +657,282 @@
     text-align:center;
     line-height:1.6;
   }
+
+  /* ---------- NAV ---------- */
+  .main-nav{
+    display:flex;
+    gap:0;
+    border:1.5px solid var(--ink);
+    margin-bottom:18px;
+    flex-wrap:wrap;
+  }
+  .main-nav button{
+    flex:1;
+    min-width:90px;
+    background:transparent;
+    border:none;
+    border-right:1.5px solid var(--ink);
+    padding:11px 8px;
+    font-family:'Oswald', sans-serif;
+    font-size:0.85rem;
+    letter-spacing:0.3px;
+    color:var(--ink-soft);
+    cursor:pointer;
+  }
+  .main-nav button:last-child{border-right:none;}
+  .main-nav button.active{
+    background:var(--ink);
+    color:var(--paper);
+  }
+
+  /* ---------- SECTIONS ---------- */
+  .app-section{display:none;}
+  .app-section.active{display:block;}
+
+  /* ---------- COMPARE ---------- */
+  .compare-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:0;
+    border:1px solid var(--ink);
+  }
+  @media(max-width:700px){.compare-grid{grid-template-columns:1fr;}}
+  .compare-panel{
+    padding:22px 24px;
+  }
+  .compare-panel:first-child{border-right:1px solid var(--ink);}
+  @media(max-width:700px){.compare-panel:first-child{border-right:none;border-bottom:1px solid var(--ink);}}
+  .compare-panel h3{
+    font-family:'Oswald',sans-serif;
+    font-size:0.95rem;
+    margin:0 0 14px;
+    text-transform:uppercase;
+    letter-spacing:0.4px;
+  }
+  .compare-result{
+    margin-top:22px;
+    border:1px solid var(--ink);
+    padding:22px 24px;
+    background:var(--paper-dark);
+  }
+  .compare-summary{
+    display:flex;
+    justify-content:space-around;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:16px;
+    margin-bottom:20px;
+    text-align:center;
+  }
+  .compare-score{
+    font-family:'Oswald',sans-serif;
+    font-size:2.4rem;
+    font-weight:700;
+    line-height:1;
+  }
+  .compare-score-label{
+    font-family:'Special Elite',monospace;
+    font-size:0.72rem;
+    color:var(--ink-soft);
+    margin-top:4px;
+  }
+  .compare-vs{
+    font-family:'Oswald',sans-serif;
+    font-size:1.1rem;
+    color:var(--ink-soft);
+  }
+  .compare-winner{
+    text-align:center;
+    font-family:'Oswald',sans-serif;
+    font-size:1.15rem;
+    font-weight:600;
+    margin-bottom:6px;
+  }
+  .compare-diff{
+    text-align:center;
+    font-size:0.9rem;
+    color:var(--ink-soft);
+    margin-bottom:18px;
+  }
+  .cat-row{
+    display:grid;
+    grid-template-columns:1fr auto 1fr;
+    gap:10px;
+    align-items:center;
+    padding:8px 0;
+    border-bottom:1px dotted var(--line);
+    font-size:0.9rem;
+  }
+  .cat-row .winner{font-family:'Oswald',sans-serif;color:var(--accent);font-weight:600;}
+  .cat-row .loser{color:var(--ink-soft);}
+  .cat-row .tie{color:var(--ink-soft);font-style:italic;}
+  .cat-name{text-align:center;font-family:'Special Elite',monospace;font-size:0.72rem;color:var(--ink-soft);}
+
+  /* ---------- HISTORY ---------- */
+  .history-stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
+    margin-bottom:22px;
+  }
+  @media(max-width:600px){.history-stats{grid-template-columns:repeat(2,1fr);}}
+  .stat-card{
+    border:1px solid var(--ink);
+    padding:14px 12px;
+    text-align:center;
+    background:var(--paper-dark);
+  }
+  .stat-card .num{
+    font-family:'Oswald',sans-serif;
+    font-size:1.6rem;
+    font-weight:700;
+    line-height:1;
+  }
+  .stat-card .lbl{
+    font-family:'Special Elite',monospace;
+    font-size:0.68rem;
+    color:var(--ink-soft);
+    margin-top:4px;
+  }
+  .match-list{border:1px solid var(--ink);}
+  .match-item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:14px 18px;
+    border-bottom:1px solid var(--line);
+    cursor:pointer;
+    gap:12px;
+  }
+  .match-item:last-child{border-bottom:none;}
+  .match-item:hover{background:var(--paper-dark);}
+  .match-item .m-name{font-family:'Oswald',sans-serif;font-size:0.95rem;}
+  .match-item .m-meta{font-family:'Special Elite',monospace;font-size:0.72rem;color:var(--ink-soft);}
+  .match-item .m-rating{
+    font-family:'Oswald',sans-serif;
+    font-size:1.35rem;
+    font-weight:700;
+    min-width:48px;
+    text-align:right;
+  }
+  .match-item .m-del{
+    background:none;border:none;color:var(--red);cursor:pointer;
+    font-family:'Special Elite',monospace;font-size:0.7rem;padding:4px 6px;
+  }
+  .spark-wrap{margin:18px 0 8px;height:60px;}
+  .spark-wrap svg{width:100%;height:60px;display:block;}
+  .empty-state{
+    text-align:center;
+    padding:40px 20px;
+    color:var(--ink-soft);
+    font-family:'Special Elite',monospace;
+    font-size:0.88rem;
+    line-height:1.7;
+  }
+  .empty-state .big{font-family:'Oswald',sans-serif;font-size:1.4rem;color:var(--line);display:block;margin-bottom:8px;}
+  .tier-line{
+    text-align:center;
+    font-family:'Special Elite',monospace;
+    font-size:0.8rem;
+    color:var(--ink-soft);
+    margin-bottom:16px;
+  }
+  .save-match-btn{
+    width:100%;
+    margin-top:10px;
+    border:1.5px solid var(--ink);
+    background:transparent;
+    color:var(--ink);
+    padding:10px 8px;
+    font-family:'Oswald',sans-serif;
+    font-size:.82rem;
+    letter-spacing:.4px;
+    cursor:pointer;
+  }
+  .save-match-btn:hover{background:var(--ink);color:var(--paper);}
+  .save-match-btn.saved{opacity:0.6;pointer-events:none;}
+
+  /* ---------- AUTH ---------- */
+  .auth-bar{
+    display:flex;
+    justify-content:flex-end;
+    align-items:center;
+    gap:10px;
+    margin-bottom:12px;
+    font-family:'Special Elite',monospace;
+    font-size:0.75rem;
+    color:var(--ink-soft);
+  }
+  .auth-bar button{
+    background:transparent;
+    border:1px solid var(--ink);
+    padding:6px 12px;
+    font-family:'Oswald',sans-serif;
+    font-size:0.78rem;
+    letter-spacing:0.3px;
+    cursor:pointer;
+    color:var(--ink);
+  }
+  .auth-bar button:hover{background:var(--ink);color:var(--paper);}
+  .auth-bar button.primary{background:var(--accent);color:var(--paper);border-color:var(--accent);}
+  .auth-bar button.primary:hover{background:var(--accent-deep);}
+  .auth-modal{
+    display:none;
+    position:fixed;inset:0;z-index:1100;
+    background:rgba(27,27,24,.72);
+    padding:20px;
+    align-items:center;justify-content:center;
+  }
+  .auth-modal.show{display:flex;}
+  .auth-dialog{
+    width:min(400px,100%);
+    background:var(--paper);
+    border:1px solid var(--ink);
+    padding:28px 26px;
+  }
+  .auth-dialog h2{
+    font-family:'Oswald',sans-serif;
+    font-size:1.2rem;
+    margin:0 0 6px;
+  }
+  .auth-dialog .auth-sub{
+    font-size:0.85rem;
+    color:var(--ink-soft);
+    margin:0 0 18px;
+  }
+  .auth-dialog .field{margin-bottom:14px;}
+  .auth-dialog .auth-error{
+    font-size:0.85rem;
+    color:var(--red);
+    margin:0 0 12px;
+    min-height:1.2em;
+  }
+  .auth-dialog .auth-actions{
+    display:flex;
+    gap:8px;
+    margin-top:8px;
+  }
+  .auth-dialog .auth-actions button{flex:1;}
+  .auth-tabs{
+    display:flex;
+    border:1.5px solid var(--ink);
+    margin-bottom:16px;
+  }
+  .auth-tabs button{
+    flex:1;
+    background:transparent;
+    border:none;
+    border-right:1.5px solid var(--ink);
+    padding:9px;
+    font-family:'Oswald',sans-serif;
+    font-size:0.82rem;
+    cursor:pointer;
+    color:var(--ink-soft);
+  }
+  .auth-tabs button:last-child{border-right:none;}
+  .auth-tabs button.active{background:var(--ink);color:var(--paper);}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 <div class="wrap">
@@ -666,6 +941,46 @@
     <h1>Match<span>Grade</span></h1>
     <div class="tagline">stat sheet in, honest number out  no highlights required</div>
   </div>
+
+  <div class="auth-bar" id="authBar">
+    <span id="authStatus">Playing as guest — history stays on this device</span>
+    <button type="button" id="authOpenBtn" class="primary" onclick="openAuthModal()">Sign in</button>
+    <button type="button" id="authSignOutBtn" style="display:none;" onclick="signOut()">Sign out</button>
+  </div>
+
+  <div class="main-nav" id="mainNav">
+    <button data-section="calc" class="active">Calculator</button>
+    <button data-section="compare">Compare</button>
+    <button data-section="history">My Matches</button>
+  </div>
+
+  <!-- Auth modal -->
+  <div class="auth-modal" id="authModal" aria-hidden="true">
+    <div class="auth-dialog">
+      <h2 id="authTitle">Sign in</h2>
+      <p class="auth-sub">Optional. Calculator works without an account. Sign in to sync My Matches across devices.</p>
+      <div class="auth-tabs" id="authTabs">
+        <button type="button" data-mode="signin" class="active">Sign in</button>
+        <button type="button" data-mode="signup">Create account</button>
+      </div>
+      <div class="field">
+        <label for="authEmail">Email</label>
+        <input type="email" id="authEmail" autocomplete="email" placeholder="you@example.com">
+      </div>
+      <div class="field">
+        <label for="authPassword">Password</label>
+        <input type="password" id="authPassword" autocomplete="current-password" placeholder="Min 6 characters">
+      </div>
+      <p class="auth-error" id="authError"></p>
+      <div class="auth-actions">
+        <button type="button" class="go-btn" style="margin:0;" id="authSubmitBtn" onclick="submitAuth()">Sign in</button>
+        <button type="button" class="save-match-btn" style="margin:0;" onclick="closeAuthModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== CALCULATOR SECTION ========== -->
+  <div class="app-section active" id="section-calc">
 
   <div class="sport-switch" id="sportSwitch">
     <button data-sport="soccer" class="active">Soccer</button>
@@ -733,13 +1048,109 @@
           <div class="breakdown-title">HOW WE GOT THERE</div>
           <div id="bdList"></div>
         </div>
-        <div class="share-card-actions"><button type="button" class="share-card-btn" onclick="openShareCard()">Share rating card</button></div>
+        <div class="tier-line" id="rTier"></div>
+        <div class="share-card-actions">
+          <button type="button" class="share-card-btn" onclick="openShareCard()">Share rating card</button>
+          <button type="button" class="save-match-btn" id="saveMatchBtn" onclick="saveCurrentMatch()">Save to My Matches</button>
+        </div>
       </div>
     </div>
 
   </div>
 
   <div class="share-card-modal" id="shareCardModal" aria-hidden="true"><div class="share-card-dialog"><div class="share-card-dialog-tools"><button type="button" onclick="shareRatingCard()">Share / Save</button><button type="button" onclick="closeShareCard()">Close</button></div><div class="share-card" id="shareCard"><div class="share-card-inner"><div class="share-card-head"><div class="share-card-brand">Match<span>Grade</span></div><div class="share-card-sport" id="cardSport">soccer</div></div><div class="share-card-name" id="cardName">YOUR NAME</div><div class="share-card-meta" id="cardMeta">Striker · full time</div><div class="share-card-score"><div class="share-card-stamp" id="cardStamp"><div class="share-card-number" id="cardNumber">6.0</div><div class="share-card-ten">/ 10</div></div></div><div class="share-card-verdict" id="cardVerdict">Solid</div><div class="share-card-sub" id="cardSub">did the job, a bit more besides</div><div class="share-card-club"><span class="share-card-club-label">Club</span><span class="share-card-club-name" id="cardClub"></span></div><div class="share-card-stats"><span id="cardStatsLeft"></span><span id="cardStatsRight">MatchGrade rating</span></div><div class="share-card-footer"><span>YOUR STATS. YOUR RATING.</span><span>MatchGrade</span></div></div></div></div></div>
+
+  </div><!-- /section-calc -->
+
+  <!-- ========== COMPARE SECTION ========== -->
+  <div class="app-section" id="section-compare">
+    <div class="sheet-head" style="border-bottom:1px dashed var(--line);margin-bottom:18px;padding-bottom:10px;">
+      <h2 style="font-family:'Oswald',sans-serif;font-size:1.05rem;text-transform:uppercase;letter-spacing:0.5px;margin:0;">Player Comparison</h2>
+      <div class="sheet-no" style="font-family:'Special Elite',monospace;font-size:0.72rem;color:var(--ink-soft);">side by side</div>
+    </div>
+
+    <p style="font-size:0.92rem;color:var(--ink-soft);margin:0 0 18px;max-width:70ch;">Enter two performances from the same sport. MatchGrade will rate both using the same engine and show who won each category.</p>
+
+    <div class="sport-switch" id="compareSportSwitch" style="margin-bottom:18px;">
+      <button data-csport="soccer" class="active">Soccer</button>
+      <button data-csport="basketball">Basketball</button>
+      <button data-csport="cricket">Cricket</button>
+    </div>
+
+    <div class="compare-grid">
+      <div class="compare-panel">
+        <h3>Player A</h3>
+        <div class="field"><label>Name</label><input type="text" id="cmpA_name" placeholder="Player A"></div>
+        <div class="field"><label>Position / Role</label><select id="cmpA_role"></select></div>
+        <div class="field" id="cmpA_minutesField"><label>Minutes</label><input type="number" id="cmpA_minutes" value="90" min="1"></div>
+        <div id="cmpA_stats"></div>
+      </div>
+      <div class="compare-panel">
+        <h3>Player B</h3>
+        <div class="field"><label>Name</label><input type="text" id="cmpB_name" placeholder="Player B"></div>
+        <div class="field"><label>Position / Role</label><select id="cmpB_role"></select></div>
+        <div class="field" id="cmpB_minutesField"><label>Minutes</label><input type="number" id="cmpB_minutes" value="90" min="1"></div>
+        <div id="cmpB_stats"></div>
+      </div>
+    </div>
+
+    <button class="go-btn" style="margin-top:18px;" onclick="runComparison()">Compare performances</button>
+
+    <div class="compare-result" id="compareResult" style="display:none;">
+      <div class="compare-summary">
+        <div>
+          <div class="compare-score" id="cmpScoreA">—</div>
+          <div class="compare-score-label" id="cmpLabelA">Player A</div>
+        </div>
+        <div class="compare-vs">VS</div>
+        <div>
+          <div class="compare-score" id="cmpScoreB">—</div>
+          <div class="compare-score-label" id="cmpLabelB">Player B</div>
+        </div>
+      </div>
+      <div class="compare-winner" id="cmpWinner"></div>
+      <div class="compare-diff" id="cmpDiff"></div>
+      <div id="cmpCategories"></div>
+    </div>
+  </div>
+
+  <!-- ========== HISTORY SECTION ========== -->
+  <div class="app-section" id="section-history">
+    <div class="sheet-head" style="border-bottom:1px dashed var(--line);margin-bottom:18px;padding-bottom:10px;">
+      <h2 style="font-family:'Oswald',sans-serif;font-size:1.05rem;text-transform:uppercase;letter-spacing:0.5px;margin:0;">My Matches</h2>
+      <div class="sheet-no" style="font-family:'Special Elite',monospace;font-size:0.72rem;color:var(--ink-soft);">saved locally</div>
+    </div>
+
+    <div id="historyContent">
+      <div class="empty-state" id="historyEmpty">
+        <span class="big">No matches yet</span>
+        Calculate a performance and save it to start building your history.<br>
+        Matches are stored on this device.
+      </div>
+      <div id="historyFilled" style="display:none;">
+        <div class="history-stats">
+          <div class="stat-card"><div class="num" id="hAvg">—</div><div class="lbl">Average</div></div>
+          <div class="stat-card"><div class="num" id="hHigh">—</div><div class="lbl">Highest</div></div>
+          <div class="stat-card"><div class="num" id="hLow">—</div><div class="lbl">Lowest</div></div>
+          <div class="stat-card"><div class="num" id="hCount">—</div><div class="lbl">Matches</div></div>
+        </div>
+        <div class="spark-wrap" id="sparkWrap"></div>
+        <div class="match-list" id="matchList"></div>
+      </div>
+    </div>
+
+    <div id="matchDetail" style="display:none;margin-top:22px;border:1px solid var(--ink);padding:22px 24px;background:var(--paper-dark);">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px;">
+        <div>
+          <div style="font-family:'Oswald',sans-serif;font-size:1.1rem;" id="mdName"></div>
+          <div style="font-family:'Special Elite',monospace;font-size:0.75rem;color:var(--ink-soft);" id="mdMeta"></div>
+        </div>
+        <div style="font-family:'Oswald',sans-serif;font-size:1.8rem;font-weight:700;" id="mdRating"></div>
+      </div>
+      <div id="mdBreakdown"></div>
+      <button class="save-match-btn" style="margin-top:16px;" onclick="closeMatchDetail()">Back to list</button>
+    </div>
+  </div>
 
   <div class="footnote">
     Baseline is 6.0  an anonymous, did-their-job performance. Everything else is earned or lost from there.
@@ -1187,6 +1598,18 @@ function verdictFor(rating){
   return verdicts[key] || verdicts["10.0"];
 }
 
+let lastRatedMatch = null;
+
+function performanceTier(rating){
+  if(rating >= 9.5) return 'Legendary performance';
+  if(rating >= 9.0) return 'World Class performance';
+  if(rating >= 8.0) return 'Excellent performance';
+  if(rating >= 7.0) return 'Good performance';
+  if(rating >= 6.0) return 'Solid performance';
+  if(rating >= 5.0) return 'Below average performance';
+  return 'Poor performance';
+}
+
 function renderResult(rating, breakdown, roleLabelText){
   document.getElementById('emptyState').style.display = 'none';
   const body = document.getElementById('resultBody');
@@ -1201,6 +1624,9 @@ function renderResult(rating, breakdown, roleLabelText){
   const [verdict, sub] = verdictFor(rating);
   document.getElementById('rVerdict').textContent = verdict;
   document.getElementById('rVerdictSub').textContent = sub;
+
+  const tierEl = document.getElementById('rTier');
+  if(tierEl) tierEl.textContent = performanceTier(rating);
 
   const stamp = document.getElementById('stamp');
   let color = 'var(--accent)';
@@ -1240,6 +1666,28 @@ function renderResult(rating, breakdown, roleLabelText){
   const topRows = [...breakdown].sort((a,b)=>Math.abs(b.amount)-Math.abs(a.amount)).slice(0,2);
   document.getElementById('cardStatsLeft').textContent = topRows[0] ? topRows[0].label : 'Rating calculated';
   document.getElementById('cardStatsRight').textContent = topRows[1] ? topRows[1].label : 'MatchGrade rating';
+
+  // Store for "Save to My Matches"
+  lastRatedMatch = {
+    id: Date.now().toString(36) + Math.random().toString(36).slice(2,7),
+    name,
+    club,
+    sport: currentSport,
+    role: document.getElementById('role').value,
+    roleLabel: roleLabelText,
+    rating: +rating.toFixed(2),
+    verdict,
+    sub,
+    tier: performanceTier(rating),
+    breakdown: breakdown.slice(),
+    date: new Date().toISOString(),
+    opponent: club || 'Unknown'
+  };
+  const saveBtn = document.getElementById('saveMatchBtn');
+  if(saveBtn){
+    saveBtn.classList.remove('saved');
+    saveBtn.textContent = 'Save to My Matches';
+  }
 }
 
 /* =========================================================
@@ -1487,6 +1935,569 @@ function grade(){
   else if(currentSport === 'basketball') gradeBasketball();
   else if(currentSport === 'cricket') gradeCricket();
 }
+
+/* =========================================================
+   SUPABASE CONFIG + AUTH
+   Paste your Project URL and anon key below.
+   Never put the service_role key here.
+========================================================= */
+const SUPABASE_CONFIG = {
+  url: '',      // e.g. 'https://zecxovvwxzypxmamewjq.supabase.co'
+  anonKey: ''sb_publishable_XuNLeBAeNifK8Lm3FIl62Q_Qoha4NIK"   // anon public key from Project Settings → API
+};
+
+let sb = null;
+let currentUser = null;
+let authMode = 'signin';
+let historyCache = [];
+
+function supabaseConfigured(){
+  return !!(SUPABASE_CONFIG.url && SUPABASE_CONFIG.anonKey && window.supabase);
+}
+
+function initSupabase(){
+  if(!supabaseConfigured()) return;
+  sb = window.supabase.createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey, {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: true
+    }
+  });
+  sb.auth.getSession().then(({data})=>{
+    currentUser = data.session?.user || null;
+    updateAuthUI();
+    if(currentUser) refreshCloudHistory();
+  });
+  sb.auth.onAuthStateChange((_event, session)=>{
+    currentUser = session?.user || null;
+    updateAuthUI();
+    if(currentUser) refreshCloudHistory();
+    else {
+      historyCache = loadLocalHistory();
+      renderHistory();
+    }
+  });
+}
+
+function updateAuthUI(){
+  const status = document.getElementById('authStatus');
+  const openBtn = document.getElementById('authOpenBtn');
+  const outBtn = document.getElementById('authSignOutBtn');
+  if(!supabaseConfigured()){
+    status.textContent = 'Cloud sync not configured — history stays on this device';
+    openBtn.style.display = 'none';
+    outBtn.style.display = 'none';
+    return;
+  }
+  if(currentUser){
+    status.textContent = 'Signed in as ' + (currentUser.email || 'user');
+    openBtn.style.display = 'none';
+    outBtn.style.display = '';
+  } else {
+    status.textContent = 'Playing as guest — history stays on this device';
+    openBtn.style.display = '';
+    outBtn.style.display = 'none';
+  }
+}
+
+function openAuthModal(){
+  if(!supabaseConfigured()){
+    alert('Supabase is not configured yet. Add your Project URL and anon key in SUPABASE_CONFIG.');
+    return;
+  }
+  document.getElementById('authError').textContent = '';
+  document.getElementById('authModal').classList.add('show');
+  document.getElementById('authModal').setAttribute('aria-hidden','false');
+}
+function closeAuthModal(){
+  document.getElementById('authModal').classList.remove('show');
+  document.getElementById('authModal').setAttribute('aria-hidden','true');
+}
+document.getElementById('authModal').addEventListener('click', e=>{
+  if(e.target.id==='authModal') closeAuthModal();
+});
+document.getElementById('authTabs').addEventListener('click', e=>{
+  if(e.target.tagName!=='BUTTON') return;
+  authMode = e.target.dataset.mode;
+  document.querySelectorAll('#authTabs button').forEach(b=>b.classList.toggle('active', b.dataset.mode===authMode));
+  document.getElementById('authTitle').textContent = authMode==='signup' ? 'Create account' : 'Sign in';
+  document.getElementById('authSubmitBtn').textContent = authMode==='signup' ? 'Create account' : 'Sign in';
+  document.getElementById('authError').textContent = '';
+});
+
+async function submitAuth(){
+  if(!sb) return;
+  const email = document.getElementById('authEmail').value.trim();
+  const password = document.getElementById('authPassword').value;
+  const errEl = document.getElementById('authError');
+  errEl.textContent = '';
+  if(!email || !password){
+    errEl.textContent = 'Email and password are required.';
+    return;
+  }
+  if(password.length < 6){
+    errEl.textContent = 'Password must be at least 6 characters.';
+    return;
+  }
+  try{
+    if(authMode==='signup'){
+      const {error} = await sb.auth.signUp({email, password});
+      if(error) throw error;
+      errEl.style.color = 'var(--accent)';
+      errEl.textContent = 'Account created. Check your email if confirmation is required, then sign in.';
+    } else {
+      const {error} = await sb.auth.signInWithPassword({email, password});
+      if(error) throw error;
+      closeAuthModal();
+    }
+  } catch(err){
+    errEl.style.color = 'var(--red)';
+    errEl.textContent = err.message || 'Authentication failed.';
+  }
+}
+
+async function signOut(){
+  if(!sb) return;
+  await sb.auth.signOut();
+  historyCache = loadLocalHistory();
+  renderHistory();
+}
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+document.getElementById('mainNav').addEventListener('click', (e)=>{
+  if(e.target.tagName !== 'BUTTON') return;
+  const sec = e.target.dataset.section;
+  document.querySelectorAll('#mainNav button').forEach(b=>b.classList.toggle('active', b.dataset.section===sec));
+  document.querySelectorAll('.app-section').forEach(s=>s.classList.toggle('active', s.id==='section-'+sec));
+  if(sec === 'history') renderHistory();
+  if(sec === 'compare') initCompare();
+});
+
+/* =========================================================
+   MY MATCHES (localStorage + Supabase)
+========================================================= */
+const HISTORY_KEY = 'matchgrade_history_v1';
+
+function loadLocalHistory(){
+  try{ return JSON.parse(localStorage.getItem(HISTORY_KEY)||'[]'); }
+  catch{ return []; }
+}
+function saveLocalHistory(list){
+  localStorage.setItem(HISTORY_KEY, JSON.stringify(list.slice(0,100)));
+}
+
+function mapRowToMatch(row){
+  return {
+    id: row.id,
+    name: row.player_name,
+    club: row.club,
+    opponent: row.opponent || row.club,
+    sport: row.sport,
+    role: row.role_code,
+    roleLabel: row.role_label,
+    rating: Number(row.rating),
+    verdict: row.verdict,
+    sub: row.verdict_sub,
+    tier: row.tier,
+    breakdown: row.breakdown || [],
+    date: row.created_at || row.match_date,
+    cloud: true
+  };
+}
+
+async function refreshCloudHistory(){
+  if(!sb || !currentUser) return;
+  const {data, error} = await sb
+    .from('matches')
+    .select('*')
+    .eq('user_id', currentUser.id)
+    .order('created_at', {ascending:false})
+    .limit(100);
+  if(error){
+    console.warn('Could not load matches:', error.message);
+    historyCache = loadLocalHistory();
+  } else {
+    historyCache = (data||[]).map(mapRowToMatch);
+  }
+  renderHistory();
+}
+
+async function saveCurrentMatch(){
+  if(!lastRatedMatch) return;
+  const btn = document.getElementById('saveMatchBtn');
+
+  // Validate bounds client-side
+  const r = Number(lastRatedMatch.rating);
+  if(!(r >= 1 && r <= 10)){
+    alert('Invalid rating. Please re-grade the performance.');
+    return;
+  }
+
+  if(sb && currentUser){
+    const payload = {
+      user_id: currentUser.id,
+      player_name: String(lastRatedMatch.name||'Unnamed player').slice(0,80),
+      club: (lastRatedMatch.club||'').slice(0,80) || null,
+      opponent: (lastRatedMatch.opponent||lastRatedMatch.club||'').slice(0,80) || null,
+      sport: lastRatedMatch.sport,
+      role_code: lastRatedMatch.role,
+      role_label: lastRatedMatch.roleLabel,
+      rating: r,
+      verdict: lastRatedMatch.verdict,
+      verdict_sub: lastRatedMatch.sub,
+      tier: lastRatedMatch.tier,
+      stats: {},
+      breakdown: lastRatedMatch.breakdown || [],
+      match_date: new Date().toISOString().slice(0,10)
+    };
+    const {data, error} = await sb.from('matches').insert(payload).select().single();
+    if(error){
+      alert('Could not save to cloud: ' + error.message);
+      // Fallback local
+      const list = loadLocalHistory();
+      list.unshift(lastRatedMatch);
+      saveLocalHistory(list);
+    } else {
+      historyCache.unshift(mapRowToMatch(data));
+    }
+  } else {
+    const list = loadLocalHistory();
+    list.unshift(lastRatedMatch);
+    saveLocalHistory(list);
+    historyCache = list;
+  }
+
+  if(btn){ btn.classList.add('saved'); btn.textContent = currentUser ? 'Saved to cloud' : 'Saved on this device'; }
+}
+
+async function deleteMatch(id, ev){
+  if(ev) ev.stopPropagation();
+  if(sb && currentUser && String(id).includes('-')){
+    // UUID from Supabase
+    const {error} = await sb.from('matches').delete().eq('id', id).eq('user_id', currentUser.id);
+    if(error){
+      alert('Could not delete: ' + error.message);
+      return;
+    }
+    historyCache = historyCache.filter(m=>m.id!==id);
+  } else {
+    const list = loadLocalHistory().filter(m=>m.id!==id);
+    saveLocalHistory(list);
+    historyCache = list;
+  }
+  renderHistory();
+  document.getElementById('matchDetail').style.display = 'none';
+}
+
+function getHistoryList(){
+  if(currentUser && historyCache.length) return historyCache;
+  if(currentUser) return historyCache;
+  return loadLocalHistory();
+}
+
+function renderHistory(){
+  const list = currentUser ? historyCache : loadLocalHistory();
+  const empty = document.getElementById('historyEmpty');
+  const filled = document.getElementById('historyFilled');
+  if(!list.length){
+    empty.style.display = 'block';
+    filled.style.display = 'none';
+    empty.innerHTML = currentUser
+      ? `<span class="big">No matches yet</span>Calculate a performance and save it to start building your cloud history.`
+      : `<span class="big">No matches yet</span>Calculate a performance and save it to start building your history.<br>Matches are stored on this device. Sign in to sync across devices.`;
+    return;
+  }
+  empty.style.display = 'none';
+  filled.style.display = 'block';
+
+  const ratings = list.map(m=>m.rating);
+  const avg = ratings.reduce((a,b)=>a+b,0)/ratings.length;
+  document.getElementById('hAvg').textContent = avg.toFixed(1);
+  document.getElementById('hHigh').textContent = Math.max(...ratings).toFixed(1);
+  document.getElementById('hLow').textContent = Math.min(...ratings).toFixed(1);
+  document.getElementById('hCount').textContent = list.length;
+
+  const recent = list.slice(0,12).reverse();
+  const vals = recent.map(m=>m.rating);
+  const min = Math.min(...vals, 4);
+  const max = Math.max(...vals, 8);
+  const w = 400, h = 56, pad = 4;
+  const pts = vals.map((v,i)=>{
+    const x = pad + (i/(Math.max(vals.length-1,1))) * (w-pad*2);
+    const y = h - pad - ((v-min)/(max-min||1)) * (h-pad*2);
+    return `${x},${y}`;
+  }).join(' ');
+  document.getElementById('sparkWrap').innerHTML = `
+    <svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">
+      <polyline fill="none" stroke="var(--accent)" stroke-width="2.5" points="${pts}"/>
+      ${vals.map((v,i)=>{
+        const x = pad + (i/(Math.max(vals.length-1,1))) * (w-pad*2);
+        const y = h - pad - ((v-min)/(max-min||1)) * (h-pad*2);
+        return `<circle cx="${x}" cy="${y}" r="3" fill="var(--accent)"/>`;
+      }).join('')}
+    </svg>`;
+
+  const ul = document.getElementById('matchList');
+  ul.innerHTML = list.map(m=>{
+    const d = new Date(m.date);
+    const dateStr = isNaN(d) ? '' : d.toLocaleDateString(undefined,{month:'short',day:'numeric'});
+    const color = m.rating >= 8 ? 'var(--gold)' : m.rating < 5.6 ? 'var(--red)' : 'var(--accent)';
+    return `<div class="match-item" onclick="showMatchDetail('${m.id}')">
+      <div>
+        <div class="m-name">${esc(m.name)} · ${esc(m.opponent||m.club||'')}</div>
+        <div class="m-meta">${esc(m.roleLabel||m.sport)} · ${dateStr}${m.cloud?' · cloud':''}</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div class="m-rating" style="color:${color}">${Number(m.rating).toFixed(1)}</div>
+        <button class="m-del" onclick="deleteMatch('${m.id}',event)" title="Delete">✕</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function showMatchDetail(id){
+  const list = currentUser ? historyCache : loadLocalHistory();
+  const m = list.find(x=>x.id===id);
+  if(!m) return;
+  document.getElementById('matchDetail').style.display = 'block';
+  document.getElementById('mdName').textContent = m.name;
+  document.getElementById('mdMeta').textContent = `${m.roleLabel||''} · ${m.sport} · ${new Date(m.date).toLocaleString()}`;
+  document.getElementById('mdRating').textContent = Number(m.rating).toFixed(1);
+  const bd = document.getElementById('mdBreakdown');
+  bd.innerHTML = `<div class="bd-row"><span style="font-style:italic;">${m.tier||''}</span><span class="amt zero">${m.verdict||''}</span></div>`;
+  (m.breakdown||[]).forEach(row=>{
+    const cls = row.amount > 0.02 ? 'pos' : row.amount < -0.02 ? 'neg' : 'zero';
+    const sign = row.amount > 0 ? '+' : '';
+    bd.innerHTML += `<div class="bd-row"><span>${esc(row.label)}</span><span class="amt ${cls}">${sign}${Number(row.amount).toFixed(2)}</span></div>`;
+  });
+  document.getElementById('matchDetail').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function closeMatchDetail(){ document.getElementById('matchDetail').style.display = 'none'; }
+
+// Boot Supabase after DOM is ready
+initSupabase();
+historyCache = loadLocalHistory();
+
+/* =========================================================
+   PLAYER COMPARISON
+========================================================= */
+let compareSport = 'soccer';
+
+function initCompare(){
+  setCompareSport(compareSport);
+}
+
+function setCompareSport(sport){
+  compareSport = sport;
+  document.querySelectorAll('#compareSportSwitch button').forEach(b=>{
+    b.classList.toggle('active', b.dataset.csport===sport);
+  });
+  const roles = sport==='soccer' ? SOCCER_ROLES : sport==='basketball' ? BBALL_ROLES : CRICKET_ROLES;
+  const core = sport==='soccer' ? SOCCER_CORE : sport==='basketball' ? BBALL_CORE : CRICKET_CORE;
+  ['A','B'].forEach(side=>{
+    const sel = document.getElementById('cmp'+side+'_role');
+    sel.innerHTML = Object.entries(roles).map(([k,v])=>`<option value="${k}">${v}</option>`).join('');
+    const minsField = document.getElementById('cmp'+side+'_minutesField');
+    const minsInput = document.getElementById('cmp'+side+'_minutes');
+    if(sport==='cricket'){
+      minsField.style.display = 'none';
+    } else {
+      minsField.style.display = 'block';
+      minsInput.value = sport==='soccer' ? 90 : 32;
+      minsInput.max = sport==='soccer' ? 120 : 48;
+    }
+    renderCompareStats(side, core[sel.value]||Object.values(core)[0]);
+    sel.onchange = ()=> renderCompareStats(side, core[sel.value]||[]);
+  });
+  document.getElementById('compareResult').style.display = 'none';
+}
+
+function renderCompareStats(side, defs){
+  const box = document.getElementById('cmp'+side+'_stats');
+  box.innerHTML = (defs||[]).map(d=>{
+    if(d.type==='check') return '';
+    return `<div class="field"><label>${d.label}</label><input type="number" id="cmp${side}_${d.id}" value="${d.def}" min="0" step="any"></div>`;
+  }).join('');
+}
+
+document.getElementById('compareSportSwitch').addEventListener('click', e=>{
+  if(e.target.tagName==='BUTTON') setCompareSport(e.target.dataset.csport);
+});
+
+function cmpVal(side, id, fallback){
+  const el = document.getElementById('cmp'+side+'_'+id);
+  if(!el) return fallback??0;
+  const n = parseFloat(el.value);
+  return isNaN(n) ? (fallback??0) : n;
+}
+
+function rateFromInputs(side, sport){
+  // Build a temporary rating using the same engines by temporarily
+  // writing into the main form is risky. Instead we reuse the core
+  // logic with a lightweight adapter for the most important stats.
+  const role = document.getElementById('cmp'+side+'_role').value;
+  const minutes = Math.max(1, cmpVal(side,'minutes', sport==='soccer'?90:32));
+  const name = document.getElementById('cmp'+side+'_name').value.trim() || ('Player '+side);
+
+  // Collect raw stats present in the compare form
+  const raw = {};
+  const core = sport==='soccer' ? SOCCER_CORE[role] : sport==='basketball' ? BBALL_CORE[role] : CRICKET_CORE[role];
+  (core||[]).forEach(d=>{ if(d.type!=='check') raw[d.id] = cmpVal(side, d.id, d.def); });
+
+  let rating = 6.0;
+  const breakdown = [];
+  function add(amount, label){
+    if(Math.abs(amount)<0.02) return;
+    rating += amount;
+    breakdown.push({label, amount});
+  }
+  function diminish(count, first, second, third, rest){
+    count = Math.max(0, Math.round(count));
+    if(count===0) return 0;
+    let total=0;
+    for(let i=1;i<=count;i++){
+      if(i===1) total+=first; else if(i===2) total+=second; else if(i===3) total+=third; else total+=rest;
+    }
+    return total;
+  }
+
+  if(sport==='soccer'){
+    const scale90 = 90/minutes;
+    const b = SOCCER_BENCH[role]||{};
+    if(role==='GK'){
+      const saves=raw.saves||0, faced=Math.max(raw.shotsFaced||0,saves,0.0001);
+      const ratio=saves/faced;
+      if(b.saveRatio) add((ratio-b.saveRatio.bench)*b.saveRatio.weight, `Save ratio ${(ratio*100).toFixed(0)}%`);
+    } else {
+      const goals=(raw.goals||0)*scale90;
+      if(goals>0){
+        let gBonus;
+        if(role==='ST') gBonus=diminish(goals,1.40,1.05,0.72,0.42);
+        else if(role==='AM'||role==='WNG') gBonus=diminish(goals,1.30,0.95,0.65,0.38);
+        else gBonus=diminish(goals,1.15,0.85,0.55,0.32);
+        add(gBonus, `Goals: ${raw.goals||0}`);
+      }
+      const assists=(raw.assists||0)*scale90;
+      if(assists>0) add(diminish(assists,1.05,0.80,0.55,0.32), `Assists: ${raw.assists||0}`);
+      Object.keys(raw).forEach(key=>{
+        if(['goals','assists'].includes(key)) return;
+        if(key==='passAcc' && b.passAcc){ add((raw[key]-b.passAcc.bench)*b.passAcc.weight, `Pass accuracy: ${raw[key]}%`); return; }
+        if(b[key]){
+          const scaled=raw[key]*scale90;
+          add((scaled-b[key].bench)*b[key].weight, `${key}: ${raw[key]}`);
+        }
+      });
+    }
+  } else if(sport==='basketball'){
+    const scale32 = 32/minutes;
+    const b = BBALL_BENCH[role]||{};
+    Object.keys(raw).forEach(key=>{
+      if(!b[key]) return;
+      const isPercent = key.toLowerCase().includes('pct');
+      const scaled = isPercent ? raw[key] : raw[key]*scale32;
+      add((scaled-b[key].bench)*b[key].weight, `${key}: ${raw[key]}`);
+    });
+  } else {
+    // cricket simplified
+    if(['BAT','AR','WK'].includes(role) && (raw.balls||0)>0){
+      const runBaseline = role==='BAT'?30:role==='WK'?20:15;
+      add(((raw.runs||0)-runBaseline)*0.045, `Runs: ${raw.runs||0}`);
+      const sr = ((raw.runs||0)/(raw.balls||1))*100;
+      if((raw.balls||0)>=10) add((sr-110)*0.01, `Strike rate ${sr.toFixed(0)}`);
+    }
+    if(['BWL','AR'].includes(role) && (raw.overs||0)>0){
+      const econ=(raw.runsConceded||0)/(raw.overs||1);
+      add((7-econ)*0.35, `Economy ${econ.toFixed(1)}`);
+      add((raw.wickets||0)*0.9, `Wickets: ${raw.wickets||0}`);
+    }
+    if(role==='WK'){
+      if(raw.catches) add(raw.catches*0.35, `Catches: ${raw.catches}`);
+      if(raw.stumpings) add(raw.stumpings*0.5, `Stumpings: ${raw.stumpings}`);
+    }
+  }
+
+  rating = Math.max(1, Math.min(10, rating));
+  if(rating>9.6){ const excess=rating-9.6; rating=9.6+excess*0.55; }
+  rating = Math.max(1, Math.min(10, rating));
+
+  return { name, role, rating, breakdown, raw, minutes };
+}
+
+function runComparison(){
+  const a = rateFromInputs('A', compareSport);
+  const b = rateFromInputs('B', compareSport);
+
+  document.getElementById('compareResult').style.display = 'block';
+  document.getElementById('cmpScoreA').textContent = a.rating.toFixed(1);
+  document.getElementById('cmpScoreB').textContent = b.rating.toFixed(1);
+  document.getElementById('cmpLabelA').textContent = a.name;
+  document.getElementById('cmpLabelB').textContent = b.name;
+
+  const diff = a.rating - b.rating;
+  let winnerText, diffText;
+  if(Math.abs(diff)<0.05){
+    winnerText = 'TIE';
+    diffText = 'Performances essentially level';
+  } else if(diff>0){
+    winnerText = a.name.toUpperCase() + ' WINS';
+    diffText = `+${diff.toFixed(1)} rating difference`;
+  } else {
+    winnerText = b.name.toUpperCase() + ' WINS';
+    diffText = `+${Math.abs(diff).toFixed(1)} rating difference`;
+  }
+  document.getElementById('cmpWinner').textContent = winnerText;
+  document.getElementById('cmpDiff').textContent = diffText;
+
+  // Category comparison from raw stats that both have
+  const cats = [];
+  const allKeys = new Set([...Object.keys(a.raw), ...Object.keys(b.raw)]);
+  const labelMap = {
+    goals:'Goals', assists:'Assists', points:'Points', rebounds:'Rebounds',
+    tackles:'Tackles', interceptions:'Interceptions', clearances:'Clearances',
+    keyPasses:'Key passes', dribbles:'Dribbles', saves:'Saves',
+    runs:'Runs', wickets:'Wickets', overs:'Overs', fgPct:'FG %',
+    threePct:'3PT %', blocks:'Blocks', steals:'Steals', passAcc:'Pass accuracy',
+    shotsOnTarget:'Shots on target', shotsTotal:'Shots'
+  };
+  allKeys.forEach(k=>{
+    if(['minutes'].includes(k)) return;
+    const av = a.raw[k], bv = b.raw[k];
+    if(av===undefined && bv===undefined) return;
+    const label = labelMap[k] || k;
+    const aVal = av??0, bVal = bv??0;
+    let winner = 'tie';
+    if(aVal > bVal + 0.001) winner = 'A';
+    else if(bVal > aVal + 0.001) winner = 'B';
+    cats.push({label, aVal, bVal, winner});
+  });
+  // Always include overall rating as a category
+  cats.unshift({
+    label:'Overall Rating',
+    aVal: a.rating.toFixed(1),
+    bVal: b.rating.toFixed(1),
+    winner: Math.abs(diff)<0.05 ? 'tie' : (diff>0?'A':'B')
+  });
+
+  document.getElementById('cmpCategories').innerHTML = cats.map(c=>{
+    const aCls = c.winner==='A'?'winner':(c.winner==='tie'?'tie':'loser');
+    const bCls = c.winner==='B'?'winner':(c.winner==='tie'?'tie':'loser');
+    return `<div class="cat-row">
+      <div class="${aCls}" style="text-align:right">${c.aVal}</div>
+      <div class="cat-name">${esc(c.label)}</div>
+      <div class="${bCls}" style="text-align:left">${c.bVal}</div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('compareResult').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+// Init compare roles on load
+setCompareSport('soccer');
 </script>
 </body>
 </html>
