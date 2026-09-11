@@ -1475,9 +1475,9 @@ const SOCCER_CORE = {
   FB: [ {id:'tackles', label:'Tackles won', def:2}, {id:'interceptions', label:'Interceptions', def:1}, {id:'keyPasses', label:'Key passes / crosses', def:1}, {id:'passAcc', label:'Pass accuracy %', def:80} ],
   DM: [ {id:'tackles', label:'Tackles won', def:3}, {id:'interceptions', label:'Interceptions', def:2}, {id:'passAcc', label:'Pass accuracy %', def:87}, {id:'passesCompleted', label:'Passes completed', def:35} ],
   CM: [ {id:'passAcc', label:'Pass accuracy %', def:84}, {id:'keyPasses', label:'Key passes', def:1} ],
-  AM: [ {id:'keyPasses', label:'Key passes', def:2}, {id:'dribbles', label:'Successful dribbles', def:2} ],
-  WNG: [ {id:'dribbles', label:'Successful dribbles', def:2}, {id:'keyPasses', label:'Key passes / crosses', def:1} ],
-  ST: [ {id:'shotsTotal', label:'Shots taken', def:2}, {id:'shotsOnTarget', label:'Shots on target', def:1} ],
+  AM: [ {id:'keyPasses', label:'Key passes', def:2}, {id:'dribbles', label:'Successful dribbles', def:2}, {id:'goals', label:'Goals', def:0}, {id:'assists', label:'Assists', def:0} ],
+  WNG: [ {id:'dribbles', label:'Successful dribbles', def:2}, {id:'keyPasses', label:'Key passes / crosses', def:1}, {id:'goals', label:'Goals', def:0}, {id:'assists', label:'Assists', def:0} ],
+  ST: [ {id:'shotsTotal', label:'Shots taken', def:2}, {id:'shotsOnTarget', label:'Shots on target', def:1}, {id:'goals', label:'Goals', def:0}, {id:'assists', label:'Assists', def:0} ],
 };
 
 
@@ -1487,9 +1487,9 @@ const SOCCER_OPTIONAL = {
   FB: [ {id:'duelsWon', label:'Duels won', def:3}, {id:'duelsTotal', label:'Duels contested', def:5}, {id:'assists', label:'Assists', def:0}, {id:'goals', label:'Goals', def:0}, {id:'dribbles', label:'Successful dribbles', def:1} ],
   DM: [ {id:'duelsWon', label:'Duels won', def:3}, {id:'duelsTotal', label:'Duels contested', def:5}, {id:'keyPasses', label:'Key passes', def:0}, {id:'goals', label:'Goals', def:0}, {id:'assists', label:'Assists', def:0} ],
   CM: [ {id:'passesCompleted', label:'Passes completed', def:30}, {id:'tackles', label:'Tackles won', def:1}, {id:'interceptions', label:'Interceptions', def:1}, {id:'dribbles', label:'Successful dribbles', def:1}, {id:'goals', label:'Goals', def:0}, {id:'assists', label:'Assists', def:0} ],
-  AM: [ {id:'goals', label:'Goals', def:0}, {id:'assists', label:'Assists', def:0}, {id:'dispossessed', label:'Times dispossessed', def:1} ],
-  WNG: [ {id:'goals', label:'Goals', def:0}, {id:'assists', label:'Assists', def:0}, {id:'dispossessed', label:'Times dispossessed', def:2} ],
-  ST: [ {id:'goals', label:'Goals', def:0}, {id:'assists', label:'Assists', def:0}, {id:'holdUp', label:'Duels won (hold-up play)', def:2}, {id:'dispossessed', label:'Times dispossessed', def:2} ],
+  AM: [ {id:'dispossessed', label:'Times dispossessed', def:1} ],
+  WNG: [ {id:'dispossessed', label:'Times dispossessed', def:2} ],
+  ST: [ {id:'holdUp', label:'Duels won (hold-up play)', def:2}, {id:'dispossessed', label:'Times dispossessed', def:2} ],
 };
 
 const SOCCER_BENCH = {
@@ -1590,7 +1590,9 @@ function renderFieldGroup(defs, containerId, label, optionalWrap){
 
 function toggleOptional(){
   optionalOpen = !optionalOpen;
-  renderSport(currentSport, true);
+  // Only re-render the optional section. Re-rendering the whole sport
+  // form resets the position dropdown to its first option (Goalkeeper).
+  renderOptionalForCurrentRole();
 }
 
 function renderRoleOptions(roleMap){
