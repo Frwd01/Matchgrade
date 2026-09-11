@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Football Player Rating Calculator — Score Any Performance Out of 10</title>
+<meta name="description" content="Free football player rating calculator. Enter match stats and get a position-weighted rating out of 10 for goalkeepers, defenders, midfielders, and forwards.">
+<meta name="keywords" content="football player rating calculator, football rating out of 10, rate football player, match rating calculator football">
+<link rel="canonical" href="https://matchgrade.netlify.app/football-player-rating-calculator">
+<meta property="og:title" content="Football Player Rating Calculator — MatchGrade">
+<meta property="og:description" content="A free, transparent football rating calculator weighted by position.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://matchgrade.netlify.app/football-player-rating-calculator">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type":"Question","name":"What is a good football player rating?","acceptedAnswer":{"@type":"Answer","text":"On a 10-point scale, 6.0 is a neutral, did-their-job performance. Ratings of 7.0 to 7.9 are very good, 8.0 and above are excellent or match-winning, and anything below 5.5 reflects a performance that hurt the team."}},
+    {"@type":"Question","name":"How do professional football rating sites calculate scores?","acceptedAnswer":{"@type":"Answer","text":"Most professional rating services use a baseline around 6.0 and adjust based on key actions weighted by position, plus match context such as the final result and goals conceded. MatchGrade follows the same baseline philosophy but shows the full breakdown of the calculation."}},
+    {"@type":"Question","name":"Can this calculator be used for youth or amateur football?","acceptedAnswer":{"@type":"Answer","text":"Yes. The calculator works for any level of football — professional, amateur, school, or five-a-side. It only needs the stats from the match, not any league-specific data."}}
+  ]
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Special+Elite&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#EDEAE2; --paper-dark:#E3DFD3; --ink:#1B1B18; --ink-soft:#4A473F;
+  --accent:#2F5233; --accent-deep:#20391F; --red:#B23A2F; --gold:#B8933F; --line:#c9c3b2;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;background:var(--paper);color:var(--ink);font-family:'Source Serif 4',serif;}
+body{background-image:radial-gradient(ellipse at top left, rgba(47,82,51,0.05), transparent 45%),repeating-linear-gradient(0deg, rgba(0,0,0,0.015) 0px, rgba(0,0,0,0.015) 1px, transparent 1px, transparent 3px);}
+.wrap{max-width:820px;margin:0 auto;padding:32px 20px 70px;}
+.masthead{border-bottom:3px solid var(--ink);padding-bottom:14px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:10px;}
+.masthead h1{font-family:'Oswald',sans-serif;font-weight:700;font-size:2.1rem;letter-spacing:-0.5px;margin:0;line-height:0.95;}
+.masthead h1 span{color:var(--accent);}
+.masthead .tagline{font-family:'Special Elite',monospace;font-size:0.75rem;color:var(--ink-soft);text-align:right;max-width:220px;line-height:1.4;}
+.breadcrumb{font-family:'Special Elite',monospace;font-size:0.72rem;color:var(--ink-soft);margin:14px 0 22px;}
+.breadcrumb a{color:var(--accent);text-decoration:none;}
+.breadcrumb a:hover{text-decoration:underline;}
+.hero{margin-bottom:28px;}
+.hero h2{font-family:'Oswald',sans-serif;font-size:1.7rem;margin:0 0 12px;line-height:1.2;}
+.hero p{font-size:1.02rem;line-height:1.65;color:var(--ink-soft);max-width:70ch;margin:0 0 14px;}
+.cta-box{border:1.5px solid var(--ink);background:var(--paper-dark);padding:20px 22px;margin:24px 0;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;}
+.cta-box p{margin:0;font-size:0.95rem;color:var(--ink-soft);max-width:44ch;}
+.cta-box a.btn{background:var(--accent);color:var(--paper);text-decoration:none;font-family:'Oswald',sans-serif;font-size:0.9rem;letter-spacing:0.4px;padding:12px 22px;white-space:nowrap;}
+.cta-box a.btn:hover{background:var(--accent-deep);}
+.section{margin-top:34px;border-top:1px solid var(--ink);padding-top:22px;}
+.section h2{font-family:'Oswald',sans-serif;font-size:1.15rem;margin:0 0 12px;}
+.section h3{font-family:'Oswald',sans-serif;font-size:1rem;margin:20px 0 8px;}
+.section p{font-size:0.96rem;line-height:1.65;color:var(--ink-soft);max-width:74ch;margin:0 0 14px;}
+.section ul, .section ol{color:var(--ink-soft);font-size:0.96rem;line-height:1.7;max-width:72ch;padding-left:22px;}
+.section li{margin-bottom:6px;}
+table.stat-table{width:100%;border-collapse:collapse;margin:16px 0 20px;font-size:0.9rem;}
+table.stat-table th{text-align:left;font-family:'Oswald',sans-serif;font-size:0.78rem;letter-spacing:0.3px;text-transform:uppercase;color:var(--ink-soft);border-bottom:2px solid var(--ink);padding:8px 10px 8px 0;}
+table.stat-table td{padding:9px 10px 9px 0;border-bottom:1px dotted var(--line);color:var(--ink-soft);}
+table.stat-table td:first-child, table.stat-table th:first-child{color:var(--ink);font-weight:600;}
+.faq-item{margin-bottom:18px;}
+.faq-item h3{font-family:'Oswald',sans-serif;font-size:0.95rem;margin:0 0 6px;}
+.faq-item p{font-size:0.92rem;line-height:1.6;color:var(--ink-soft);margin:0;}
+.footnote{margin-top:30px;font-size:0.8rem;color:var(--ink-soft);text-align:center;line-height:1.7;}
+.footnote a{color:var(--accent);}
+.pagelinks{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;}
+.pagelinks a{font-family:'Special Elite',monospace;font-size:0.75rem;color:var(--accent-deep);text-decoration:none;border:1px solid var(--line);padding:6px 12px;}
+.pagelinks a:hover{border-color:var(--accent);}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="masthead">
+    <h1><a href="/" style="color:inherit;text-decoration:none;">Match<span>Grade</span></a></h1>
+    <div class="tagline">stat sheet in, honest number out</div>
+  </div>
+  <div class="breadcrumb"><a href="/">Home</a> / Football player rating calculator</div>
+
+  <div class="hero">
+    <h2>Football player rating calculator</h2>
+    <p>MatchGrade turns a football stat line into a rating out of 10, the same way match-day rating services do — but transparently, showing exactly which stats moved the number. Choose a position, enter the match stats, and get an instant score.</p>
+    <p>Every position is weighted differently. A goalkeeper's rating leans on saves and clean sheets; a striker's leans on goals and shot quality; a central midfielder sits somewhere between defensive actions and creative output.</p>
+  </div>
+
+  <div class="cta-box">
+    <p>Pick a position and enter this match's stats to get a rating.</p>
+    <a class="btn" href="/">Open the calculator</a>
+  </div>
+
+  <div class="section">
+    <h2>Why "football" and "soccer" ratings work the same way</h2>
+    <p>This page and the soccer player rating calculator use the identical scoring engine — the difference is only naming convention, since football is the standard term for the sport outside North America. Whichever you search for, the position weighting, the 6.0 baseline, and the stat inputs are the same.</p>
+    <h3>Positions covered</h3>
+    <ul>
+      <li>Goalkeeper — save ratio, clean sheets, claims, penalty saves</li>
+      <li>Centre-back and full-back — tackles, interceptions, clearances, duels, pass accuracy</li>
+      <li>Defensive, central, and attacking midfield — passing, key passes, tackles, goal contributions</li>
+      <li>Winger and striker — goals, assists, shots on target, dribbles, touches in the box</li>
+    </ul>
+    <h3>What makes a rating go up or down</h3>
+    <p>Positive contributions include goals, assists, key passes, successful dribbles, tackles won, interceptions, clean sheets, and strong pass accuracy relative to position norms. Negative contributions include goals conceded (weighted more heavily for defensive positions), errors leading to a goal, yellow and red cards, and being dispossessed frequently in advanced positions.</p>
+  </div>
+
+  <div class="section">
+    <h2>Related pages</h2>
+    <div class="pagelinks">
+      <a href="/">Home — all three sports</a>
+      <a href="/soccer-player-rating-calculator">Soccer player rating calculator</a>
+      <a href="/basketball-player-rating-calculator">Basketball player rating calculator</a>
+      <a href="/cricket-player-rating-calculator">Cricket player rating calculator</a>
+      <a href="/how-player-ratings-work">How player ratings work</a>
+    </div>
+  </div>
+
+  <div class="footnote">
+    <a href="/">MatchGrade</a> — free player rating calculator for soccer, basketball, and cricket.
+  </div>
+</div>
+</body>
+</html>
