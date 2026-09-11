@@ -746,96 +746,6 @@
     color:var(--paper);
   }
 
-  /* ---------- AUDIENCE + QUICK RATE + EXAMPLES ---------- */
-  .audience-strip{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:10px;
-    margin-bottom:18px;
-  }
-  @media(max-width:640px){.audience-strip{grid-template-columns:1fr;}}
-  .audience-card{
-    border:1px solid var(--ink);
-    padding:12px 14px;
-    background:var(--paper-dark);
-    cursor:default;
-  }
-  .audience-card strong{
-    font-family:'Oswald',sans-serif;
-    font-size:0.88rem;
-    letter-spacing:0.3px;
-    display:block;
-    margin-bottom:4px;
-  }
-  .audience-card span{
-    font-size:0.82rem;
-    color:var(--ink-soft);
-    line-height:1.4;
-  }
-  .mode-row{
-    display:flex;
-    flex-wrap:wrap;
-    align-items:center;
-    justify-content:space-between;
-    gap:12px;
-    margin-bottom:14px;
-  }
-  .rate-mode{
-    display:flex;
-    border:1.5px solid var(--ink);
-  }
-  .rate-mode button{
-    background:transparent;
-    border:none;
-    border-right:1.5px solid var(--ink);
-    padding:9px 14px;
-    font-family:'Oswald',sans-serif;
-    font-size:0.8rem;
-    letter-spacing:0.3px;
-    color:var(--ink-soft);
-    cursor:pointer;
-  }
-  .rate-mode button:last-child{border-right:none;}
-  .rate-mode button.active{
-    background:var(--ink);
-    color:var(--paper);
-  }
-  .examples-row{
-    display:flex;
-    flex-wrap:wrap;
-    gap:8px;
-    align-items:center;
-    margin-bottom:16px;
-  }
-  .examples-label{
-    font-family:'Special Elite',monospace;
-    font-size:0.72rem;
-    color:var(--ink-soft);
-    margin-right:4px;
-  }
-  .example-chip{
-    border:1px solid var(--ink);
-    background:transparent;
-    font-family:'Oswald',sans-serif;
-    font-size:0.75rem;
-    letter-spacing:0.3px;
-    padding:7px 11px;
-    cursor:pointer;
-    color:var(--ink);
-  }
-  .example-chip:hover{
-    background:var(--accent);
-    color:var(--paper);
-    border-color:var(--accent);
-  }
-  .quick-hint{
-    font-family:'Special Elite',monospace;
-    font-size:0.72rem;
-    color:var(--ink-soft);
-    margin:0 0 12px;
-  }
-  .quick-hint.hidden{display:none;}
-
   /* ---------- SECTIONS ---------- */
   .app-section{display:none;}
   .app-section.active{display:block;}
@@ -1139,25 +1049,6 @@
     <button data-sport="cricket">Cricket</button>
   </div>
 
-  <div class="audience-strip" aria-label="Who MatchGrade is for">
-    <div class="audience-card"><strong>Players</strong><span>Rate your own game after the match — no full Opta sheet needed.</span></div>
-    <div class="audience-card"><strong>Coaches</strong><span>Log performances and build a honest season record for the squad.</span></div>
-    <div class="audience-card"><strong>Fans</strong><span>Settle the argument with a transparent rating and breakdown.</span></div>
-  </div>
-
-  <div class="mode-row">
-    <div class="rate-mode" id="rateModeSwitch">
-      <button type="button" data-mode="quick" class="active">Quick rate</button>
-      <button type="button" data-mode="full">Full sheet</button>
-    </div>
-    <p class="quick-hint" id="quickHint">Quick rate uses the core stats only. Switch to Full sheet for optional extras.</p>
-  </div>
-
-  <div class="examples-row" id="examplesRow">
-    <span class="examples-label">Try an example:</span>
-    <!-- chips filled by JS per sport -->
-  </div>
-
   <div class="board">
 
     <!-- LEFT: INPUT SHEET -->
@@ -1207,7 +1098,7 @@
     <div class="result">
       <div class="result-empty" id="emptyState">
         <span class="big-q">?</span>
-        try an example above<br>or fill the sheet yourself
+        fill in the sheet<br>and the rating drops here
       </div>
 
       <div class="result-body" id="resultBody">
@@ -1588,230 +1479,6 @@ const CRICKET_OPTIONAL = {
 };
 
 /* =========================================================
-   QUICK RATE + EXAMPLE PERFORMANCES
-========================================================= */
-let rateMode = 'quick'; // 'quick' | 'full'
-
-const EXAMPLES = {
-  soccer: [
-    {
-      id: 'st_brace',
-      label: 'Striker brace',
-      name: 'Jordan Hale',
-      club: 'Riverside FC',
-      role: 'ST',
-      minutes: 90,
-      result: 'win',
-      stats: { goals: 2, assists: 0, shotsTotal: 5, shotsOnTarget: 3 },
-      context: { goalsConceded: 1, errorsToGoal: 0 }
-    },
-    {
-      id: 'gk_wall',
-      label: 'GK clean sheet',
-      name: 'Sam Okoye',
-      club: 'Harbor United',
-      role: 'GK',
-      minutes: 90,
-      result: 'win',
-      stats: { saves: 6, shotsFaced: 7 },
-      context: { goalsConceded: 0, errorsToGoal: 0 },
-      checks: { cleanSheet: true }
-    },
-    {
-      id: 'cm_engine',
-      label: 'Midfield engine',
-      name: 'Leo Park',
-      club: 'Eastside',
-      role: 'CM',
-      minutes: 90,
-      result: 'draw',
-      stats: { passAcc: 89, keyPasses: 3, goals: 0, assists: 1 },
-      context: { goalsConceded: 1, errorsToGoal: 0 }
-    }
-  ],
-  basketball: [
-    {
-      id: 'pg_dimes',
-      label: 'Floor general',
-      name: 'Chris Dalton',
-      club: 'Metro',
-      role: 'PG',
-      minutes: 34,
-      result: 'win',
-      stats: { points: 14, assists: 11, turnovers: 2, fgPct: 48 }
-    },
-    {
-      id: 'c_double',
-      label: 'Big double-double',
-      name: 'Marcus Reed',
-      club: 'Harbor',
-      role: 'C',
-      minutes: 30,
-      result: 'win',
-      stats: { points: 18, rebounds: 14, blocks: 3, fgPct: 62 }
-    },
-    {
-      id: 'sg_scoring',
-      label: 'Scoring guard',
-      name: 'Ava Knight',
-      club: 'Riverside',
-      role: 'SG',
-      minutes: 32,
-      result: 'loss',
-      stats: { points: 28, fgPct: 47, threePct: 40, assists: 3 }
-    }
-  ],
-  cricket: [
-    {
-      id: 'bat_fifty',
-      label: 'Batter fifty',
-      name: 'Ravi Mehta',
-      club: 'Riverside CC',
-      role: 'BAT',
-      result: 'win',
-      stats: { runs: 62, balls: 48 }
-    },
-    {
-      id: 'bwl_three',
-      label: 'Bowler 3-fer',
-      name: 'Tom Briggs',
-      club: 'Harbor CC',
-      role: 'BWL',
-      result: 'win',
-      stats: { overs: 4, runsConceded: 18, wickets: 3 }
-    },
-    {
-      id: 'ar_both',
-      label: 'All-round day',
-      name: 'Nina Cole',
-      club: 'Eastside CC',
-      role: 'AR',
-      result: 'win',
-      stats: { runs: 34, balls: 22, overs: 3, runsConceded: 19, wickets: 2 }
-    }
-  ]
-};
-
-function setRateMode(mode){
-  rateMode = mode === 'full' ? 'full' : 'quick';
-  document.querySelectorAll('#rateModeSwitch button').forEach(b=>{
-    b.classList.toggle('active', b.dataset.mode === rateMode);
-  });
-  const hint = document.getElementById('quickHint');
-  if(hint){
-    hint.classList.toggle('hidden', rateMode !== 'quick');
-    hint.textContent = rateMode === 'quick'
-      ? 'Quick rate uses the core stats only. Switch to Full sheet for optional extras.'
-      : 'Full sheet includes optional extras for a sharper rating.';
-  }
-  const sheetNo = document.getElementById('sheetNo');
-  if(sheetNo) sheetNo.textContent = rateMode === 'quick' ? 'quick rate' : 'form 02-B';
-  renderRoleFields();
-  renderContextFields();
-  applyQuickModeToContext();
-}
-
-function applyQuickModeToContext(){
-  const ctx = document.getElementById('contextFields');
-  if(!ctx) return;
-  // In quick mode, keep result toggles but hide denser context if present
-  const extraRows = ctx.querySelectorAll('.field-row, .checkline');
-  extraRows.forEach((el, i)=>{
-    // keep first field-row / result UI visible; hide deeper extras in quick mode for soccer
-    if(rateMode === 'quick' && currentSport === 'soccer' && el.classList.contains('checkline')){
-      el.style.display = 'none';
-    } else if(el.classList.contains('checkline')){
-      el.style.display = '';
-    }
-  });
-}
-
-function renderExamplesForSport(sport){
-  const row = document.getElementById('examplesRow');
-  if(!row) return;
-  const list = EXAMPLES[sport] || [];
-  row.innerHTML = `<span class="examples-label">Try an example:</span>` + list.map(ex=>
-    `<button type="button" class="example-chip" data-ex="${ex.id}">${ex.label}</button>`
-  ).join('');
-}
-
-function loadExample(exId){
-  const list = EXAMPLES[currentSport] || [];
-  const ex = list.find(e=>e.id===exId);
-  if(!ex) return;
-
-  // Ensure full enough form for the example
-  if(rateMode === 'quick'){
-    // stay in quick — core stats only is enough for examples
-  }
-
-  const roleSel = document.getElementById('role');
-  if(roleSel){
-    roleSel.value = ex.role;
-    renderRoleFields();
-  }
-
-  const nameEl = document.getElementById('playerName');
-  const clubEl = document.getElementById('clubName');
-  const minsEl = document.getElementById('minutes');
-  if(nameEl) nameEl.value = ex.name || '';
-  if(clubEl){
-    clubEl.value = ex.club || '';
-    if(typeof onClubNameInput === 'function') onClubNameInput('main');
-  }
-  if(minsEl && ex.minutes != null) minsEl.value = ex.minutes;
-
-  // Stats
-  Object.entries(ex.stats || {}).forEach(([k,v])=>{
-    const el = document.getElementById('stat_'+k);
-    if(!el) return;
-    if(el.type === 'checkbox') el.checked = !!v;
-    else el.value = v;
-  });
-  Object.entries(ex.checks || {}).forEach(([k,v])=>{
-    const el = document.getElementById('stat_'+k);
-    if(el && el.type === 'checkbox') el.checked = !!v;
-  });
-
-  // Context
-  if(ex.context){
-    if(ex.context.goalsConceded != null){
-      const g = document.getElementById('goalsConceded');
-      if(g) g.value = ex.context.goalsConceded;
-    }
-    if(ex.context.errorsToGoal != null){
-      const e = document.getElementById('errorsToGoal');
-      if(e) e.value = ex.context.errorsToGoal;
-    }
-  }
-
-  if(ex.result){
-    resultVal = ex.result;
-    const toggle = document.getElementById('resultToggle');
-    if(toggle){
-      toggle.querySelectorAll('button').forEach(b=>{
-        b.classList.toggle('active', b.dataset.val === ex.result);
-      });
-    }
-  }
-
-  grade();
-  const empty = document.getElementById('emptyState');
-  if(empty) empty.style.display = 'none';
-}
-
-document.getElementById('rateModeSwitch')?.addEventListener('click', (e)=>{
-  if(e.target.tagName === 'BUTTON' && e.target.dataset.mode){
-    setRateMode(e.target.dataset.mode);
-  }
-});
-
-document.getElementById('examplesRow')?.addEventListener('click', (e)=>{
-  const btn = e.target.closest('.example-chip');
-  if(btn && btn.dataset.ex) loadExample(btn.dataset.ex);
-});
-
-/* =========================================================
    FIELD RENDERING
 ========================================================= */
 
@@ -1967,8 +1634,6 @@ function renderSport(sport, keepOptionalState){
   document.getElementById('role').onchange = () => renderRoleFields();
   renderOptionalForCurrentRole();
   renderContextFields();
-  applyQuickModeToContext();
-  renderExamplesForSport(sport);
 
   document.getElementById('emptyState').style.display = 'block';
   document.getElementById('resultBody').classList.remove('show');
@@ -1984,11 +1649,6 @@ function renderRoleFields(){
 
 function renderOptionalForCurrentRole(){
   const role = document.getElementById('role').value;
-  const box = document.getElementById('optionalFields');
-  if(rateMode === 'quick'){
-    if(box) box.innerHTML = '';
-    return;
-  }
   let defs = [];
   if(currentSport === 'soccer') defs = SOCCER_OPTIONAL[role] || [];
   if(currentSport === 'basketball') defs = BBALL_OPTIONAL[role] || [];
