@@ -2079,7 +2079,7 @@ function calculateSoccerRating(role, minutes, raw, provided, context, result){
       else if(role === 'CM') gBonus = diminishing(goals, 1.18, 0.82, 0.54, 0.30);
       else if(role === 'FB' || role === 'DM') gBonus = diminishing(goals, 1.10, 0.76, 0.50, 0.28);
       else gBonus = diminishing(goals, 1.15, 0.80, 0.52, 0.28);
-      add(Math.min(3.2, gBonus), `Goals: ${raw.goals}${exposure !== 1 ? ' (adjusted)' : ''}`);
+      add(Math.min(4.5, gBonus), `Goals: ${raw.goals}${exposure !== 1 ? ' (adjusted)' : ''}`);
     }
 
     if(has('assists') && raw.assists > 0){
