@@ -691,23 +691,66 @@
     margin:18px 0 6px;
   }
 
-  .faq-item{
-    margin-bottom:18px;
+  .faq-list{
+    border-top:1px solid var(--line);
   }
 
-  .faq-item h3{
+  .faq-item{
+    border-bottom:1px solid var(--line);
+    margin-bottom:0;
+  }
+
+  .faq-q{
+    width:100%;
+    text-align:left;
+    background:none;
+    border:none;
+    cursor:pointer;
+    padding:14px 30px 14px 2px;
     font-family:'Oswald', sans-serif;
     font-size:0.95rem;
-    margin:0 0 6px;
     color:var(--ink);
+    position:relative;
+    display:block;
   }
 
-  .faq-item p{
-    font-size:0.95rem;
-    line-height:1.65;
+  .faq-q:hover{color:var(--accent);}
+
+  .faq-q::after{
+    content:"+";
+    position:absolute;
+    right:2px;
+    top:50%;
+    transform:translateY(-50%);
+    font-family:'Oswald', sans-serif;
+    font-size:1.2rem;
+    font-weight:600;
+    color:var(--ink-soft);
+    transition:transform 0.2s ease;
+  }
+
+  .faq-item.open .faq-q::after{
+    content:"−";
+    color:var(--accent);
+  }
+
+  .faq-a{
+    max-height:0;
+    overflow:hidden;
+    transition:max-height 0.25s ease;
+  }
+
+  .faq-item.open .faq-a{
+    max-height:400px;
+  }
+
+  .faq-a p{
+    font-size:0.92rem;
+    line-height:1.6;
     color:var(--ink-soft);
     max-width:78ch;
-    margin:0;
+    margin:0 0 16px;
+    padding-right:10px;
   }
 
   /* ---------- FOOTER ---------- */
@@ -1563,74 +1606,76 @@
   <div class="about">
     <h2>Frequently asked questions</h2>
 
-    <div class="faq-item">
-      <h3>What is MatchGrade?</h3>
-      <p>MatchGrade is a free player rating calculator that turns match statistics into an honest rating out of 10 for soccer, basketball, and cricket. Enter the numbers from a game and get a transparent score based on position or role.</p>
-    </div>
+    <div class="faq-list" id="faqList">
+      <div class="faq-item">
+        <button type="button" class="faq-q">What is MatchGrade?</button>
+        <div class="faq-a"><p>MatchGrade is a free player rating calculator that turns match statistics into an honest rating out of 10 for soccer, basketball, and cricket. Enter the numbers from a game and get a transparent score based on position or role.</p></div>
+      </div>
 
-    <div class="faq-item">
-      <h3>How does the MatchGrade player rating calculator work?</h3>
-      <p>Every rating starts at a 6.0 baseline, which represents an anonymous, did-their-job performance. The score then moves up or down depending on how each stat compares to what is typical for that specific position or role. The tool shows exactly which stats pushed the rating higher or lower so nothing is a black box.</p>
-    </div>
+      <div class="faq-item">
+        <button type="button" class="faq-q">How does the MatchGrade player rating calculator work?</button>
+        <div class="faq-a"><p>Every rating starts at a 6.0 baseline, which represents an anonymous, did-their-job performance. The score then moves up or down depending on how each stat compares to what is typical for that specific position or role. The tool shows exactly which stats pushed the rating higher or lower so nothing is a black box.</p></div>
+      </div>
 
-    <div class="faq-item">
-      <h3>Is MatchGrade free to use?</h3>
-      <p>Yes. MatchGrade is completely free. There are no accounts, subscriptions, or hidden fees. Enter stats, get a rating, and share the card if you want.</p>
-    </div>
+      <div class="faq-item">
+        <button type="button" class="faq-q">Is MatchGrade free to use?</button>
+        <div class="faq-a"><p>Yes. MatchGrade is completely free. There are no accounts, subscriptions, or hidden fees. Enter stats, get a rating, and share the card if you want.</p></div>
+      </div>
 
-    <div class="faq-item">
-      <h3>Which sports does MatchGrade support?</h3>
-      <p>MatchGrade currently supports three sports: soccer (football), basketball, and cricket. Each sport has its own position- or role-specific scoring model so the same raw number is interpreted differently depending on the role.</p>
-    </div>
+      <div class="faq-item">
+        <button type="button" class="faq-q">Which sports does MatchGrade support?</button>
+        <div class="faq-a"><p>MatchGrade currently supports three sports: soccer (football), basketball, and cricket. Each sport has its own position- or role-specific scoring model so the same raw number is interpreted differently depending on the role.</p></div>
+      </div>
 
-    <div class="faq-item">
-      <h3>Why does every rating start at 6.0?</h3>
-      <p>A 6.0 baseline is the same starting point used by many professional rating services. It represents a neutral, anonymous performance where the player did their job without standing out positively or negatively. Everything above or below that is earned or lost from the stats.</p>
-    </div>
+      <div class="faq-item">
+        <button type="button" class="faq-q">Why does every rating start at 6.0?</button>
+        <div class="faq-a"><p>A 6.0 baseline is the same starting point used by many professional rating services. It represents a neutral, anonymous performance where the player did their job without standing out positively or negatively. Everything above or below that is earned or lost from the stats.</p></div>
+      </div>
 
-    <div class="faq-item">
-      <h3>Do different positions use different weighting?</h3>
-      <p>Yes. A center-back is judged more on tackles, interceptions, clearances and aerials. A striker is judged more on goals, shot conversion and touches in the box. A point guard leans on assists and turnovers. A bowler is scored on wickets and economy. MatchGrade only asks for the stats that role actually produces.</p>
-    </div>
+      <div class="faq-item">
+        <button type="button" class="faq-q">Do different positions use different weighting?</button>
+        <div class="faq-a"><p>Yes. A center-back is judged more on tackles, interceptions, clearances and aerials. A striker is judged more on goals, shot conversion and touches in the box. A point guard leans on assists and turnovers. A bowler is scored on wickets and economy. MatchGrade only asks for the stats that role actually produces.</p></div>
+      </div>
 
-    <div class="faq-item">
-      <h3>Can I rate players from any league or level?</h3>
-      <p>Yes. MatchGrade works for any level — professional, amateur, youth, or recreational. The calculator does not require a specific league or competition. Just enter the stats from the match.</p>
-    </div>
+      <div class="faq-item">
+        <button type="button" class="faq-q">Can I rate players from any league or level?</button>
+        <div class="faq-a"><p>Yes. MatchGrade works for any level — professional, amateur, youth, or recreational. The calculator does not require a specific league or competition. Just enter the stats from the match.</p></div>
+      </div>
 
-    <div class="faq-item">
-      <h3>What stats do I need for a soccer player rating?</h3>
-      <p>Core stats depend on position. Goalkeepers need saves and shots faced. Defenders need tackles, interceptions and clearances. Midfielders and attackers need key passes, goals, assists and dribbles. Optional extras such as duels, aerials, and errors leading to a goal can refine the score further.</p>
-    </div>
+      <div class="faq-item">
+        <button type="button" class="faq-q">What stats do I need for a soccer player rating?</button>
+        <div class="faq-a"><p>Core stats depend on position. Goalkeepers need saves and shots faced. Defenders need tackles, interceptions and clearances. Midfielders and attackers need key passes, goals, assists and dribbles. Optional extras such as duels, aerials, and errors leading to a goal can refine the score further.</p></div>
+      </div>
 
-    <div class="faq-item">
-      <h3>How are basketball ratings calculated?</h3>
-      <p>Basketball ratings start at 6.0 and adjust based on points, shooting percentages, rebounds, assists, turnovers, steals, blocks and plus-minus. Each position (point guard, shooting guard, small forward, power forward, center) weights these stats differently to reflect typical contributions.</p>
-    </div>
+      <div class="faq-item">
+        <button type="button" class="faq-q">How are basketball ratings calculated?</button>
+        <div class="faq-a"><p>Basketball ratings start at 6.0 and adjust based on points, shooting percentages, rebounds, assists, turnovers, steals, blocks and plus-minus. Each position (point guard, shooting guard, small forward, power forward, center) weights these stats differently to reflect typical contributions.</p></div>
+      </div>
 
-    <div class="faq-item">
-      <h3>How do cricket ratings work on MatchGrade?</h3>
-      <p>Choose batter, bowler, all-rounder or wicket-keeper. Batting factors in runs, balls faced and strike rate. Bowling factors in overs, wickets and economy. Wicket-keepers also receive credit for catches and stumpings. Optional stats such as boundaries, maidens and byes can be added for more precision.</p>
-    </div>
+      <div class="faq-item">
+        <button type="button" class="faq-q">How do cricket ratings work on MatchGrade?</button>
+        <div class="faq-a"><p>Choose batter, bowler, all-rounder or wicket-keeper. Batting factors in runs, balls faced and strike rate. Bowling factors in overs, wickets and economy. Wicket-keepers also receive credit for catches and stumpings. Optional stats such as boundaries, maidens and byes can be added for more precision.</p></div>
+      </div>
 
-    <div class="faq-item">
-      <h3>Can I share my MatchGrade rating?</h3>
-      <p>Yes. After grading a performance you can open a shareable rating card. The card can be saved as an image or shared directly from supported devices. It includes the player name, position, rating, verdict and key contributing stats.</p>
-    </div>
+      <div class="faq-item">
+        <button type="button" class="faq-q">Can I share my MatchGrade rating?</button>
+        <div class="faq-a"><p>Yes. After grading a performance you can open a shareable rating card. The card can be saved as an image or shared directly from supported devices. It includes the player name, position, rating, verdict and key contributing stats.</p></div>
+      </div>
 
-    <div class="faq-item">
-      <h3>Is MatchGrade the same as WhoScored or SofaScore ratings?</h3>
-      <p>MatchGrade uses a similar 6.0 baseline philosophy but is an independent tool. It is designed to be transparent: every rating shows exactly which stats moved the score up or down. It is not affiliated with any major data provider and works from the numbers you enter yourself.</p>
-    </div>
+      <div class="faq-item">
+        <button type="button" class="faq-q">Is MatchGrade the same as WhoScored or SofaScore ratings?</button>
+        <div class="faq-a"><p>MatchGrade uses a similar 6.0 baseline philosophy but is an independent tool. It is designed to be transparent: every rating shows exactly which stats moved the score up or down. It is not affiliated with any major data provider and works from the numbers you enter yourself.</p></div>
+      </div>
 
-    <div class="faq-item">
-      <h3>Do I need an account to use MatchGrade?</h3>
-      <p>No. MatchGrade is a free, no-login tool. Open the page, select the sport, enter the stats and get the rating instantly. Nothing is stored on a server unless you choose to share the rating card.</p>
-    </div>
+      <div class="faq-item">
+        <button type="button" class="faq-q">Do I need an account to use MatchGrade?</button>
+        <div class="faq-a"><p>No. MatchGrade is a free, no-login tool. Open the page, select the sport, enter the stats and get the rating instantly. Nothing is stored on a server unless you choose to share the rating card.</p></div>
+      </div>
 
-    <div class="faq-item">
-      <h3>Does playing time affect the rating?</h3>
-      <p>Yes. Soccer and basketball ratings scale stats to a full-match equivalent (90 minutes or 32 minutes) so short appearances are not unfairly punished or rewarded. Very limited minutes also gently pull the final rating toward the neutral 6.0 baseline.</p>
+      <div class="faq-item">
+        <button type="button" class="faq-q">Does playing time affect the rating?</button>
+        <div class="faq-a"><p>Yes. Soccer and basketball ratings scale stats to a full-match equivalent (90 minutes or 32 minutes) so short appearances are not unfairly punished or rewarded. Very limited minutes also gently pull the final rating toward the neutral 6.0 baseline.</p></div>
+      </div>
     </div>
   </div>
 
@@ -3489,6 +3534,20 @@ function downloadComparisonCard(blob){
 
 // Init compare roles on load
 setCompareSport('soccer');
+
+/* =========================================================
+   FAQ ACCORDION
+   Only one item's answer is visible at a time; clicking a
+   question toggles it open/closed rather than showing everything.
+========================================================= */
+document.getElementById('faqList')?.addEventListener('click', function(e){
+  const btn = e.target.closest('.faq-q');
+  if(!btn) return;
+  const item = btn.closest('.faq-item');
+  const wasOpen = item.classList.contains('open');
+  this.querySelectorAll('.faq-item.open').forEach(i=>i.classList.remove('open'));
+  if(!wasOpen) item.classList.add('open');
+});
 
 /* =========================================================
    SEASON SUMMARY GENERATOR
