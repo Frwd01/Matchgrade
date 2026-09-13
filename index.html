@@ -172,62 +172,6 @@
     --accent-deep: var(--pitch-deep);
   }
 
-  [data-theme="dark"]{
-    --paper:#1C1B18;
-    --paper-dark:#242320;
-    --ink:#EDEAE2;
-    --ink-soft:#A8A398;
-    --pitch:#5C9464;
-    --pitch-deep:#7BB584;
-    --red:#D9695C;
-    --gold:#D4AF5E;
-    --line:#3A3833;
-  }
-
-  [data-theme="dark"] body{
-    background-image:
-      radial-gradient(ellipse at top left, rgba(92,148,100,0.06), transparent 45%),
-      repeating-linear-gradient(0deg, rgba(255,255,255,0.012) 0px, rgba(255,255,255,0.012) 1px, transparent 1px, transparent 3px);
-  }
-
-  [data-theme="dark"] .stamp,
-  [data-theme="dark"] .share-card-stamp,
-  [data-theme="dark"] .cmp-card-stamp{
-    background:var(--paper-dark);
-  }
-
-  .theme-toggle-row{
-    display:flex;
-    justify-content:flex-end;
-    align-items:center;
-    gap:8px;
-    margin-bottom:10px;
-  }
-  .theme-toggle-label{
-    font-family:'Special Elite', monospace;
-    font-size:0.68rem;
-    color:var(--ink-soft);
-  }
-  .theme-switch{
-    position:relative;
-    width:42px;
-    height:22px;
-    background:var(--paper-dark);
-    border:1.5px solid var(--ink);
-    cursor:pointer;
-    flex-shrink:0;
-  }
-  .theme-switch::after{
-    content:"";
-    position:absolute;
-    top:1px;left:1px;
-    width:16px;height:16px;
-    background:var(--ink-soft);
-    transition:transform .15s ease, background .15s ease;
-  }
-  .theme-switch.on{background:var(--accent);}
-  .theme-switch.on::after{transform:translateX(20px);background:var(--paper);}
-
   *{box-sizing:border-box;}
 
   html,body{
@@ -1275,11 +1219,6 @@
 
 <div class="wrap">
 
-  <div class="theme-toggle-row">
-    <span class="theme-toggle-label">DARK MODE</span>
-    <div class="theme-switch" id="themeSwitch" onclick="toggleTheme()"></div>
-  </div>
-
   <div class="masthead">
     <h1>Match<span>Grade</span></h1>
     <div class="tagline">stat sheet in, honest number out  no highlights required</div>
@@ -1344,7 +1283,7 @@
       <div class="field-row">
         <div class="field">
           <label>Player name</label>
-          <input type="text" id="playerName" placeholder="e.g. Marcus">
+          <input type="text" id="playerName" placeholder="e.g. Affan">
         </div>
         <div class="field">
           <label id="roleLabel">Position</label>
@@ -3592,37 +3531,6 @@ function downloadComparisonCard(blob){
   document.body.appendChild(a); a.click(); a.remove();
   setTimeout(()=>URL.revokeObjectURL(url), 1000);
 }
-
-/* =========================================================
-   DARK MODE
-   Optional, off by default. Preference persists in localStorage.
-   Purely a CSS variable swap via [data-theme="dark"] on <html>.
-========================================================= */
-const THEME_KEY = 'matchgrade_theme_v1';
-
-function applyTheme(theme){
-  const root = document.documentElement;
-  if(theme === 'dark'){
-    root.setAttribute('data-theme', 'dark');
-  } else {
-    root.removeAttribute('data-theme');
-  }
-  const sw = document.getElementById('themeSwitch');
-  if(sw) sw.classList.toggle('on', theme === 'dark');
-}
-
-function toggleTheme(){
-  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-  const next = isDark ? 'light' : 'dark';
-  applyTheme(next);
-  try{ localStorage.setItem(THEME_KEY, next); }catch(e){}
-}
-
-(function initTheme(){
-  let saved = 'light';
-  try{ saved = localStorage.getItem(THEME_KEY) || 'light'; }catch(e){}
-  applyTheme(saved);
-})();
 
 // Init compare roles on load
 setCompareSport('soccer');
