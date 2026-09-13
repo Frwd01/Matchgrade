@@ -992,6 +992,183 @@
   }
   .auth-tabs button:last-child{border-right:none;}
   .auth-tabs button.active{background:var(--ink);color:var(--paper);}
+
+  /* ---------- RATING INTEGRITY CHECK ---------- */
+  .integrity-banner{
+    display:none;
+    border:1.5px solid var(--red);
+    background:rgba(178,58,47,0.07);
+    padding:14px 16px;
+    margin-bottom:16px;
+  }
+  .integrity-banner.show{display:block;}
+  .integrity-banner .ib-title{
+    font-family:'Oswald',sans-serif;
+    font-size:0.85rem;
+    font-weight:600;
+    color:var(--red);
+    margin-bottom:6px;
+    display:flex;
+    align-items:center;
+    gap:6px;
+  }
+  .integrity-banner ul{margin:0 0 10px;padding-left:18px;font-size:0.85rem;color:var(--ink-soft);}
+  .integrity-banner li{margin-bottom:3px;}
+  .integrity-actions{display:flex;gap:8px;flex-wrap:wrap;}
+  .integrity-actions button{
+    font-family:'Oswald',sans-serif;
+    font-size:0.78rem;
+    padding:8px 14px;
+    border:1px solid var(--ink);
+    background:transparent;
+    cursor:pointer;
+    color:var(--ink);
+  }
+  .integrity-actions button.proceed{background:var(--red);color:#fff;border-color:var(--red);}
+  .integrity-actions button:hover{opacity:0.85;}
+
+  /* ---------- MATCHGRADE RADAR ---------- */
+  .radar-wrap{
+    border-top:1px dashed var(--line);
+    padding-top:16px;
+    margin-top:16px;
+    text-align:center;
+  }
+  .radar-title{
+    font-family:'Oswald',sans-serif;
+    font-size:0.68rem;
+    letter-spacing:0.6px;
+    color:var(--ink-soft);
+    margin-bottom:10px;
+    text-align:left;
+  }
+  .radar-wrap svg{max-width:280px;width:100%;height:auto;}
+  .radar-legend{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:8px 14px;
+    margin-top:8px;
+    font-family:'Special Elite',monospace;
+    font-size:0.68rem;
+    color:var(--ink-soft);
+  }
+
+  /* ---------- CUSTOM FORMULA MODE ---------- */
+  .formula-toggle-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin:18px 0 4px;
+    padding-top:14px;
+    border-top:1px solid var(--line);
+  }
+  .formula-toggle-label{
+    font-family:'Oswald',sans-serif;
+    font-size:0.72rem;
+    letter-spacing:0.5px;
+    color:var(--ink-soft);
+  }
+  .formula-switch{
+    position:relative;
+    width:42px;
+    height:22px;
+    background:var(--paper-dark);
+    border:1.5px solid var(--ink);
+    cursor:pointer;
+    flex-shrink:0;
+  }
+  .formula-switch::after{
+    content:"";
+    position:absolute;
+    top:1px;left:1px;
+    width:16px;height:16px;
+    background:var(--ink-soft);
+    transition:transform .15s ease, background .15s ease;
+  }
+  .formula-switch.on{background:var(--accent);}
+  .formula-switch.on::after{transform:translateX(20px);background:var(--paper);}
+  .formula-panel{
+    display:none;
+    margin-top:12px;
+    padding:14px 16px;
+    background:var(--paper-dark);
+    border:1px solid var(--line);
+  }
+  .formula-panel.open{display:block;}
+  .formula-panel .fp-note{
+    font-family:'Special Elite',monospace;
+    font-size:0.68rem;
+    color:var(--ink-soft);
+    margin-bottom:12px;
+    line-height:1.5;
+  }
+  .formula-row{
+    display:grid;
+    grid-template-columns:1fr auto;
+    align-items:center;
+    gap:10px;
+    margin-bottom:10px;
+  }
+  .formula-row label{font-size:0.85rem;color:var(--ink);}
+  .formula-row input[type="range"]{width:130px;accent-color:var(--accent);}
+  .formula-row .fv{font-family:'Oswald',sans-serif;font-size:0.8rem;color:var(--accent);min-width:34px;text-align:right;}
+  .formula-reset{
+    font-family:'Special Elite',monospace;
+    font-size:0.7rem;
+    color:var(--ink-soft);
+    text-decoration:underline;
+    background:none;
+    border:none;
+    cursor:pointer;
+    padding:0;
+    margin-top:4px;
+  }
+  .formula-active-note{
+    display:none;
+    font-family:'Special Elite',monospace;
+    font-size:0.68rem;
+    color:var(--accent);
+    margin-top:8px;
+  }
+  .formula-active-note.show{display:block;}
+
+  /* ---------- SEASON SUMMARY ---------- */
+  .season-empty{text-align:center;padding:50px 20px;color:var(--ink-soft);}
+  .season-empty .big{display:block;font-family:'Oswald',sans-serif;font-size:1.1rem;color:var(--ink);margin-bottom:8px;}
+  .season-card{
+    max-width:520px;margin:0 auto;background:var(--paper);border:1px solid var(--ink);
+    padding:28px 26px 24px;position:relative;overflow:hidden;
+  }
+  .season-card::before{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:radial-gradient(ellipse at top left, rgba(47,82,51,0.05), transparent 45%),
+      repeating-linear-gradient(0deg, rgba(0,0,0,0.015) 0px, rgba(0,0,0,0.015) 1px, transparent 1px, transparent 3px);
+  }
+  .season-card-inner{position:relative;z-index:1;}
+  .season-card-brand{font-family:'Oswald',sans-serif;font-weight:700;font-size:1.6rem;border-bottom:3px solid var(--ink);padding-bottom:10px;margin-bottom:18px;display:flex;justify-content:space-between;align-items:baseline;}
+  .season-card-brand span{color:var(--accent);}
+  .season-card-brand .range{font-family:'Special Elite',monospace;font-size:0.7rem;color:var(--ink-soft);}
+  .season-stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:20px;}
+  .season-stat-box{border:1px solid var(--line);padding:14px 12px;text-align:center;}
+  .season-stat-box .ssn{font-family:'Oswald',sans-serif;font-size:1.9rem;font-weight:700;color:var(--accent);line-height:1;}
+  .season-stat-box .ssl{font-family:'Special Elite',monospace;font-size:0.65rem;color:var(--ink-soft);margin-top:6px;letter-spacing:0.5px;}
+  .season-line{
+    border-top:1px dashed var(--line);padding-top:14px;margin-top:4px;
+    font-family:'Oswald',sans-serif;font-size:1rem;text-align:center;color:var(--ink);
+  }
+  .season-line .accent{color:var(--accent);font-weight:700;}
+  .season-selector{display:flex;gap:0;border:1.5px solid var(--ink);margin-bottom:18px;max-width:420px;}
+  .season-selector button{flex:1;background:transparent;border:none;border-right:1.5px solid var(--ink);padding:9px 4px;font-family:'Oswald',sans-serif;font-size:0.78rem;color:var(--ink-soft);cursor:pointer;}
+  .season-selector button:last-child{border-right:none;}
+  .season-selector button.active{background:var(--ink);color:var(--paper);}
+  .season-actions{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;max-width:520px;margin-left:auto;margin-right:auto;}
+  .season-actions button{
+    font-family:'Oswald',sans-serif;font-size:0.85rem;letter-spacing:0.3px;
+    padding:11px 18px;border:1.5px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer;flex:1;
+  }
+  .season-actions button.primary{background:var(--accent);color:var(--paper);border-color:var(--accent);}
+  .season-actions button:hover{opacity:0.88;}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -1014,6 +1191,7 @@
     <button data-section="calc" class="active">Calculator</button>
     <button data-section="compare">Compare</button>
     <button data-section="history">My Matches</button>
+    <button data-section="season">Season Summary</button>
   </div>
 
   <!-- Auth modal -->
@@ -1092,6 +1270,30 @@
       <div id="optionalFields"></div>
       <div id="contextFields"></div>
 
+      <div class="formula-toggle-row">
+        <span class="formula-toggle-label">CUSTOM RATING FORMULA</span>
+        <div class="formula-switch" id="formulaSwitch" onclick="toggleFormulaMode()"></div>
+      </div>
+      <div class="formula-panel" id="formulaPanel">
+        <div class="fp-note">Adjust how much each category counts toward the final rating. The default MatchGrade formula is untouched unless this is switched on — 1.00× on every slider always equals the standard result.</div>
+        <div class="formula-row"><label>Attack (goals, assists, shots)</label><input type="range" id="fw_attack" min="0.3" max="2" step="0.05" value="1" oninput="updateFormulaLabel('fw_attack')"><span class="fv" id="fw_attack_v">1.00×</span></div>
+        <div class="formula-row"><label>Creation (key passes, dribbles)</label><input type="range" id="fw_creation" min="0.3" max="2" step="0.05" value="1" oninput="updateFormulaLabel('fw_creation')"><span class="fv" id="fw_creation_v">1.00×</span></div>
+        <div class="formula-row"><label>Passing (accuracy, volume)</label><input type="range" id="fw_passing" min="0.3" max="2" step="0.05" value="1" oninput="updateFormulaLabel('fw_passing')"><span class="fv" id="fw_passing_v">1.00×</span></div>
+        <div class="formula-row"><label>Defense (tackles, interceptions)</label><input type="range" id="fw_defense" min="0.3" max="2" step="0.05" value="1" oninput="updateFormulaLabel('fw_defense')"><span class="fv" id="fw_defense_v">1.00×</span></div>
+        <div class="formula-row"><label>Discipline (cards, errors)</label><input type="range" id="fw_discipline" min="0.3" max="2" step="0.05" value="1" oninput="updateFormulaLabel('fw_discipline')"><span class="fv" id="fw_discipline_v">1.00×</span></div>
+        <div class="formula-row"><label>Efficiency (conversion, duels)</label><input type="range" id="fw_efficiency" min="0.3" max="2" step="0.05" value="1" oninput="updateFormulaLabel('fw_efficiency')"><span class="fv" id="fw_efficiency_v">1.00×</span></div>
+        <button type="button" class="formula-reset" onclick="resetFormulaWeights()">Reset to default (1.00× everywhere)</button>
+      </div>
+
+      <div class="integrity-banner" id="integrityBanner">
+        <div class="ib-title">⚠ These stats look unusual</div>
+        <ul id="integrityList"></ul>
+        <div class="integrity-actions">
+          <button type="button" onclick="dismissIntegrityWarning()">Let me fix the stats</button>
+          <button type="button" class="proceed" onclick="proceedDespiteWarning()">Calculate anyway</button>
+        </div>
+      </div>
+
       <button class="go-btn" onclick="grade()">Grade the performance</button>
     </div>
 
@@ -1117,6 +1319,12 @@
         <div class="breakdown">
           <div class="breakdown-title">HOW WE GOT THERE</div>
           <div id="bdList"></div>
+        </div>
+        <div class="formula-active-note" id="formulaActiveNote">Custom formula applied  this rating uses your weights, not the default MatchGrade formula.</div>
+        <div class="radar-wrap">
+          <div class="radar-title">MATCHGRADE RADAR</div>
+          <svg id="radarSvg" viewBox="0 0 280 260"></svg>
+          <div class="radar-legend" id="radarLegend"></div>
         </div>
         <div class="tier-line" id="rTier"></div>
         <div class="share-card-actions">
@@ -1274,6 +1482,50 @@
       </div>
       <div id="mdBreakdown"></div>
       <button class="save-match-btn" style="margin-top:16px;" onclick="closeMatchDetail()">Back to list</button>
+    </div>
+  </div>
+
+  <!-- ========== SEASON SUMMARY SECTION ========== -->
+  <div class="app-section" id="section-season">
+    <div class="sheet-head" style="border-bottom:1px dashed var(--line);margin-bottom:18px;padding-bottom:10px;">
+      <h2 style="font-family:'Oswald',sans-serif;font-size:1.05rem;text-transform:uppercase;letter-spacing:0.5px;margin:0;">Season Summary</h2>
+      <div class="sheet-no" style="font-family:'Special Elite',monospace;font-size:0.72rem;color:var(--ink-soft);">from your saved matches</div>
+    </div>
+
+    <div id="seasonContent">
+      <div class="season-empty" id="seasonEmpty">
+        <span class="big">No matches saved yet</span>
+        Save a few rated performances under My Matches, then come back here to see the season add up.
+      </div>
+      <div id="seasonFilled" style="display:none;">
+        <div class="season-selector" id="seasonSportFilter"></div>
+        <div class="season-card" id="seasonCard">
+          <div class="season-card-inner">
+            <div class="season-card-brand">Match<span>Grade</span> <span class="range" id="seasonRange"></span></div>
+            <div class="season-stat-grid">
+              <div class="season-stat-box"><div class="ssn" id="ssMatches">0</div><div class="ssl">MATCHES</div></div>
+              <div class="season-stat-box"><div class="ssn" id="ssAvg">0.0</div><div class="ssl">AVERAGE</div></div>
+              <div class="season-stat-box"><div class="ssn" id="ssMotm">0</div><div class="ssl">MOTM-TIER (8.5+)</div></div>
+              <div class="season-stat-box"><div class="ssn" id="ssExcellent">0</div><div class="ssl">EXCELLENT (8.0+)</div></div>
+            </div>
+            <div class="season-line" id="seasonLine"></div>
+          </div>
+        </div>
+        <div class="season-actions">
+          <button type="button" class="primary" onclick="shareSeasonCard()">Share season card</button>
+          <button type="button" onclick="downloadSeasonText()">Copy as text</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="share-card-modal" id="seasonShareModal" aria-hidden="true">
+    <div class="share-card-dialog">
+      <div class="share-card-dialog-tools">
+        <button type="button" onclick="exportSeasonCard()">Share / Save</button>
+        <button type="button" onclick="closeSeasonShareCard()">Close</button>
+      </div>
+      <div style="padding:10px;"><div class="season-card" id="seasonCardPreview"></div></div>
     </div>
   </div>
 
@@ -1670,6 +1922,7 @@ document.getElementById('sportSwitch').addEventListener('click', (e)=>{
 });
 
 renderSport('soccer');
+initFormulaPanel();
 
 /* =========================================================
    HELPERS
@@ -1757,10 +2010,17 @@ function performanceTier(rating){
   return 'Poor performance';
 }
 
-function renderResult(rating, breakdown, roleLabelText){
+function renderResult(rawRating, rawBreakdown, roleLabelText){
+  const weighted = applyFormulaWeights(rawRating, rawBreakdown);
+  const rating = weighted.rating;
+  const breakdown = weighted.breakdown;
+
   document.getElementById('emptyState').style.display = 'none';
   const body = document.getElementById('resultBody');
   body.classList.add('show');
+
+  const formulaNote = document.getElementById('formulaActiveNote');
+  if(formulaNote) formulaNote.classList.toggle('show', weighted.wasCustom);
 
   const name = document.getElementById('playerName').value.trim() || 'Unnamed player';
   document.getElementById('rPlayerName').textContent = name;
@@ -1825,6 +2085,8 @@ function renderResult(rating, breakdown, roleLabelText){
   document.getElementById('cardStatsLeft').textContent = topRows[0] ? topRows[0].label : 'Rating calculated';
   document.getElementById('cardStatsRight').textContent = topRows[1] ? topRows[1].label : 'MatchGrade rating';
 
+  drawRadar(computeRadarCategories(rawBreakdown));
+
   // Store for "Save to My Matches"
   lastRatedMatch = {
     id: Date.now().toString(36) + Math.random().toString(36).slice(2,7),
@@ -1839,6 +2101,7 @@ function renderResult(rating, breakdown, roleLabelText){
     sub,
     tier: performanceTier(rating),
     breakdown: breakdown.slice(),
+    customFormula: weighted.wasCustom,
     date: new Date().toISOString(),
     opponent: club || 'Unknown'
   };
@@ -2226,10 +2489,285 @@ function gradeCricket(){
   renderResult(rating, breakdown, `${CRICKET_ROLES[role]} · match complete`);
 }
 
-function grade(){
+/* =========================================================
+   RATING INTEGRITY CHECK
+   Runs before calculation. Flags impossible or wildly unlikely
+   stat combinations (e.g. 60 goals in one match, more goals
+   than shots, more passes completed than a human can realistically
+   make in the given minutes). Does not block calculation outright —
+   it warns and lets the user confirm or go back and fix the stats.
+========================================================= */
+let integrityOverride = false;
+
+function collectRawStatsForIntegrity(){
+  const sport = currentSport;
+  const role = document.getElementById('role').value;
+  const minutes = val('minutes', sport === 'basketball' ? 32 : 90);
+  const defs = sport === 'soccer' ? [...(SOCCER_CORE[role]||[]), ...(SOCCER_OPTIONAL[role]||[])]
+    : sport === 'basketball' ? [...(BBALL_CORE[role]||[]), ...(BBALL_OPTIONAL[role]||[])]
+    : [...(CRICKET_CORE[role]||[]), ...(CRICKET_OPTIONAL[role]||[])];
+  const raw = {};
+  defs.forEach(d=>{
+    const el = document.getElementById('stat_'+d.id);
+    if(!el) return;
+    if(d.type === 'check') raw[d.id] = !!el.checked;
+    else raw[d.id] = el.value.trim() === '' ? null : parseFloat(el.value);
+  });
+  return {sport, role, minutes, raw};
+}
+
+function runIntegrityCheck(){
+  const {sport, role, minutes, raw} = collectRawStatsForIntegrity();
+  const issues = [];
+  const num = (k)=> (raw[k]===null || raw[k]===undefined || isNaN(raw[k])) ? null : raw[k];
+
+  if(sport === 'soccer'){
+    const goals = num('goals'), assists = num('assists'), shotsTotal = num('shotsTotal'),
+          shotsOnTarget = num('shotsOnTarget'), duelsWon = num('duelsWon'), duelsTotal = num('duelsTotal'),
+          passAcc = num('passAcc'), tackles = num('tackles'), saves = num('saves'), shotsFaced = num('shotsFaced');
+
+    if(goals !== null && goals > 12) issues.push(`${goals} goals in a single match is essentially unheard of  double check this number.`);
+    if(assists !== null && assists > 10) issues.push(`${assists} assists in one match is extremely unlikely.`);
+    if(goals !== null && shotsTotal !== null && goals > shotsTotal) issues.push(`Goals (${goals}) can't exceed total shots (${shotsTotal}).`);
+    if(shotsOnTarget !== null && shotsTotal !== null && shotsOnTarget > shotsTotal) issues.push(`Shots on target (${shotsOnTarget}) can't exceed total shots (${shotsTotal}).`);
+    if(duelsWon !== null && duelsTotal !== null && duelsWon > duelsTotal) issues.push(`Duels won (${duelsWon}) can't exceed duels contested (${duelsTotal}).`);
+    if(passAcc !== null && (passAcc > 100 || passAcc < 0)) issues.push(`Pass accuracy of ${passAcc}% isn't a valid percentage.`);
+    if(saves !== null && shotsFaced !== null && saves > shotsFaced) issues.push(`Saves (${saves}) can't exceed shots faced (${shotsFaced}).`);
+    if(tackles !== null && tackles > 25) issues.push(`${tackles} tackles in one match is far above any realistic total.`);
+    if(minutes > 0 && minutes <= 5 && (goals > 2 || assists > 2)) issues.push(`That's a lot of goal involvement for only ${minutes} minutes on the pitch.`);
+  }
+
+  if(sport === 'basketball'){
+    const points = num('points'), fgPct = num('fgPct'), threePct = num('threePct'), rebounds = num('rebounds'),
+          assists = num('assists'), turnovers = num('turnovers'), blocks = num('blocks'), steals = num('steals'),
+          freeThrowPct = num('freeThrowPct');
+
+    if(points !== null && points > 100) issues.push(`${points} points in a single game is beyond any realistic total  Wilt Chamberlain's NBA record is 100.`);
+    if(fgPct !== null && (fgPct > 100 || fgPct < 0)) issues.push(`Field goal % of ${fgPct} isn't a valid percentage.`);
+    if(threePct !== null && (threePct > 100 || threePct < 0)) issues.push(`3-point % of ${threePct} isn't a valid percentage.`);
+    if(freeThrowPct !== null && (freeThrowPct > 100 || freeThrowPct < 0)) issues.push(`Free throw % of ${freeThrowPct} isn't a valid percentage.`);
+    if(rebounds !== null && rebounds > 45) issues.push(`${rebounds} rebounds in a game is far above any realistic total.`);
+    if(assists !== null && assists > 30) issues.push(`${assists} assists in a game is far above any realistic total.`);
+    if(blocks !== null && blocks > 20) issues.push(`${blocks} blocks in a game looks like it may be a typo.`);
+    if(steals !== null && steals > 15) issues.push(`${steals} steals in a game looks like it may be a typo.`);
+    if(minutes > 0 && minutes < 6 && points > 30) issues.push(`${points} points in only ${minutes} minutes is extremely unlikely  check the minutes field.`);
+  }
+
+  if(sport === 'cricket'){
+    const runs = num('runs'), balls = num('balls'), wickets = num('wickets'), overs = num('overs'),
+          runsConceded = num('runsConceded'), fours = num('fours'), sixes = num('sixes');
+
+    if(runs !== null && runs > 300) issues.push(`${runs} runs in a single innings is far beyond any realistic total.`);
+    if(runs !== null && balls !== null && balls > 0 && runs > balls * 6) issues.push(`${runs} runs off ${balls} balls is a strike rate over 600  not physically possible (max 6 runs per ball).`);
+    if(wickets !== null && wickets > 10) issues.push(`${wickets} wickets is impossible  a team only has 10 wickets to take.`);
+    if(overs !== null && overs > 0 && wickets !== null && wickets > overs * 6) issues.push(`${wickets} wickets from ${overs} overs isn't possible (max one wicket per ball, six balls per over).`);
+    if(fours !== null && balls !== null && balls > 0 && fours > balls) issues.push(`${fours} fours can't exceed balls faced (${balls}).`);
+    if(sixes !== null && balls !== null && balls > 0 && sixes > balls) issues.push(`${sixes} sixes can't exceed balls faced (${balls}).`);
+    if(runsConceded !== null && overs !== null && overs > 0 && (runsConceded / overs) > 36) issues.push(`An economy over 36 runs/over is essentially impossible  check overs and runs conceded.`);
+  }
+
+  return issues;
+}
+
+function showIntegrityBanner(issues){
+  const banner = document.getElementById('integrityBanner');
+  const list = document.getElementById('integrityList');
+  list.innerHTML = issues.map(i=>`<li>${esc(i)}</li>`).join('');
+  banner.classList.add('show');
+  banner.scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+
+function dismissIntegrityWarning(){
+  document.getElementById('integrityBanner').classList.remove('show');
+  integrityOverride = false;
+}
+
+function proceedDespiteWarning(){
+  integrityOverride = true;
+  document.getElementById('integrityBanner').classList.remove('show');
+  runGradeForSport();
+}
+
+function runGradeForSport(){
   if(currentSport === 'soccer') gradeSoccer();
   else if(currentSport === 'basketball') gradeBasketball();
   else if(currentSport === 'cricket') gradeCricket();
+  integrityOverride = false;
+}
+
+function grade(){
+  const issues = runIntegrityCheck();
+  if(issues.length > 0 && !integrityOverride){
+    showIntegrityBanner(issues);
+    return;
+  }
+  document.getElementById('integrityBanner').classList.remove('show');
+  runGradeForSport();
+}
+
+/* =========================================================
+   CUSTOM RATING FORMULA MODE
+   Off by default. When on, applies user-chosen category
+   multipliers on TOP of the default breakdown produced by the
+   standard MatchGrade formula, which itself is never altered.
+========================================================= */
+const FORMULA_KEY = 'matchgrade_formula_weights_v1';
+let formulaModeOn = false;
+
+const FORMULA_CATEGORY_MAP = [
+  {key:'attack', match:/goal(?!s conceded)|shot(?!-stopping)|conversion|run(?:s)?:|wicket|catches|stumping/i},
+  {key:'creation', match:/assist|key pass|dribbl|cross|boundar|sixes/i},
+  {key:'passing', match:/pass/i},
+  {key:'defense', match:/tackle|interception|clearance|duel|aerial|save ratio|shot-stopping|byes/i},
+  {key:'discipline', match:/card|sent off|booked|error|conceded|wides|no-balls|got out|dismissed/i},
+  {key:'efficiency', match:/economy|strike rate|field goal|three-point|3-point|free throw|maiden/i},
+];
+
+function categorizeLabel(label){
+  for(const c of FORMULA_CATEGORY_MAP){
+    if(c.match.test(label)) return c.key;
+  }
+  return 'efficiency';
+}
+
+function loadFormulaWeights(){
+  try{
+    const s = JSON.parse(localStorage.getItem(FORMULA_KEY) || '{}');
+    return Object.assign({attack:1, creation:1, passing:1, defense:1, discipline:1, efficiency:1}, s);
+  }catch(e){
+    return {attack:1, creation:1, passing:1, defense:1, discipline:1, efficiency:1};
+  }
+}
+function saveFormulaWeights(w){
+  try{ localStorage.setItem(FORMULA_KEY, JSON.stringify(w)); }catch(e){}
+}
+
+function toggleFormulaMode(){
+  formulaModeOn = !formulaModeOn;
+  const sw = document.getElementById('formulaSwitch');
+  const panel = document.getElementById('formulaPanel');
+  sw.classList.toggle('on', formulaModeOn);
+  panel.classList.toggle('open', formulaModeOn);
+}
+
+function updateFormulaLabel(id){
+  const el = document.getElementById(id);
+  const v = document.getElementById(id+'_v');
+  v.textContent = parseFloat(el.value).toFixed(2)+'×';
+  const weights = loadFormulaWeights();
+  const key = id.replace('fw_','');
+  weights[key] = parseFloat(el.value);
+  saveFormulaWeights(weights);
+}
+
+function resetFormulaWeights(){
+  const defaults = {attack:1, creation:1, passing:1, defense:1, discipline:1, efficiency:1};
+  saveFormulaWeights(defaults);
+  Object.keys(defaults).forEach(k=>{
+    const el = document.getElementById('fw_'+k);
+    const v = document.getElementById('fw_'+k+'_v');
+    if(el){ el.value = 1; }
+    if(v){ v.textContent = '1.00×'; }
+  });
+}
+
+function initFormulaPanel(){
+  const weights = loadFormulaWeights();
+  Object.keys(weights).forEach(k=>{
+    const el = document.getElementById('fw_'+k);
+    const v = document.getElementById('fw_'+k+'_v');
+    if(el){ el.value = weights[k]; }
+    if(v){ v.textContent = Number(weights[k]).toFixed(2)+'×'; }
+  });
+}
+
+// Applies formula weights to a breakdown WITHOUT mutating the original
+// default-formula result. Returns {rating, breakdown} where breakdown
+// entries reflect the weighted amounts actually used in the final score.
+function applyFormulaWeights(defaultRating, defaultBreakdown){
+  if(!formulaModeOn) return {rating: defaultRating, breakdown: defaultBreakdown, wasCustom:false};
+  const weights = loadFormulaWeights();
+  let rating = 6.0;
+  const breakdown = defaultBreakdown.map(row=>{
+    const cat = categorizeLabel(row.label);
+    const w = weights[cat] !== undefined ? weights[cat] : 1;
+    const amount = row.amount * w;
+    rating += amount;
+    return {label: row.label + (w !== 1 ? ` [${cat} ×${w.toFixed(2)}]` : ''), amount};
+  });
+  if(rating > 9.55) rating = 9.55 + (rating - 9.55) * 0.45;
+  rating = Math.max(1.0, Math.min(10.0, rating));
+  return {rating, breakdown, wasCustom:true};
+}
+
+/* =========================================================
+   MATCHGRADE RADAR
+   Maps the rating breakdown into six fixed categories and
+   draws an SVG radar/spider chart in the result panel.
+========================================================= */
+function computeRadarCategories(breakdown){
+  const totals = {attack:0, creation:0, passing:0, defense:0, discipline:0, efficiency:0};
+  breakdown.forEach(row=>{
+    const cat = categorizeLabel(row.label);
+    totals[cat] += row.amount;
+  });
+  // Convert point deltas into a 0-10 display scale centered on 5.
+  const toScale = (v)=> Math.max(0, Math.min(10, 5 + v * 2.2));
+  return {
+    Attack: toScale(totals.attack),
+    Creation: toScale(totals.creation),
+    Passing: toScale(totals.passing),
+    Defense: toScale(totals.defense),
+    Discipline: toScale(totals.discipline),
+    Efficiency: toScale(totals.efficiency),
+  };
+}
+
+function drawRadar(categories){
+  const svg = document.getElementById('radarSvg');
+  const labels = Object.keys(categories);
+  const values = Object.values(categories);
+  const n = labels.length;
+  const cx = 140, cy = 120, maxR = 88;
+  const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#2F5233';
+  const lineColor = getComputedStyle(document.documentElement).getPropertyValue('--line').trim() || '#c9c3b2';
+  const inkColor = getComputedStyle(document.documentElement).getPropertyValue('--ink').trim() || '#1B1B18';
+  const softColor = getComputedStyle(document.documentElement).getPropertyValue('--ink-soft').trim() || '#4A473F';
+
+  function pointFor(i, value, radius){
+    const angle = (Math.PI * 2 * i / n) - Math.PI/2;
+    const r = (value/10) * radius;
+    return [cx + r*Math.cos(angle), cy + r*Math.sin(angle)];
+  }
+
+  let rings = '';
+  [0.25,0.5,0.75,1].forEach(f=>{
+    const pts = labels.map((_,i)=>pointFor(i,10*f,maxR).join(',')).join(' ');
+    rings += `<polygon points="${pts}" fill="none" stroke="${lineColor}" stroke-width="1"/>`;
+  });
+
+  let spokes = '';
+  let labelSvg = '';
+  labels.forEach((lab,i)=>{
+    const [x,y] = pointFor(i,10,maxR);
+    spokes += `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="${lineColor}" stroke-width="1"/>`;
+    const [lx,ly] = pointFor(i,12.4,maxR);
+    labelSvg += `<text x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="middle" font-family="Special Elite,monospace" font-size="9" fill="${softColor}">${esc(lab)}</text>`;
+  });
+
+  const dataPts = labels.map((lab,i)=>pointFor(i, values[i], maxR).join(',')).join(' ');
+  const dataPoly = `<polygon points="${dataPts}" fill="${accentColor}" fill-opacity="0.22" stroke="${accentColor}" stroke-width="2"/>`;
+
+  let dots = '';
+  labels.forEach((lab,i)=>{
+    const [x,y] = pointFor(i, values[i], maxR);
+    dots += `<circle cx="${x}" cy="${y}" r="3" fill="${accentColor}"/>`;
+  });
+
+  svg.innerHTML = rings + spokes + dataPoly + dots + labelSvg;
+
+  const legend = document.getElementById('radarLegend');
+  legend.innerHTML = labels.map((lab,i)=>`<span>${esc(lab)}: ${values[i].toFixed(1)}</span>`).join('');
 }
 
 /* =========================================================
@@ -2391,6 +2929,7 @@ document.getElementById('mainNav').addEventListener('click', (e)=>{
   if(sec === 'history') renderHistory();
   if(sec === 'compare') initCompare();
   if(sec === 'calc') applySportTheme(currentSport);
+  if(sec === 'season') renderSeasonSummary();
 });
 
 /* =========================================================
@@ -2950,6 +3489,188 @@ function downloadComparisonCard(blob){
 
 // Init compare roles on load
 setCompareSport('soccer');
+
+/* =========================================================
+   SEASON SUMMARY GENERATOR
+   Aggregates saved matches (from My Matches / getHistoryList)
+   into a shareable season card: match count, average rating,
+   MOTM-tier and excellent-tier performance counts.
+========================================================= */
+let seasonSportFilter = 'all';
+let lastSeasonSummary = null;
+
+function seasonSportOptions(list){
+  const sports = Array.from(new Set(list.map(m=>m.sport))).filter(Boolean);
+  return sports;
+}
+
+function computeSeasonStats(list){
+  if(!list.length) return null;
+  const ratings = list.map(m=>Number(m.rating)||0);
+  const avg = ratings.reduce((a,b)=>a+b,0) / ratings.length;
+  const motm = list.filter(m=>Number(m.rating) >= 8.5).length;
+  const excellent = list.filter(m=>Number(m.rating) >= 8.0).length;
+  const sorted = [...list].sort((a,b)=> new Date(a.date) - new Date(b.date));
+  const first = sorted[0]?.date ? new Date(sorted[0].date) : null;
+  const last = sorted[sorted.length-1]?.date ? new Date(sorted[sorted.length-1].date) : null;
+  const fmt = (d)=> d ? d.toLocaleDateString(undefined,{month:'short', year:'numeric'}) : '';
+  return {
+    count: list.length,
+    avg: +avg.toFixed(1),
+    motm,
+    excellent,
+    rangeText: first && last ? (fmt(first) === fmt(last) ? fmt(first) : `${fmt(first)}  ${fmt(last)}`) : ''
+  };
+}
+
+function renderSeasonSummary(){
+  const list = getHistoryList();
+  const empty = document.getElementById('seasonEmpty');
+  const filled = document.getElementById('seasonFilled');
+
+  if(!list.length){
+    empty.style.display = 'block';
+    filled.style.display = 'none';
+    return;
+  }
+  empty.style.display = 'none';
+  filled.style.display = 'block';
+
+  const sports = seasonSportOptions(list);
+  const filterEl = document.getElementById('seasonSportFilter');
+  const filterButtons = ['all', ...sports].map(s=>{
+    const lbl = s === 'all' ? 'All sports' : s.charAt(0).toUpperCase()+s.slice(1);
+    return `<button type="button" data-sport="${s}" class="${seasonSportFilter===s?'active':''}">${esc(lbl)}</button>`;
+  }).join('');
+  filterEl.innerHTML = filterButtons;
+  filterEl.querySelectorAll('button').forEach(btn=>{
+    btn.onclick = ()=>{ seasonSportFilter = btn.dataset.sport; renderSeasonSummary(); };
+  });
+
+  const filtered = seasonSportFilter === 'all' ? list : list.filter(m=>m.sport === seasonSportFilter);
+  const stats = computeSeasonStats(filtered);
+
+  if(!stats){
+    document.getElementById('ssMatches').textContent = '0';
+    document.getElementById('ssAvg').textContent = '0.0';
+    document.getElementById('ssMotm').textContent = '0';
+    document.getElementById('ssExcellent').textContent = '0';
+    document.getElementById('seasonLine').textContent = 'No matches for this filter yet.';
+    document.getElementById('seasonRange').textContent = '';
+    lastSeasonSummary = null;
+    return;
+  }
+
+  document.getElementById('ssMatches').textContent = stats.count;
+  document.getElementById('ssAvg').textContent = stats.avg.toFixed(1);
+  document.getElementById('ssMotm').textContent = stats.motm;
+  document.getElementById('ssExcellent').textContent = stats.excellent;
+  document.getElementById('seasonRange').textContent = stats.rangeText;
+  document.getElementById('seasonLine').innerHTML =
+    `<span class="accent">${stats.count}</span> matches · <span class="accent">${stats.avg.toFixed(1)}</span> average · <span class="accent">${stats.motm}</span> MOTM · <span class="accent">${stats.excellent}</span> excellent performances`;
+
+  lastSeasonSummary = {stats, sportFilter: seasonSportFilter};
+}
+
+function seasonSummaryText(){
+  if(!lastSeasonSummary) return '';
+  const {stats, sportFilter} = lastSeasonSummary;
+  const sportLabel = sportFilter === 'all' ? 'All sports' : sportFilter.charAt(0).toUpperCase()+sportFilter.slice(1);
+  return `MatchGrade Season Summary  ${sportLabel}${stats.rangeText ? ' ('+stats.rangeText+')' : ''}\n${stats.count} matches | ${stats.avg.toFixed(1)} average | ${stats.motm} MOTM | ${stats.excellent} excellent performances`;
+}
+
+function downloadSeasonText(){
+  const text = seasonSummaryText();
+  if(!text) return;
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(()=>{
+      alert('Season summary copied to clipboard.');
+    }).catch(()=>{
+      promptFallbackCopy(text);
+    });
+  } else {
+    promptFallbackCopy(text);
+  }
+}
+function promptFallbackCopy(text){
+  window.prompt('Copy your season summary:', text);
+}
+
+function shareSeasonCard(){
+  if(!lastSeasonSummary) return;
+  const preview = document.getElementById('seasonCardPreview');
+  preview.innerHTML = document.getElementById('seasonCard').innerHTML;
+  const m = document.getElementById('seasonShareModal');
+  m.classList.add('show');
+  m.setAttribute('aria-hidden','false');
+}
+function closeSeasonShareCard(){
+  const m = document.getElementById('seasonShareModal');
+  m.classList.remove('show');
+  m.setAttribute('aria-hidden','true');
+}
+document.getElementById('seasonShareModal')?.addEventListener('click', function(e){
+  if(e.target === this) closeSeasonShareCard();
+});
+
+function exportSeasonCard(){
+  if(!lastSeasonSummary) return;
+  const {stats, sportFilter} = lastSeasonSummary;
+  const sportLabel = sportFilter === 'all' ? 'All sports' : sportFilter.charAt(0).toUpperCase()+sportFilter.slice(1);
+  const accent = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#2F5233';
+  const paper = getComputedStyle(document.documentElement).getPropertyValue('--paper').trim() || '#EDEAE2';
+  const ink = getComputedStyle(document.documentElement).getPropertyValue('--ink').trim() || '#1B1B18';
+  const soft = getComputedStyle(document.documentElement).getPropertyValue('--ink-soft').trim() || '#4A473F';
+  const line = getComputedStyle(document.documentElement).getPropertyValue('--line').trim() || '#c9c3b2';
+
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="900" height="700" viewBox="0 0 900 700">
+    <rect width="900" height="700" fill="${paper}"/>
+    <text x="60" y="90" font-family="Arial,sans-serif" font-size="42" font-weight="700" fill="${ink}">Match<tspan fill="${accent}">Grade</tspan></text>
+    <text x="840" y="82" text-anchor="end" font-family="monospace" font-size="16" fill="${soft}">${escapeXml(sportLabel)}${stats.rangeText ? ' · '+escapeXml(stats.rangeText) : ''}</text>
+    <line x1="60" y1="112" x2="840" y2="112" stroke="${ink}" stroke-width="4"/>
+    <text x="60" y="180" font-family="monospace" font-size="18" letter-spacing="2" fill="${soft}">SEASON SUMMARY</text>
+
+    <g>
+      <rect x="60" y="220" width="360" height="130" fill="none" stroke="${line}"/>
+      <text x="240" y="290" text-anchor="middle" font-family="Arial,sans-serif" font-size="54" font-weight="700" fill="${accent}">${stats.count}</text>
+      <text x="240" y="330" text-anchor="middle" font-family="monospace" font-size="14" fill="${soft}">MATCHES</text>
+
+      <rect x="480" y="220" width="360" height="130" fill="none" stroke="${line}"/>
+      <text x="660" y="290" text-anchor="middle" font-family="Arial,sans-serif" font-size="54" font-weight="700" fill="${accent}">${stats.avg.toFixed(1)}</text>
+      <text x="660" y="330" text-anchor="middle" font-family="monospace" font-size="14" fill="${soft}">AVERAGE</text>
+
+      <rect x="60" y="370" width="360" height="130" fill="none" stroke="${line}"/>
+      <text x="240" y="440" text-anchor="middle" font-family="Arial,sans-serif" font-size="54" font-weight="700" fill="${accent}">${stats.motm}</text>
+      <text x="240" y="480" text-anchor="middle" font-family="monospace" font-size="14" fill="${soft}">MOTM-TIER (8.5+)</text>
+
+      <rect x="480" y="370" width="360" height="130" fill="none" stroke="${line}"/>
+      <text x="660" y="440" text-anchor="middle" font-family="Arial,sans-serif" font-size="54" font-weight="700" fill="${accent}">${stats.excellent}</text>
+      <text x="660" y="480" text-anchor="middle" font-family="monospace" font-size="14" fill="${soft}">EXCELLENT (8.0+)</text>
+    </g>
+
+    <line x1="60" y1="545" x2="840" y2="545" stroke="${line}" stroke-width="2" stroke-dasharray="9 8"/>
+    <text x="450" y="600" text-anchor="middle" font-family="Arial,sans-serif" font-size="24" fill="${ink}">${stats.count} matches | ${stats.avg.toFixed(1)} average | ${stats.motm} MOTM | ${stats.excellent} excellent performances</text>
+
+    <line x1="60" y1="640" x2="840" y2="640" stroke="${line}"/>
+    <text x="60" y="675" font-family="monospace" font-size="14" fill="${soft}">A SEASON, ADDED UP</text>
+    <text x="840" y="675" text-anchor="end" font-family="monospace" font-size="14" fill="${soft}">MatchGrade</text>
+  </svg>`;
+
+  const blob = new Blob([svg], {type:'image/svg+xml'});
+  const file = new File([blob], 'matchgrade-season-summary.svg', {type:'image/svg+xml'});
+  if(navigator.share){
+    navigator.share({title:'MatchGrade season summary', text: seasonSummaryText(), files:[file]}).catch(()=>downloadSeasonBlob(blob));
+  } else {
+    downloadSeasonBlob(blob);
+  }
+}
+function downloadSeasonBlob(blob){
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'matchgrade-season-summary.svg';
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url), 1000);
+}
 
 </script>
 </body>
