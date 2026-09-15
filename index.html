@@ -5,18 +5,24 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="google-site-verification" content="06ROWv6yXa7peG6nR8M0_ezNxSk9r70rW6S9qY5qa_0" />
 
-<title>Player Rating Calculator  Soccer, Basketball & Cricket Stats to a Score Out of 10</title>
-<meta name="description" content="Enter match stats  goals, assists, points, rebounds, runs, wickets  and get an honest player rating out of 10, calculated per position or role. Free tool for soccer, basketball, and cricket.">
-<meta name="keywords" content="player rating calculator, football rating out of 10, basketball player rating, cricket player rating, match rating generator, soccer stats calculator">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+
+<title>Player Rating Calculator — Soccer & Cricket Stats to a Score Out of 10</title>
+<meta name="description" content="Enter match stats — goals, assists, runs, wickets — and get an honest player rating out of 10, calculated per position or role. Free tool for soccer and cricket.">
+<meta name="keywords" content="player rating calculator, football rating out of 10, cricket player rating, match rating generator, soccer stats calculator">
 <link rel="canonical" href="https://matchgrade.netlify.app/">
 
 <meta property="og:title" content="MatchGrade  Rate Any Player's Performance">
-<meta property="og:description" content="Turn match stats into an honest rating out of 10, for soccer, basketball, or cricket.">
+<meta property="og:description" content="Turn match stats into an honest rating out of 10, for soccer or cricket.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://matchgrade.netlify.app/">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MatchGrade  Rate Any Player's Performance">
-<meta name="twitter:description" content="Stat sheet in, honest rating out. Soccer, basketball, cricket.">
+<meta name="twitter:description" content="Stat sheet in, honest rating out. Soccer and cricket.">
 
 <script type="application/ld+json">
 {
@@ -25,7 +31,7 @@
   "name": "MatchGrade",
   "applicationCategory": "SportsApplication",
   "operatingSystem": "Any",
-  "description": "A stat-based player rating calculator for soccer, basketball, and cricket. Enter match stats and get a rating out of 10 based on position or role.",
+  "description": "A stat-based player rating calculator for soccer and cricket. Enter match stats and get a rating out of 10 based on position or role.",
   "offers": {
     "@type": "Offer",
     "price": "0",
@@ -44,7 +50,7 @@
       "name": "What is MatchGrade?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "MatchGrade is a free player rating calculator that turns match statistics into an honest rating out of 10 for soccer, basketball, and cricket. Enter the numbers from a game and get a transparent score based on position or role."
+        "text": "MatchGrade is a free player rating calculator that turns match statistics into an honest rating out of 10 for soccer and cricket. Enter the numbers from a game and get a transparent score based on position or role."
       }
     },
     {
@@ -68,7 +74,7 @@
       "name": "Which sports does MatchGrade support?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "MatchGrade currently supports three sports: soccer (football), basketball, and cricket. Each sport has its own position- or role-specific scoring model so the same raw number is interpreted differently depending on the role."
+        "text": "MatchGrade currently supports two sports: soccer (football) and cricket. Each sport has its own position- or role-specific scoring model so the same raw number is interpreted differently depending on the role."
       }
     },
     {
@@ -84,7 +90,7 @@
       "name": "Do different positions use different weighting?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes. A center-back is judged more on tackles, interceptions, clearances and aerials. A striker is judged more on goals, shot conversion and touches in the box. A point guard leans on assists and turnovers. A bowler is scored on wickets and economy. MatchGrade only asks for the stats that role actually produces."
+        "text": "Yes. A center-back is judged more on tackles, interceptions, clearances and aerials. A striker is judged more on goals, shot conversion and touches in the box. A bowler is scored on wickets and economy. MatchGrade only asks for the stats that role actually produces."
       }
     },
     {
@@ -101,14 +107,6 @@
       "acceptedAnswer": {
         "@type": "Answer",
         "text": "Core stats depend on position. Goalkeepers need saves and shots faced. Defenders need tackles, interceptions and clearances. Midfielders and attackers need key passes, goals, assists and dribbles. Optional extras such as duels, aerials, and errors leading to a goal can refine the score further."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "How are basketball ratings calculated?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Basketball ratings start at 6.0 and adjust based on points, shooting percentages, rebounds, assists, turnovers, steals, blocks and plus-minus. Each position (point guard, shooting guard, small forward, power forward, center) weights these stats differently to reflect typical contributions."
       }
     },
     {
@@ -148,7 +146,7 @@
       "name": "Does playing time affect the rating?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes. Soccer and basketball ratings scale stats to a full-match equivalent (90 minutes or 32 minutes) so short appearances are not unfairly punished or rewarded. Very limited minutes also gently pull the final rating toward the neutral 6.0 baseline."
+        "text": "Yes. Soccer ratings scale stats to a full-match equivalent (90 minutes) so short appearances are not unfairly punished or rewarded. Very limited minutes also gently pull the final rating toward the neutral 6.0 baseline."
       }
     }
   ]
@@ -1624,7 +1622,6 @@
 
   <div class="sport-switch" id="sportSwitch">
     <button data-sport="soccer" class="active">Soccer</button>
-    <button data-sport="basketball">Basketball</button>
     <button data-sport="cricket">Cricket</button>
   </div>
 
@@ -1751,7 +1748,6 @@
 
     <div class="sport-switch" id="compareSportSwitch" style="margin-bottom:18px;">
       <button data-csport="soccer" class="active">Soccer</button>
-      <button data-csport="basketball">Basketball</button>
       <button data-csport="cricket">Cricket</button>
     </div>
 
@@ -1939,7 +1935,6 @@
     <div style="display:flex;flex-wrap:wrap;gap:10px;">
       <a href="/soccer-player-rating-calculator" style="font-family:'Special Elite',monospace;font-size:0.75rem;color:var(--accent);text-decoration:none;border:1px solid var(--line);padding:6px 12px;">Soccer rating guide</a>
       <a href="/football-player-rating-calculator" style="font-family:'Special Elite',monospace;font-size:0.75rem;color:var(--accent);text-decoration:none;border:1px solid var(--line);padding:6px 12px;">Football rating guide</a>
-      <a href="/basketball-player-rating-calculator" style="font-family:'Special Elite',monospace;font-size:0.75rem;color:var(--accent);text-decoration:none;border:1px solid var(--line);padding:6px 12px;">Basketball rating guide</a>
       <a href="/cricket-player-rating-calculator" style="font-family:'Special Elite',monospace;font-size:0.75rem;color:var(--accent);text-decoration:none;border:1px solid var(--line);padding:6px 12px;">Cricket rating guide</a>
       <a href="/how-player-ratings-work" style="font-family:'Special Elite',monospace;font-size:0.75rem;color:var(--accent);text-decoration:none;border:1px solid var(--line);padding:6px 12px;">How ratings work</a>
     </div>
@@ -1947,14 +1942,11 @@
 
   <div class="about">
     <h2>How the player rating is calculated</h2>
-    <p>MatchGrade turns a match stat line into a single rating out of 10, using the same starting point professional rating services use: a 6.0 baseline represents an anonymous, did-their-job performance. From there, the score moves up or down based on how each stat compares to what's typical for that specific position or role  a center-back's rating leans on tackles and clearances, a striker's leans on goals and shot quality, a point guard's leans on assists and turnovers, and a bowler's leans on wickets and economy rather than runs scored.</p>
+    <p>MatchGrade turns a match stat line into a single rating out of 10, using the same starting point professional rating services use: a 6.0 baseline represents an anonymous, did-their-job performance. From there, the score moves up or down based on how each stat compares to what's typical for that specific position or role  a center-back's rating leans on tackles and clearances, a striker's leans on goals and shot quality, and a bowler's leans on wickets and economy rather than runs scored.</p>
     <p>Every sport has its own scoring model, because the same raw number means something different depending on the role. Ten tackles is an outstanding game for a full-back and an odd stat line for a striker. MatchGrade only asks for the numbers that role actually generates, and shows exactly which stats pushed the rating up or down so the score is never a black box.</p>
 
     <h3>Soccer ratings</h3>
     <p>Choose from goalkeeper, centre-back, full-back, defensive mid, central mid, attacking mid, winger, or striker. Core stats are tailored to the role, with optional extras like dribbles, aerial duels, and errors leading to a goal for a more precise score.</p>
-
-    <h3>Basketball ratings</h3>
-    <p>Choose point guard, shooting guard, small forward, power forward, or center. The rating weighs shooting efficiency, rebounding, assists, and turnovers differently by position, with optional plus-minus and steal/block stats available for a sharper number.</p>
 
     <h3>Cricket ratings</h3>
     <p>Choose batter, bowler, all-rounder, or wicket-keeper. Batting rating factors in runs, balls faced, and strike rate; bowling factors in overs, wickets, and economy rate; wicket-keepers get credit for catches and stumpings on top of their batting line.</p>
@@ -1966,7 +1958,7 @@
     <div class="faq-list" id="faqList">
       <div class="faq-item">
         <button type="button" class="faq-q">What is MatchGrade?</button>
-        <div class="faq-a"><p>MatchGrade is a free player rating calculator that turns match statistics into an honest rating out of 10 for soccer, basketball, and cricket. Enter the numbers from a game and get a transparent score based on position or role.</p></div>
+        <div class="faq-a"><p>MatchGrade is a free player rating calculator that turns match statistics into an honest rating out of 10 for soccer and cricket. Enter the numbers from a game and get a transparent score based on position or role.</p></div>
       </div>
 
       <div class="faq-item">
@@ -1981,7 +1973,7 @@
 
       <div class="faq-item">
         <button type="button" class="faq-q">Which sports does MatchGrade support?</button>
-        <div class="faq-a"><p>MatchGrade currently supports three sports: soccer (football), basketball, and cricket. Each sport has its own position- or role-specific scoring model so the same raw number is interpreted differently depending on the role.</p></div>
+        <div class="faq-a"><p>MatchGrade currently supports two sports: soccer (football) and cricket. Each sport has its own position- or role-specific scoring model so the same raw number is interpreted differently depending on the role.</p></div>
       </div>
 
       <div class="faq-item">
@@ -1991,7 +1983,7 @@
 
       <div class="faq-item">
         <button type="button" class="faq-q">Do different positions use different weighting?</button>
-        <div class="faq-a"><p>Yes. A center-back is judged more on tackles, interceptions, clearances and aerials. A striker is judged more on goals, shot conversion and touches in the box. A point guard leans on assists and turnovers. A bowler is scored on wickets and economy. MatchGrade only asks for the stats that role actually produces.</p></div>
+        <div class="faq-a"><p>Yes. A center-back is judged more on tackles, interceptions, clearances and aerials. A striker is judged more on goals, shot conversion and touches in the box. A bowler is scored on wickets and economy. MatchGrade only asks for the stats that role actually produces.</p></div>
       </div>
 
       <div class="faq-item">
@@ -2004,10 +1996,6 @@
         <div class="faq-a"><p>Core stats depend on position. Goalkeepers need saves and shots faced. Defenders need tackles, interceptions and clearances. Midfielders and attackers need key passes, goals, assists and dribbles. Optional extras such as duels, aerials, and errors leading to a goal can refine the score further.</p></div>
       </div>
 
-      <div class="faq-item">
-        <button type="button" class="faq-q">How are basketball ratings calculated?</button>
-        <div class="faq-a"><p>Basketball ratings start at 6.0 and adjust based on points, shooting percentages, rebounds, assists, turnovers, steals, blocks and plus-minus. Each position (point guard, shooting guard, small forward, power forward, center) weights these stats differently to reflect typical contributions.</p></div>
-      </div>
 
       <div class="faq-item">
         <button type="button" class="faq-q">How do cricket ratings work on MatchGrade?</button>
@@ -2031,7 +2019,7 @@
 
       <div class="faq-item">
         <button type="button" class="faq-q">Does playing time affect the rating?</button>
-        <div class="faq-a"><p>Yes. Soccer and basketball ratings scale stats to a full-match equivalent (90 minutes or 32 minutes) so short appearances are not unfairly punished or rewarded. Very limited minutes also gently pull the final rating toward the neutral 6.0 baseline.</p></div>
+        <div class="faq-a"><p>Yes. Soccer ratings scale stats to a full-match equivalent (90 minutes) so short appearances are not unfairly punished or rewarded. Very limited minutes also gently pull the final rating toward the neutral 6.0 baseline.</p></div>
       </div>
     </div>
   </div>
@@ -2088,33 +2076,6 @@ const SOCCER_BENCH = {
   AM: { keyPasses:{bench:2, weight:0.36}, passAcc:{bench:80, weight:0.03}, dribbles:{bench:2, weight:0.22}, shotsOnTarget:{bench:1, weight:0.26}, dispossessed:{bench:1, weight:-0.18} },
   WNG: { dribbles:{bench:2, weight:0.24}, keyPasses:{bench:1, weight:0.36}, shotsOnTarget:{bench:1, weight:0.25}, touchesBox:{bench:3, weight:0.12}, dispossessed:{bench:2, weight:-0.15} },
   ST: { shotConv:{bench:0.30, weight:1.35}, shotsOnTarget:{bench:1, weight:0.24}, touchesBox:{bench:4, weight:0.11}, holdUp:{bench:2, weight:0.15}, dispossessed:{bench:2, weight:-0.15} },
-};
-
-/* ---------------- BASKETBALL ---------------- */
-const BBALL_ROLES = { PG:'Point guard', SG:'Shooting guard', SF:'Small forward', PF:'Power forward', C:'Center' };
-
-const BBALL_CORE = {
-  PG: [ {id:'points', label:'Points', def:12}, {id:'assists', label:'Assists', def:6}, {id:'turnovers', label:'Turnovers', def:2}, {id:'fgPct', label:'Field goal %', def:45} ],
-  SG: [ {id:'points', label:'Points', def:16}, {id:'fgPct', label:'Field goal %', def:44}, {id:'threePct', label:'3-point %', def:35}, {id:'assists', label:'Assists', def:2} ],
-  SF: [ {id:'points', label:'Points', def:14}, {id:'rebounds', label:'Rebounds', def:5}, {id:'assists', label:'Assists', def:3}, {id:'fgPct', label:'Field goal %', def:46} ],
-  PF: [ {id:'points', label:'Points', def:12}, {id:'rebounds', label:'Rebounds', def:8}, {id:'fgPct', label:'Field goal %', def:48}, {id:'blocks', label:'Blocks', def:1} ],
-  C: [ {id:'points', label:'Points', def:10}, {id:'rebounds', label:'Rebounds', def:10}, {id:'blocks', label:'Blocks', def:1.5}, {id:'fgPct', label:'Field goal %', def:52} ],
-};
-
-const BBALL_OPTIONAL = {
-  PG: [ {id:'steals', label:'Steals', def:1}, {id:'threePct', label:'3-point %', def:33}, {id:'plusMinus', label:'Plus / minus', def:0} ],
-  SG: [ {id:'turnovers', label:'Turnovers', def:2}, {id:'steals', label:'Steals', def:1}, {id:'plusMinus', label:'Plus / minus', def:0} ],
-  SF: [ {id:'threePct', label:'3-point %', def:34}, {id:'steals', label:'Steals', def:1}, {id:'turnovers', label:'Turnovers', def:2}, {id:'plusMinus', label:'Plus / minus', def:0} ],
-  PF: [ {id:'assists', label:'Assists', def:1.5}, {id:'turnovers', label:'Turnovers', def:1.5}, {id:'plusMinus', label:'Plus / minus', def:0} ],
-  C: [ {id:'assists', label:'Assists', def:1}, {id:'turnovers', label:'Turnovers', def:1.5}, {id:'freeThrowPct', label:'Free throw %', def:65}, {id:'plusMinus', label:'Plus / minus', def:0} ],
-};
-
-const BBALL_BENCH = {
-  PG: { points:{bench:12, weight:0.10}, assists:{bench:6, weight:0.22}, turnovers:{bench:2, weight:-0.35}, fgPct:{bench:45, weight:0.03}, steals:{bench:1, weight:0.25}, plusMinus:{bench:0, weight:0.05} },
-  SG: { points:{bench:16, weight:0.10}, fgPct:{bench:44, weight:0.035}, threePct:{bench:35, weight:0.03}, assists:{bench:2, weight:0.18}, turnovers:{bench:2, weight:-0.3}, steals:{bench:1, weight:0.2}, plusMinus:{bench:0, weight:0.05} },
-  SF: { points:{bench:14, weight:0.09}, rebounds:{bench:5, weight:0.15}, assists:{bench:3, weight:0.18}, fgPct:{bench:46, weight:0.03}, threePct:{bench:34, weight:0.02}, steals:{bench:1, weight:0.2}, turnovers:{bench:2, weight:-0.3}, plusMinus:{bench:0, weight:0.05} },
-  PF: { points:{bench:12, weight:0.09}, rebounds:{bench:8, weight:0.14}, fgPct:{bench:48, weight:0.03}, blocks:{bench:1, weight:0.3}, assists:{bench:1.5, weight:0.15}, turnovers:{bench:1.5, weight:-0.3}, plusMinus:{bench:0, weight:0.05} },
-  C: { points:{bench:10, weight:0.09}, rebounds:{bench:10, weight:0.13}, blocks:{bench:1.5, weight:0.3}, fgPct:{bench:52, weight:0.03}, assists:{bench:1, weight:0.15}, turnovers:{bench:1.5, weight:-0.3}, freeThrowPct:{bench:65, weight:0.01}, plusMinus:{bench:0, weight:0.05} },
 };
 
 /* ---------------- CRICKET ---------------- */
@@ -2205,16 +2166,6 @@ function renderContextFields(){
       <div class="checkline"><input type="checkbox" id="sentOff"><label for="sentOff" style="margin:0; font-size:0.9rem;">Sent off (red card)</label></div>
       <div class="checkline"><input type="checkbox" id="yellow"><label for="yellow" style="margin:0; font-size:0.9rem;">Booked (yellow card)</label></div>
     `;
-  } else if(currentSport === 'basketball'){
-    container.innerHTML = `
-      <div class="section-label">Match context</div>
-      <label style="display:block; font-size:0.85rem; color:var(--ink-soft); margin-bottom:6px;">Result</label>
-      <div class="result-toggle" id="resultToggle">
-        <button data-val="win" class="active">Won</button>
-        <button data-val="loss">Lost</button>
-      </div>
-      <div class="checkline"><input type="checkbox" id="fouledOut"><label for="fouledOut" style="margin:0; font-size:0.9rem;">Fouled out</label></div>
-    `;
   } else if(currentSport === 'cricket'){
     container.innerHTML = `
       <div class="section-label">Match context</div>
@@ -2243,7 +2194,6 @@ function attachResultToggle(){
 function applySportTheme(sport){
   const root = document.documentElement;
   if(sport === 'soccer') { root.style.setProperty('--accent', '#2F5233'); root.style.setProperty('--accent-deep', '#20391F'); }
-  else if(sport === 'basketball') { root.style.setProperty('--accent', '#B8562E'); root.style.setProperty('--accent-deep', '#8C3F1F'); }
   else if(sport === 'cricket') { root.style.setProperty('--accent', '#2E5C8A'); root.style.setProperty('--accent-deep', '#1E3E5C'); }
 }
 
@@ -2271,16 +2221,6 @@ function renderSport(sport, keepOptionalState){
     document.getElementById('minutes').value = 90;
     renderRoleOptions(SOCCER_ROLES);
     renderFieldGroup(SOCCER_CORE[document.getElementById('role').value] || SOCCER_CORE.CM, 'statFields', 'Match numbers');
-  } else if(sport === 'basketball'){
-    clubLabel.textContent = 'Team name';
-    document.getElementById('clubName').placeholder = 'e.g. Riverside';
-    sheetTitle.textContent = 'Stat Sheet  Basketball';
-    roleLabel.textContent = 'Position';
-    minutesField.style.display = 'block';
-    minutesLabel.innerHTML = 'Minutes played <span style="font-size:0.75rem; color:#8a8578;">(out of 48)</span>';
-    document.getElementById('minutes').value = 32;
-    renderRoleOptions(BBALL_ROLES);
-    renderFieldGroup(BBALL_CORE[document.getElementById('role').value] || BBALL_CORE.PG, 'statFields', 'Box score');
   } else if(sport === 'cricket'){
     clubLabel.textContent = 'Team name';
     document.getElementById('clubName').placeholder = 'e.g. Riverside CC';
@@ -2302,7 +2242,6 @@ function renderSport(sport, keepOptionalState){
 function renderRoleFields(){
   const role = document.getElementById('role').value;
   if(currentSport === 'soccer') renderFieldGroup(SOCCER_CORE[role], 'statFields', 'Match numbers');
-  if(currentSport === 'basketball') renderFieldGroup(BBALL_CORE[role], 'statFields', 'Box score');
   if(currentSport === 'cricket') renderFieldGroup(CRICKET_CORE[role], 'statFields', 'Innings numbers');
   renderOptionalForCurrentRole();
 }
@@ -2311,7 +2250,6 @@ function renderOptionalForCurrentRole(){
   const role = document.getElementById('role').value;
   let defs = [];
   if(currentSport === 'soccer') defs = SOCCER_OPTIONAL[role] || [];
-  if(currentSport === 'basketball') defs = BBALL_OPTIONAL[role] || [];
   if(currentSport === 'cricket') defs = CRICKET_OPTIONAL[role] || [];
   renderFieldGroup(defs, 'optionalFields', 'Optional extra stats', true);
 }
@@ -2868,48 +2806,6 @@ function gradeSoccer(){
   renderResult(result.rating, result.breakdown, `${SOCCER_ROLES[role]} · full time`);
 }
 
-function gradeBasketball(){
-  const role = document.getElementById('role').value;
-  const minutes = Math.max(1, val('minutes', 32));
-  const scale32 = 32 / minutes;
-  const breakdown = [];
-  let rating = 6.0;
-
-  const allDefs = [...(BBALL_CORE[role]||[]), ...(BBALL_OPTIONAL[role]||[])];
-  const raw = {};
-  allDefs.forEach(d=>{ raw[d.id] = val('stat_'+d.id, d.def); });
-  const b = BBALL_BENCH[role];
-
-  function add(amount, label){
-    if(Math.abs(amount) < 0.02) return;
-    rating += amount;
-    breakdown.push({label, amount});
-  }
-
-  Object.keys(raw).forEach(key=>{
-    if(!b[key]) return;
-    const isPercent = key.toLowerCase().includes('pct');
-    const scaled = isPercent ? raw[key] : raw[key] * scale32;
-    const nice = allDefs.find(d=>d.id===key)?.label || key;
-    add((scaled - b[key].bench) * b[key].weight, `${nice}: ${raw[key]}${isPercent ? '%' : ''}`);
-  });
-
-  const fouledOut = val('fouledOut', false);
-  if(fouledOut) add(-0.8, 'Fouled out');
-
-  if(resultVal === 'win') add(0.25, 'Team won');
-  else if(resultVal === 'loss') add(-0.25, 'Team lost');
-
-  if(minutes < 15){
-    const pull = (6.0 - rating) * 0.35;
-    rating += pull;
-    breakdown.push({label:`Limited minutes (${minutes}')  pulled toward neutral`, amount: pull});
-  }
-
-  rating = Math.max(1.0, Math.min(10.0, rating));
-  renderResult(rating, breakdown, `${BBALL_ROLES[role]} · final box score`);
-}
-
 function gradeCricket(){
   const role = document.getElementById('role').value;
   const breakdown = [];
@@ -2977,9 +2873,8 @@ let integrityOverride = false;
 function collectRawStatsForIntegrity(){
   const sport = currentSport;
   const role = document.getElementById('role').value;
-  const minutes = val('minutes', sport === 'basketball' ? 32 : 90);
+  const minutes = val('minutes', 90);
   const defs = sport === 'soccer' ? [...(SOCCER_CORE[role]||[]), ...(SOCCER_OPTIONAL[role]||[])]
-    : sport === 'basketball' ? [...(BBALL_CORE[role]||[]), ...(BBALL_OPTIONAL[role]||[])]
     : [...(CRICKET_CORE[role]||[]), ...(CRICKET_OPTIONAL[role]||[])];
   const raw = {};
   defs.forEach(d=>{
@@ -3010,22 +2905,6 @@ function runIntegrityCheck(){
     if(saves !== null && shotsFaced !== null && saves > shotsFaced) issues.push(`Saves (${saves}) can't exceed shots faced (${shotsFaced}).`);
     if(tackles !== null && tackles > 25) issues.push(`${tackles} tackles in one match is far above any realistic total.`);
     if(minutes > 0 && minutes <= 5 && (goals > 2 || assists > 2)) issues.push(`That's a lot of goal involvement for only ${minutes} minutes on the pitch.`);
-  }
-
-  if(sport === 'basketball'){
-    const points = num('points'), fgPct = num('fgPct'), threePct = num('threePct'), rebounds = num('rebounds'),
-          assists = num('assists'), turnovers = num('turnovers'), blocks = num('blocks'), steals = num('steals'),
-          freeThrowPct = num('freeThrowPct');
-
-    if(points !== null && points > 100) issues.push(`${points} points in a single game is beyond any realistic total  Wilt Chamberlain's NBA record is 100.`);
-    if(fgPct !== null && (fgPct > 100 || fgPct < 0)) issues.push(`Field goal % of ${fgPct} isn't a valid percentage.`);
-    if(threePct !== null && (threePct > 100 || threePct < 0)) issues.push(`3-point % of ${threePct} isn't a valid percentage.`);
-    if(freeThrowPct !== null && (freeThrowPct > 100 || freeThrowPct < 0)) issues.push(`Free throw % of ${freeThrowPct} isn't a valid percentage.`);
-    if(rebounds !== null && rebounds > 45) issues.push(`${rebounds} rebounds in a game is far above any realistic total.`);
-    if(assists !== null && assists > 30) issues.push(`${assists} assists in a game is far above any realistic total.`);
-    if(blocks !== null && blocks > 20) issues.push(`${blocks} blocks in a game looks like it may be a typo.`);
-    if(steals !== null && steals > 15) issues.push(`${steals} steals in a game looks like it may be a typo.`);
-    if(minutes > 0 && minutes < 6 && points > 30) issues.push(`${points} points in only ${minutes} minutes is extremely unlikely  check the minutes field.`);
   }
 
   if(sport === 'cricket'){
@@ -3065,7 +2944,6 @@ function proceedDespiteWarning(){
 
 function runGradeForSport(){
   if(currentSport === 'soccer') gradeSoccer();
-  else if(currentSport === 'basketball') gradeBasketball();
   else if(currentSport === 'cricket') gradeCricket();
   integrityOverride = false;
 }
@@ -3630,8 +3508,8 @@ function setCompareSport(sport){
   document.querySelectorAll('#compareSportSwitch button').forEach(b=>{
     b.classList.toggle('active', b.dataset.csport===sport);
   });
-  const roles = sport==='soccer' ? SOCCER_ROLES : sport==='basketball' ? BBALL_ROLES : CRICKET_ROLES;
-  const core = sport==='soccer' ? SOCCER_CORE : sport==='basketball' ? BBALL_CORE : CRICKET_CORE;
+  const roles = sport==='soccer' ? SOCCER_ROLES : CRICKET_ROLES;
+  const core = sport==='soccer' ? SOCCER_CORE : CRICKET_CORE;
   ['A','B'].forEach(side=>{
     const sel = document.getElementById('cmp'+side+'_role');
     sel.innerHTML = Object.entries(roles).map(([k,v])=>`<option value="${k}">${v}</option>`).join('');
@@ -3641,8 +3519,8 @@ function setCompareSport(sport){
       minsField.style.display = 'none';
     } else {
       minsField.style.display = 'block';
-      minsInput.value = sport==='soccer' ? 90 : 32;
-      minsInput.max = sport==='soccer' ? 120 : 48;
+      minsInput.value = 90;
+      minsInput.max = 120;
     }
     const defsForRole = ()=>{
       const base = core[sel.value] || Object.values(core)[0] || [];
@@ -3679,12 +3557,12 @@ function cmpVal(side, id, fallback){
 
 function rateFromInputs(side, sport){
   const role = document.getElementById('cmp'+side+'_role').value;
-  const minutes = Math.max(1, cmpVal(side,'minutes', sport==='soccer'?90:32));
+  const minutes = Math.max(1, cmpVal(side,'minutes', 90));
   const name = document.getElementById('cmp'+side+'_name').value.trim() || ('Player '+side);
 
   const raw = {};
   const provided = {};
-  const core = sport==='soccer' ? SOCCER_CORE[role] : sport==='basketball' ? BBALL_CORE[role] : CRICKET_CORE[role];
+  const core = sport==='soccer' ? SOCCER_CORE[role] : CRICKET_CORE[role];
   const optional = sport==='soccer' ? (SOCCER_OPTIONAL[role]||[]) : [];
   const defs = [...(core||[]), ...optional];
 
@@ -3704,7 +3582,7 @@ function rateFromInputs(side, sport){
     return {name, role, rating:result.rating, breakdown:result.breakdown, raw, minutes};
   }
 
-  // Existing basketball/cricket comparison model.
+  // Cricket comparison model.
   let rating = 6.0;
   const breakdown = [];
   function add(amount, label){
@@ -3712,41 +3590,21 @@ function rateFromInputs(side, sport){
     rating += amount;
     breakdown.push({label, amount});
   }
-  function diminish(count, first, second, third, rest){
-    count = Math.max(0, Math.round(count));
-    if(count===0) return 0;
-    let total=0;
-    for(let i=1;i<=count;i++){
-      if(i===1) total+=first; else if(i===2) total+=second; else if(i===3) total+=third; else total+=rest;
-    }
-    return total;
-  }
 
-  if(sport==='basketball'){
-    const scale32 = 32/minutes;
-    const b = BBALL_BENCH[role]||{};
-    Object.keys(raw).forEach(key=>{
-      if(!b[key]) return;
-      const isPercent = key.toLowerCase().includes('pct');
-      const scaled = isPercent ? raw[key] : raw[key]*scale32;
-      add((scaled-b[key].bench)*b[key].weight, `${key}: ${raw[key]}`);
-    });
-  } else {
-    if(['BAT','AR','WK'].includes(role) && (raw.balls||0)>0){
-      const runBaseline = role==='BAT'?30:role==='WK'?20:15;
-      add(((raw.runs||0)-runBaseline)*0.045, `Runs: ${raw.runs||0}`);
-      const sr = ((raw.runs||0)/(raw.balls||1))*100;
-      if((raw.balls||0)>=10) add((sr-110)*0.01, `Strike rate ${sr.toFixed(0)}`);
-    }
-    if(['BWL','AR'].includes(role) && (raw.overs||0)>0){
-      const econ=(raw.runsConceded||0)/(raw.overs||1);
-      add((7-econ)*0.35, `Economy ${econ.toFixed(1)}`);
-      add((raw.wickets||0)*0.9, `Wickets: ${raw.wickets||0}`);
-    }
-    if(role==='WK'){
-      if(raw.catches) add(raw.catches*0.35, `Catches: ${raw.catches}`);
-      if(raw.stumpings) add(raw.stumpings*0.5, `Stumpings: ${raw.stumpings}`);
-    }
+  if(['BAT','AR','WK'].includes(role) && (raw.balls||0)>0){
+    const runBaseline = role==='BAT'?30:role==='WK'?20:15;
+    add(((raw.runs||0)-runBaseline)*0.045, `Runs: ${raw.runs||0}`);
+    const sr = ((raw.runs||0)/(raw.balls||1))*100;
+    if((raw.balls||0)>=10) add((sr-110)*0.01, `Strike rate ${sr.toFixed(0)}`);
+  }
+  if(['BWL','AR'].includes(role) && (raw.overs||0)>0){
+    const econ=(raw.runsConceded||0)/(raw.overs||1);
+    add((7-econ)*0.35, `Economy ${econ.toFixed(1)}`);
+    add((raw.wickets||0)*0.9, `Wickets: ${raw.wickets||0}`);
+  }
+  if(role==='WK'){
+    if(raw.catches) add(raw.catches*0.35, `Catches: ${raw.catches}`);
+    if(raw.stumpings) add(raw.stumpings*0.5, `Stumpings: ${raw.stumpings}`);
   }
 
   rating = Math.max(1, Math.min(10, rating));
@@ -3783,12 +3641,12 @@ function runComparison(){
   const cats = [];
   const allKeys = new Set([...Object.keys(a.raw), ...Object.keys(b.raw)]);
   const labelMap = {
-    goals:'Goals', assists:'Assists', points:'Points', rebounds:'Rebounds',
+    goals:'Goals', assists:'Assists',
     tackles:'Tackles', interceptions:'Interceptions', clearances:'Clearances',
     keyPasses:'Key passes', dribbles:'Dribbles', saves:'Saves',
-    runs:'Runs', wickets:'Wickets', overs:'Overs', fgPct:'FG %',
-    threePct:'3PT %', blocks:'Blocks', steals:'Steals', passAcc:'Pass accuracy',
-    shotsOnTarget:'Shots on target', shotsTotal:'Shots'
+    runs:'Runs', wickets:'Wickets', overs:'Overs', balls:'Balls faced',
+    runsConceded:'Runs conceded', catches:'Catches', stumpings:'Stumpings',
+    passAcc:'Pass accuracy', shotsOnTarget:'Shots on target', shotsTotal:'Shots'
   };
   allKeys.forEach(k=>{
     if(['minutes'].includes(k)) return;
