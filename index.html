@@ -5,7 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="google-site-verification" content="06ROWv6yXa7peG6nR8M0_ezNxSk9r70rW6S9qY5qa_0" />
 
-<link rel="icon" href="favicon.ico" type="image/x-icon">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 
 <title>Player Rating Calculator — Soccer & Cricket Stats to a Score Out of 10</title>
@@ -2054,25 +2057,149 @@ const SOCCER_CORE = {
 
 
 const SOCCER_OPTIONAL = {
-  GK: [ {id:'claims', label:'Crosses claimed', def:0, ignored:true}, {id:'penSaved', label:'Penalties saved', def:0}, {id:'cleanSheet', label:'Clean sheet?', type:'check'} ],
-  CB: [ {id:'duelsWon', label:'Duels won', def:4}, {id:'duelsTotal', label:'Duels contested', def:6}, {id:'aerialsWon', label:'Aerials won', def:2}, {id:'goals', label:'Goals', def:0}, {id:'assists', label:'Assists', def:0} ],
-  FB: [ {id:'duelsWon', label:'Duels won', def:3}, {id:'duelsTotal', label:'Duels contested', def:5}, {id:'assists', label:'Assists', def:0}, {id:'goals', label:'Goals', def:0}, {id:'dribbles', label:'Successful dribbles', def:1} ],
-  DM: [ {id:'duelsWon', label:'Duels won', def:3}, {id:'duelsTotal', label:'Duels contested', def:5}, {id:'keyPasses', label:'Key passes', def:0}, {id:'goals', label:'Goals', def:0}, {id:'assists', label:'Assists', def:0} ],
-  CM: [ {id:'passesCompleted', label:'Passes completed', def:30}, {id:'tackles', label:'Tackles won', def:1}, {id:'interceptions', label:'Interceptions', def:1}, {id:'dribbles', label:'Successful dribbles', def:1}, {id:'goals', label:'Goals', def:0}, {id:'assists', label:'Assists', def:0} ],
-  AM: [ {id:'dispossessed', label:'Times dispossessed', def:1} ],
-  WNG: [ {id:'dispossessed', label:'Times dispossessed', def:2} ],
-  ST: [ {id:'holdUp', label:'Duels won (hold-up play)', def:2}, {id:'dispossessed', label:'Times dispossessed', def:2} ],
+  GK: [
+    {id:'claims', label:'Crosses claimed / punches', def:0},
+    {id:'penSaved', label:'Penalties saved', def:0},
+    {id:'cleanSheet', label:'Clean sheet?', type:'check'},
+    {id:'sweeperActions', label:'Sweeper / high exits', def:0},
+    {id:'longBalls', label:'Long balls completed', def:0},
+    {id:'passAcc', label:'Pass accuracy %', def:0}
+  ],
+  CB: [
+    {id:'duelsWon', label:'Duels won', def:0},
+    {id:'duelsTotal', label:'Duels contested', def:0},
+    {id:'aerialsWon', label:'Aerials won', def:0},
+    {id:'aerialsTotal', label:'Aerials contested', def:0},
+    {id:'blocks', label:'Blocks', def:0},
+    {id:'recoveries', label:'Recoveries', def:0},
+    {id:'progressivePasses', label:'Progressive passes', def:0},
+    {id:'goals', label:'Goals', def:0},
+    {id:'assists', label:'Assists', def:0},
+    {id:'foulsWon', label:'Fouls won', def:0},
+    {id:'foulsCommitted', label:'Fouls committed', def:0}
+  ],
+  FB: [
+    {id:'duelsWon', label:'Duels won', def:0},
+    {id:'duelsTotal', label:'Duels contested', def:0},
+    {id:'dribbles', label:'Successful dribbles', def:0},
+    {id:'progressiveCarries', label:'Progressive carries', def:0},
+    {id:'crosses', label:'Accurate crosses', def:0},
+    {id:'blocks', label:'Blocks', def:0},
+    {id:'recoveries', label:'Recoveries', def:0},
+    {id:'goals', label:'Goals', def:0},
+    {id:'assists', label:'Assists', def:0},
+    {id:'foulsWon', label:'Fouls won', def:0},
+    {id:'foulsCommitted', label:'Fouls committed', def:0}
+  ],
+  DM: [
+    {id:'duelsWon', label:'Duels won', def:0},
+    {id:'duelsTotal', label:'Duels contested', def:0},
+    {id:'keyPasses', label:'Key passes', def:0},
+    {id:'progressivePasses', label:'Progressive passes', def:0},
+    {id:'recoveries', label:'Recoveries', def:0},
+    {id:'blocks', label:'Blocks', def:0},
+    {id:'goals', label:'Goals', def:0},
+    {id:'assists', label:'Assists', def:0},
+    {id:'foulsWon', label:'Fouls won', def:0},
+    {id:'foulsCommitted', label:'Fouls committed', def:0},
+    {id:'dribbles', label:'Successful dribbles', def:0}
+  ],
+  CM: [
+    {id:'passesCompleted', label:'Passes completed', def:0},
+    {id:'tackles', label:'Tackles won', def:0},
+    {id:'interceptions', label:'Interceptions', def:0},
+    {id:'dribbles', label:'Successful dribbles', def:0},
+    {id:'progressivePasses', label:'Progressive passes', def:0},
+    {id:'progressiveCarries', label:'Progressive carries', def:0},
+    {id:'shotsTotal', label:'Shots taken', def:0},
+    {id:'goals', label:'Goals', def:0},
+    {id:'assists', label:'Assists', def:0},
+    {id:'foulsWon', label:'Fouls won', def:0},
+    {id:'foulsCommitted', label:'Fouls committed', def:0}
+  ],
+  AM: [
+    {id:'dispossessed', label:'Times dispossessed', def:0},
+    {id:'shotsTotal', label:'Shots taken', def:0},
+    {id:'shotsOnTarget', label:'Shots on target', def:0},
+    {id:'progressiveCarries', label:'Progressive carries', def:0},
+    {id:'progressivePasses', label:'Progressive passes', def:0},
+    {id:'foulsWon', label:'Fouls won', def:0},
+    {id:'touchesBox', label:'Touches in box', def:0},
+    {id:'passAcc', label:'Pass accuracy %', def:0}
+  ],
+  WNG: [
+    {id:'dispossessed', label:'Times dispossessed', def:0},
+    {id:'shotsTotal', label:'Shots taken', def:0},
+    {id:'shotsOnTarget', label:'Shots on target', def:0},
+    {id:'progressiveCarries', label:'Progressive carries', def:0},
+    {id:'crosses', label:'Accurate crosses', def:0},
+    {id:'touchesBox', label:'Touches in box', def:0},
+    {id:'foulsWon', label:'Fouls won', def:0},
+    {id:'passAcc', label:'Pass accuracy %', def:0}
+  ],
+  ST: [
+    {id:'holdUp', label:'Duels won (hold-up play)', def:0},
+    {id:'dispossessed', label:'Times dispossessed', def:0},
+    {id:'touchesBox', label:'Touches in box', def:0},
+    {id:'foulsWon', label:'Fouls won', def:0},
+    {id:'progressiveCarries', label:'Progressive carries', def:0},
+    {id:'offsides', label:'Offsides', def:0},
+    {id:'passAcc', label:'Pass accuracy %', def:0},
+    {id:'aerialsWon', label:'Aerials won', def:0}
+  ],
 };
 
 const SOCCER_BENCH = {
-  GK: { saveRatio:{bench:0.68, weight:3.4}, penSaved:{bench:0, weight:1.1} },
-  CB: { tackles:{bench:2, weight:0.18}, interceptions:{bench:2, weight:0.20}, clearances:{bench:3, weight:0.09}, duelRatio:{bench:0.60, weight:1.45}, passAcc:{bench:85, weight:0.035}, aerialsWon:{bench:2, weight:0.16} },
-  FB: { tackles:{bench:2, weight:0.16}, interceptions:{bench:1, weight:0.16}, duelRatio:{bench:0.55, weight:1.25}, passAcc:{bench:80, weight:0.03}, keyPasses:{bench:1, weight:0.30}, dribbles:{bench:1, weight:0.22} },
-  DM: { tackles:{bench:3, weight:0.17}, interceptions:{bench:2, weight:0.17}, passAcc:{bench:87, weight:0.04}, passesCompleted:{bench:35, weight:0.018}, duelRatio:{bench:0.60, weight:1.20}, keyPasses:{bench:0, weight:0.28} },
-  CM: { passAcc:{bench:84, weight:0.035}, passesCompleted:{bench:30, weight:0.018}, keyPasses:{bench:1, weight:0.36}, tackles:{bench:1, weight:0.14}, interceptions:{bench:1, weight:0.14}, dribbles:{bench:1, weight:0.20} },
-  AM: { keyPasses:{bench:2, weight:0.36}, passAcc:{bench:80, weight:0.03}, dribbles:{bench:2, weight:0.22}, shotsOnTarget:{bench:1, weight:0.26}, dispossessed:{bench:1, weight:-0.18} },
-  WNG: { dribbles:{bench:2, weight:0.24}, keyPasses:{bench:1, weight:0.36}, shotsOnTarget:{bench:1, weight:0.25}, touchesBox:{bench:3, weight:0.12}, dispossessed:{bench:2, weight:-0.15} },
-  ST: { shotConv:{bench:0.30, weight:1.35}, shotsOnTarget:{bench:1, weight:0.24}, touchesBox:{bench:4, weight:0.11}, holdUp:{bench:2, weight:0.15}, dispossessed:{bench:2, weight:-0.15} },
+  GK: {
+    saveRatio:{bench:0.68, weight:3.45},
+    penSaved:{bench:0, weight:1.25},
+    claims:{bench:2, weight:0.18},
+    sweeperActions:{bench:1, weight:0.22},
+    longBalls:{bench:4, weight:0.08},
+    passAcc:{bench:65, weight:0.025}
+  },
+  CB: {
+    tackles:{bench:2, weight:0.18}, interceptions:{bench:2, weight:0.20}, clearances:{bench:3, weight:0.09},
+    duelRatio:{bench:0.60, weight:1.45}, passAcc:{bench:85, weight:0.035}, aerialsWon:{bench:2, weight:0.16},
+    blocks:{bench:1, weight:0.22}, recoveries:{bench:4, weight:0.09}, progressivePasses:{bench:2, weight:0.18},
+    foulsWon:{bench:1, weight:0.12}, foulsCommitted:{bench:1, weight:-0.14}
+  },
+  FB: {
+    tackles:{bench:2, weight:0.16}, interceptions:{bench:1, weight:0.16}, duelRatio:{bench:0.55, weight:1.25},
+    passAcc:{bench:80, weight:0.03}, keyPasses:{bench:1, weight:0.30}, dribbles:{bench:1, weight:0.22},
+    progressiveCarries:{bench:3, weight:0.14}, crosses:{bench:1, weight:0.28}, blocks:{bench:0.5, weight:0.18},
+    recoveries:{bench:3, weight:0.09}, foulsWon:{bench:1, weight:0.12}, foulsCommitted:{bench:1, weight:-0.12}
+  },
+  DM: {
+    tackles:{bench:3, weight:0.17}, interceptions:{bench:2, weight:0.17}, passAcc:{bench:87, weight:0.04},
+    passesCompleted:{bench:35, weight:0.018}, duelRatio:{bench:0.60, weight:1.20}, keyPasses:{bench:0, weight:0.28},
+    progressivePasses:{bench:3, weight:0.16}, recoveries:{bench:5, weight:0.09}, blocks:{bench:1, weight:0.18},
+    dribbles:{bench:1, weight:0.15}, foulsWon:{bench:1, weight:0.10}, foulsCommitted:{bench:1.5, weight:-0.12}
+  },
+  CM: {
+    passAcc:{bench:84, weight:0.035}, passesCompleted:{bench:30, weight:0.018}, keyPasses:{bench:1, weight:0.36},
+    tackles:{bench:1, weight:0.14}, interceptions:{bench:1, weight:0.14}, dribbles:{bench:1, weight:0.20},
+    progressivePasses:{bench:4, weight:0.14}, progressiveCarries:{bench:3, weight:0.12}, shotsTotal:{bench:1, weight:0.15},
+    foulsWon:{bench:1, weight:0.10}, foulsCommitted:{bench:1, weight:-0.12}
+  },
+  AM: {
+    keyPasses:{bench:2, weight:0.36}, passAcc:{bench:80, weight:0.03}, dribbles:{bench:2, weight:0.22},
+    shotsOnTarget:{bench:1, weight:0.26}, dispossessed:{bench:1, weight:-0.18},
+    shotsTotal:{bench:2, weight:0.12}, progressiveCarries:{bench:4, weight:0.13}, progressivePasses:{bench:3, weight:0.15},
+    touchesBox:{bench:3, weight:0.14}, foulsWon:{bench:1, weight:0.12}
+  },
+  WNG: {
+    dribbles:{bench:2, weight:0.24}, keyPasses:{bench:1, weight:0.36}, shotsOnTarget:{bench:1, weight:0.25},
+    touchesBox:{bench:3, weight:0.12}, dispossessed:{bench:2, weight:-0.15},
+    shotsTotal:{bench:2, weight:0.12}, progressiveCarries:{bench:5, weight:0.13}, crosses:{bench:1, weight:0.26},
+    foulsWon:{bench:1, weight:0.12}, passAcc:{bench:78, weight:0.025}
+  },
+  ST: {
+    shotConv:{bench:0.30, weight:1.35}, shotsOnTarget:{bench:1, weight:0.24}, touchesBox:{bench:4, weight:0.11},
+    holdUp:{bench:2, weight:0.15}, dispossessed:{bench:2, weight:-0.15},
+    progressiveCarries:{bench:2, weight:0.12}, foulsWon:{bench:1, weight:0.14}, aerialsWon:{bench:1, weight:0.14},
+    offsides:{bench:1, weight:-0.10}, passAcc:{bench:72, weight:0.02}
+  },
 };
 
 /* ---------------- CRICKET ---------------- */
@@ -2634,7 +2761,7 @@ function calculateSoccerRating(role, minutes, raw, provided, context, result){
 
   // Exposure adjustment is deliberately capped. Linear full-match scaling can
   // make a short cameo with one big action look like a five-goal performance.
-  const exposure = Math.min(2.25, Math.sqrt(90 / Math.max(1, minutes)));
+  const exposure = Math.min(3.25, Math.sqrt(90 / Math.max(1, minutes)));
 
   function add(amount, label){
     if(!Number.isFinite(amount) || Math.abs(amount) < 0.02) return;
@@ -2666,14 +2793,44 @@ function calculateSoccerRating(role, minutes, raw, provided, context, result){
     const faced = Math.max(0, Number(raw.shotsFaced)||0);
     if(faced > 0){
       const ratio = Math.min(1, saves / faced);
-      add((ratio - b.saveRatio.bench) * b.saveRatio.weight, `Save ratio ${(ratio*100).toFixed(0)}% (${saves}/${faced})`);
-      // Reward difficult workload separately, but cap it so volume cannot dominate.
-      const saveVolume = Math.min(0.45, Math.max(0, saves - 3) * 0.07 * exposure);
-      add(saveVolume, `Shot-stopping volume: ${saves} saves`);
+      // Moderate weight: 50% ≈ -0.62, 68% ≈ 0, 83% ≈ +0.52
+      const ratioBonus = (ratio - b.saveRatio.bench) * b.saveRatio.weight;
+      add(ratioBonus, `Save ratio ${(ratio*100).toFixed(0)}% (${saves}/${faced})`);
+
+      // Volume is the main positive driver for busy keepers.
+      // 5 saves already gives a healthy boost; 25 saves can still reach the top.
+      // Formula: first few saves worth more, then diminishing.
+      let volume = 0;
+      for(let i = 1; i <= saves; i++){
+        if(i <= 3) volume += 0.32;
+        else if(i <= 6) volume += 0.26;
+        else if(i <= 10) volume += 0.18;
+        else if(i <= 15) volume += 0.12;
+        else volume += 0.07;
+      }
+      volume = Math.min(2.9, volume * Math.min(1.35, exposure));
+      add(volume, `Shot-stopping volume: ${saves} saves`);
     }
-    if(has('penSaved') && raw.penSaved > 0) add(Math.min(1.5, raw.penSaved * b.penSaved.weight), `Penalty save x${raw.penSaved}`);
+    if(has('penSaved') && raw.penSaved > 0) add(Math.min(1.8, raw.penSaved * b.penSaved.weight), `Penalty save x${raw.penSaved}`);
     if(has('cleanSheet') && raw.cleanSheet) add(0.55, 'Clean sheet');
-    // Crosses claimed is intentionally display-only and never changes the rating.
+
+    // Optional GK stats now count when filled
+    if(has('claims') && b.claims){
+      const scaled = Math.max(0, Number(raw.claims)||0) * exposure;
+      add(Math.max(-0.6, Math.min(0.8, (scaled - b.claims.bench) * b.claims.weight)), `Claims / punches: ${raw.claims}`);
+    }
+    if(has('sweeperActions') && b.sweeperActions){
+      const scaled = Math.max(0, Number(raw.sweeperActions)||0) * exposure;
+      add(Math.max(-0.5, Math.min(0.9, (scaled - b.sweeperActions.bench) * b.sweeperActions.weight)), `Sweeper actions: ${raw.sweeperActions}`);
+    }
+    if(has('longBalls') && b.longBalls){
+      const scaled = Math.max(0, Number(raw.longBalls)||0) * exposure;
+      add(Math.max(-0.4, Math.min(0.6, (scaled - b.longBalls.bench) * b.longBalls.weight)), `Long balls: ${raw.longBalls}`);
+    }
+    if(has('passAcc') && b.passAcc){
+      const acc = Math.max(0, Math.min(100, Number(raw.passAcc)||0));
+      add(Math.max(-0.5, Math.min(0.6, (acc - b.passAcc.bench) * b.passAcc.weight)), `Pass accuracy: ${acc}%`);
+    }
   } else {
     // High-impact attacking actions. Goals/assists are optional for every
     // outfield role, so they only contribute when the user actually enters them.
@@ -2747,7 +2904,7 @@ function calculateSoccerRating(role, minutes, raw, provided, context, result){
   if(conceded > 0) add(-Math.min(1.8, conceded * concededWeight), `Goals conceded: ${conceded}`);
   else if(['GK','CB','FB','DM'].includes(role)) add(0.22, 'No goals conceded');
 
-  if(errors > 0) add(-Math.min(2.0, errors * 1.15), `Error(s) leading to goal: ${errors}`);
+  if(errors > 0) add(-Math.min(4.25, errors * (4.25/6)), `Error(s) leading to goal: ${errors}`);
   if(sentOff) add(-2.0, 'Sent off');
   else if(yellow) add(-0.18, 'Booked');
 
@@ -2762,9 +2919,10 @@ function calculateSoccerRating(role, minutes, raw, provided, context, result){
     if(Math.abs(pull) >= 0.02) breakdown.push({label:`Limited minutes (${minutes}')  rating confidence reduced`, amount:pull});
   }
 
-  // Keep elite scores difficult without making 10.0 impossible.
-  if(rating > 9.55){
-    rating = 9.55 + (rating - 9.55) * 0.45;
+  // Soft compression only above 9.75 so genuine 10s remain possible
+  // (especially important for elite goalkeeper performances).
+  if(rating > 9.75){
+    rating = 9.75 + (rating - 9.75) * 0.55;
   }
 
   rating = Math.max(1.0, Math.min(10.0, rating));
