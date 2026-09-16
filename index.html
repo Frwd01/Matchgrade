@@ -4,12 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="google-site-verification" content="06ROWv6yXa7peG6nR8M0_ezNxSk9r70rW6S9qY5qa_0" />
-<meta name='impact-site-verification' value='64e4fe30-7944-474b-a8d3-b71066c08d2d'>
-<link rel="icon" href="favicon.ico" sizes="any">
-<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
-<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-<link rel="manifest" href="site.webmanifest">
+
+<link rel="icon" href="favicon.ico" type="image/x-icon">
 
 <title>Player Rating Calculator — Soccer & Cricket Stats to a Score Out of 10</title>
 <meta name="description" content="Enter match stats — goals, assists, runs, wickets — and get an honest player rating out of 10, calculated per position or role. Free tool for soccer and cricket.">
@@ -1502,6 +1498,17 @@
         </div>
 
         <div class="settings-section">
+          <div class="settings-section-title">Soccer Format</div>
+          <div class="settings-row">
+            <div>
+              <div class="settings-row-label">5-a-side mode</div>
+              <div class="settings-row-sub">Uses a different rating model tuned for small-sided games (shorter matches, more goals, higher involvement)</div>
+            </div>
+            <div class="theme-switch" id="fiveAsideSwitch" onclick="toggleFiveAside()"></div>
+          </div>
+        </div>
+
+        <div class="settings-section">
           <div class="settings-section-title">History &amp; Seasons</div>
           <div class="settings-row">
             <div>
@@ -1691,7 +1698,10 @@
         </div>
       </div>
 
-      <button class="go-btn" onclick="grade()">Grade the performance</button>
+      <div style="display:flex;gap:10px;margin-top:22px;flex-wrap:wrap;">
+        <button class="go-btn" style="flex:1;margin-top:0;" onclick="grade()">Grade the performance</button>
+        <button type="button" class="go-btn" style="flex:0 0 auto;margin-top:0;background:transparent;color:var(--ink);border:1.5px solid var(--ink);padding:14px 16px;" onclick="tryExample()" title="Fill a realistic sample and grade it">Try an example</button>
+      </div>
     </div>
 
     <!-- RIGHT: RESULT -->
@@ -1894,6 +1904,23 @@
         Save a few rated performances under My Matches, then come back here to see the season add up.
       </div>
       <div id="seasonFilled" style="display:none;">
+        <div class="season-date-controls" style="display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;margin-bottom:16px;padding:14px 0;border-bottom:1px dashed var(--line);">
+          <div class="field" style="margin:0;min-width:140px;">
+            <label>Season from</label>
+            <input type="date" id="seasonFrom" onchange="onSeasonDatesChanged()">
+          </div>
+          <div class="field" style="margin:0;min-width:140px;">
+            <label>Season to</label>
+            <input type="date" id="seasonTo" onchange="onSeasonDatesChanged()">
+          </div>
+          <div class="field" style="margin:0;min-width:160px;">
+            <label>Season name</label>
+            <input type="text" id="seasonName" placeholder="e.g. 2025/26 League" style="width:100%;">
+          </div>
+          <button type="button" class="settings-action-btn" onclick="saveCurrentSeason()" style="margin-bottom:2px;">Save this season</button>
+          <button type="button" class="settings-action-btn" onclick="startNewSeason()" style="margin-bottom:2px;">Start new season</button>
+        </div>
+        <div id="savedSeasonsList" style="margin-bottom:14px;"></div>
         <div class="season-selector" id="seasonSportFilter"></div>
         <div class="season-card" id="seasonCard">
           <div class="season-card-inner">
@@ -2037,6 +2064,9 @@ let currentSport = 'soccer';
 let resultVal = 'win';
 let optionalOpen = false;
 let lastComparison = null;
+let fiveAsideMode = false; // declared early so renderSport can read it on first load
+let seasonFromDate = null;
+let seasonToDate = null;
 
 /* ---------------- SOCCER ---------------- */
 const SOCCER_ROLES = {
@@ -2341,8 +2371,11 @@ function renderSport(sport, keepOptionalState){
     sheetTitle.textContent = 'Stat Sheet  Soccer';
     roleLabel.textContent = 'Position';
     minutesField.style.display = 'block';
-    minutesLabel.innerHTML = 'Minutes played <span style="font-size:0.75rem; color:#8a8578;">(out of 90)</span>';
-    document.getElementById('minutes').value = 90;
+    const is5 = (typeof fiveAsideMode !== 'undefined' && fiveAsideMode);
+    minutesLabel.innerHTML = is5
+      ? 'Minutes played <span style="font-size:0.75rem; color:#8a8578;">(out of 40 · 5-a-side)</span>'
+      : 'Minutes played <span style="font-size:0.75rem; color:#8a8578;">(out of 90)</span>';
+    document.getElementById('minutes').value = is5 ? 40 : 90;
     renderRoleOptions(SOCCER_ROLES);
     renderFieldGroup(SOCCER_CORE[document.getElementById('role').value] || SOCCER_CORE.CM, 'statFields', 'Match numbers');
   } else if(sport === 'cricket'){
@@ -2358,6 +2391,7 @@ function renderSport(sport, keepOptionalState){
   document.getElementById('role').onchange = () => renderRoleFields();
   renderOptionalForCurrentRole();
   renderContextFields();
+  if(typeof updateFiveAsideUI === 'function') updateFiveAsideUI();
 
   document.getElementById('emptyState').style.display = 'block';
   document.getElementById('resultBody').classList.remove('show');
@@ -2761,7 +2795,8 @@ function calculateSoccerRating(role, minutes, raw, provided, context, result){
 
   // Exposure adjustment is deliberately capped. Linear full-match scaling can
   // make a short cameo with one big action look like a five-goal performance.
-  const exposure = Math.min(3.25, Math.sqrt(90 / Math.max(1, minutes)));
+  const fullMatchMins = (typeof fiveAsideMode !== 'undefined' && fiveAsideMode) ? 40 : 90;
+  const exposure = Math.min(3.25, Math.sqrt(fullMatchMins / Math.max(1, minutes)));
 
   function add(amount, label){
     if(!Number.isFinite(amount) || Math.abs(amount) < 0.02) return;
@@ -2836,13 +2871,15 @@ function calculateSoccerRating(role, minutes, raw, provided, context, result){
     // outfield role, so they only contribute when the user actually enters them.
     if(has('goals') && raw.goals > 0){
       const goals = raw.goals * exposure;
+      // In 5-a-side goals are more common, so each is worth a little less
+      const gScale = (typeof fiveAsideMode !== 'undefined' && fiveAsideMode) ? 0.82 : 1.0;
       let gBonus;
       if(role === 'ST') gBonus = diminishing(goals, 1.45, 1.00, 0.68, 0.34);
       else if(role === 'AM' || role === 'WNG') gBonus = diminishing(goals, 1.30, 0.92, 0.60, 0.32);
       else if(role === 'CM') gBonus = diminishing(goals, 1.18, 0.82, 0.54, 0.30);
       else if(role === 'FB' || role === 'DM') gBonus = diminishing(goals, 1.10, 0.76, 0.50, 0.28);
       else gBonus = diminishing(goals, 1.15, 0.80, 0.52, 0.28);
-      add(Math.min(4.5, gBonus), `Goals: ${raw.goals}${exposure !== 1 ? ' (adjusted)' : ''}`);
+      add(Math.min(4.5, gBonus * gScale), `Goals: ${raw.goals}${exposure !== 1 ? ' (adjusted)' : ''}`);
     }
 
     if(has('assists') && raw.assists > 0){
@@ -2912,8 +2949,9 @@ function calculateSoccerRating(role, minutes, raw, provided, context, result){
   else if(result === 'loss') add(-0.22, 'Team lost');
 
   // Very short appearances carry less statistical confidence.
-  if(minutes < 45){
-    const confidence = Math.max(0.45, minutes / 45);
+  const shortThreshold = (typeof fiveAsideMode !== 'undefined' && fiveAsideMode) ? 20 : 45;
+  if(minutes < shortThreshold){
+    const confidence = Math.max(0.45, minutes / shortThreshold);
     const pull = (6.0 - rating) * (1 - confidence) * 0.65;
     rating += pull;
     if(Math.abs(pull) >= 0.02) breakdown.push({label:`Limited minutes (${minutes}')  rating confidence reduced`, amount:pull});
@@ -4246,6 +4284,14 @@ function resetSettings(){
 // Init compare roles on load
 setCompareSport('soccer');
 
+// Init 5-a-side mode + season date UI
+(function(){
+  loadFiveAside();
+  // Default season dates empty = show all matches
+  seasonFromDate = null;
+  seasonToDate = null;
+})();
+
 /* =========================================================
    FAQ ACCORDION
    Only one item's answer is visible at a time; clicking a
@@ -4259,6 +4305,334 @@ document.getElementById('faqList')?.addEventListener('click', function(e){
   this.querySelectorAll('.faq-item.open').forEach(i=>i.classList.remove('open'));
   if(!wasOpen) item.classList.add('open');
 });
+
+
+/* =========================================================
+   TRY AN EXAMPLE
+   Fills a realistic sample performance and grades it instantly.
+========================================================= */
+const EXAMPLE_POOL = {
+  soccer: [
+    // --- Strikers ---
+    { role:'ST', name:'Alex Rivera', club:'Riverside FC', minutes:90, result:'win',
+      stats:{ goals:2, assists:1, shotsTotal:5, shotsOnTarget:3, touchesBox:7, holdUp:3, dispossessed:1, aerialsWon:2, foulsWon:2 },
+      context:{ goalsConceded:1, errorsToGoal:0, sentOff:false, yellow:false } },
+    { role:'ST', name:'Kian Doyle', club:'Ashford Town', minutes:72, result:'draw',
+      stats:{ goals:1, assists:0, shotsTotal:4, shotsOnTarget:2, touchesBox:5, holdUp:1, dispossessed:3, progressiveCarries:2, offsides:2 },
+      context:{ goalsConceded:1, errorsToGoal:0, sentOff:false, yellow:false } },
+    { role:'ST', name:'Yara Mbeki', club:'Summit Athletic', minutes:90, result:'win',
+      stats:{ goals:3, assists:0, shotsTotal:7, shotsOnTarget:5, touchesBox:9, holdUp:4, dispossessed:0, aerialsWon:3, foulsWon:1 },
+      context:{ goalsConceded:0, errorsToGoal:0, sentOff:false, yellow:false } },
+
+    // --- Goalkeepers ---
+    { role:'GK', name:'Sam Okonkwo', club:'Harbour United', minutes:90, result:'win',
+      stats:{ saves:7, shotsFaced:9, cleanSheet:true, claims:3, penSaved:0, sweeperActions:2, longBalls:6, passAcc:72 },
+      context:{ goalsConceded:0, errorsToGoal:0, sentOff:false, yellow:false } },
+    { role:'GK', name:'Elena Vos', club:'Northgate', minutes:90, result:'loss',
+      stats:{ saves:5, shotsFaced:11, cleanSheet:false, claims:1, penSaved:1, sweeperActions:0, longBalls:3, passAcc:58 },
+      context:{ goalsConceded:3, errorsToGoal:1, sentOff:false, yellow:false } },
+    { role:'GK', name:'Tariq Hassan', club:'Desert Lions', minutes:90, result:'draw',
+      stats:{ saves:12, shotsFaced:14, cleanSheet:false, claims:4, penSaved:0, sweeperActions:3, longBalls:8, passAcc:65 },
+      context:{ goalsConceded:1, errorsToGoal:0, sentOff:false, yellow:false } },
+
+    // --- Centre-backs ---
+    { role:'CB', name:'Marcus Hale', club:'Northbridge', minutes:90, result:'win',
+      stats:{ tackles:4, interceptions:3, clearances:6, passAcc:88, duelsWon:7, duelsTotal:9, aerialsWon:4, blocks:2, recoveries:5, progressivePasses:3 },
+      context:{ goalsConceded:0, errorsToGoal:0, sentOff:false, yellow:false } },
+    { role:'CB', name:'Sofia Ruiz', club:'Iberia FC', minutes:90, result:'draw',
+      stats:{ tackles:2, interceptions:5, clearances:8, passAcc:91, duelsWon:5, duelsTotal:8, aerialsWon:6, blocks:1, goals:1, assists:0 },
+      context:{ goalsConceded:1, errorsToGoal:0, sentOff:false, yellow:true } },
+    { role:'CB', name:'Ben Cartwright', club:'Milltown', minutes:65, result:'loss',
+      stats:{ tackles:1, interceptions:1, clearances:4, passAcc:79, duelsWon:3, duelsTotal:7, aerialsWon:2, blocks:0, foulsCommitted:3 },
+      context:{ goalsConceded:2, errorsToGoal:1, sentOff:false, yellow:false } },
+
+    // --- Full-backs ---
+    { role:'FB', name:'Priya Shah', club:'Coastal FC', minutes:90, result:'loss',
+      stats:{ tackles:3, interceptions:2, keyPasses:2, passAcc:81, dribbles:2, assists:1, duelsWon:5, duelsTotal:8, crosses:3, progressiveCarries:4 },
+      context:{ goalsConceded:2, errorsToGoal:0, sentOff:false, yellow:true } },
+    { role:'FB', name:'Lucas Berg', club:'Fjell FC', minutes:90, result:'win',
+      stats:{ tackles:5, interceptions:3, keyPasses:1, passAcc:86, dribbles:4, assists:0, goals:1, duelsWon:8, duelsTotal:10, crosses:2, recoveries:6 },
+      context:{ goalsConceded:0, errorsToGoal:0, sentOff:false, yellow:false } },
+    { role:'FB', name:'Amara Nwosu', club:'Lagos United', minutes:78, result:'win',
+      stats:{ tackles:2, interceptions:1, keyPasses:4, passAcc:77, dribbles:6, assists:2, duelsWon:4, duelsTotal:6, crosses:5, progressiveCarries:7 },
+      context:{ goalsConceded:1, errorsToGoal:0, sentOff:false, yellow:false } },
+
+    // --- Defensive mids ---
+    { role:'DM', name:'Owen Briggs', club:'Steelworks', minutes:90, result:'draw',
+      stats:{ tackles:5, interceptions:4, passAcc:90, passesCompleted:48, duelsWon:6, duelsTotal:9, keyPasses:1, recoveries:7, blocks:2 },
+      context:{ goalsConceded:1, errorsToGoal:0, sentOff:false, yellow:false } },
+    { role:'DM', name:'Chen Wei', club:'Pearl City', minutes:90, result:'win',
+      stats:{ tackles:7, interceptions:6, passAcc:93, passesCompleted:61, duelsWon:9, duelsTotal:11, keyPasses:2, progressivePasses:5, foulsCommitted:2 },
+      context:{ goalsConceded:0, errorsToGoal:0, sentOff:false, yellow:true } },
+    { role:'DM', name:'Rita Okello', club:'Savanna FC', minutes:55, result:'win',
+      stats:{ tackles:3, interceptions:2, passAcc:85, passesCompleted:28, duelsWon:4, duelsTotal:5, keyPasses:0, recoveries:4, dribbles:1 },
+      context:{ goalsConceded:0, errorsToGoal:0, sentOff:false, yellow:false } },
+
+    // --- Central mids ---
+    { role:'CM', name:'Jordan Lee', club:'Eastside Athletic', minutes:88, result:'draw',
+      stats:{ passAcc:89, keyPasses:3, passesCompleted:52, tackles:2, interceptions:2, dribbles:2, goals:0, assists:1, progressivePasses:6 },
+      context:{ goalsConceded:1, errorsToGoal:0, sentOff:false, yellow:false } },
+    { role:'CM', name:'Mateo Silva', club:'Campo Verde', minutes:90, result:'win',
+      stats:{ passAcc:84, keyPasses:5, passesCompleted:44, tackles:1, interceptions:1, dribbles:4, goals:1, assists:1, shotsTotal:3, progressiveCarries:5 },
+      context:{ goalsConceded:1, errorsToGoal:0, sentOff:false, yellow:false } },
+    { role:'CM', name:'Hannah Cole', club:'Westfield', minutes:90, result:'loss',
+      stats:{ passAcc:76, keyPasses:1, passesCompleted:33, tackles:4, interceptions:3, dribbles:0, goals:0, assists:0, foulsCommitted:2 },
+      context:{ goalsConceded:3, errorsToGoal:0, sentOff:false, yellow:true } },
+
+    // --- Attacking mids ---
+    { role:'AM', name:'Diego Santos', club:'Metro City', minutes:78, result:'win',
+      stats:{ keyPasses:4, dribbles:3, goals:1, assists:2, shotsOnTarget:2, dispossessed:1, progressiveCarries:5, touchesBox:4 },
+      context:{ goalsConceded:0, errorsToGoal:0, sentOff:false, yellow:false } },
+    { role:'AM', name:'Ines Dubois', club:'Lyonette', minutes:90, result:'win',
+      stats:{ keyPasses:6, dribbles:5, goals:0, assists:3, shotsOnTarget:1, dispossessed:2, shotsTotal:3, progressivePasses:4, foulsWon:2 },
+      context:{ goalsConceded:1, errorsToGoal:0, sentOff:false, yellow:false } },
+    { role:'AM', name:'Ravi Kapoor', club:'Lotus FC', minutes:62, result:'draw',
+      stats:{ keyPasses:2, dribbles:1, goals:1, assists:0, shotsOnTarget:2, dispossessed:3, touchesBox:3, passAcc:81 },
+      context:{ goalsConceded:1, errorsToGoal:0, sentOff:false, yellow:false } },
+
+    // --- Wingers ---
+    { role:'WNG', name:'Theo Nash', club:'Valley Rovers', minutes:82, result:'win',
+      stats:{ dribbles:5, keyPasses:3, goals:1, assists:1, shotsOnTarget:2, touchesBox:5, dispossessed:2, progressiveCarries:6, crosses:2 },
+      context:{ goalsConceded:1, errorsToGoal:0, sentOff:false, yellow:false } },
+    { role:'WNG', name:'Zara Al-Farsi', club:'Oasis SC', minutes:90, result:'win',
+      stats:{ dribbles:8, keyPasses:2, goals:2, assists:0, shotsOnTarget:4, touchesBox:6, dispossessed:1, crosses:1, shotsTotal:6, foulsWon:3 },
+      context:{ goalsConceded:0, errorsToGoal:0, sentOff:false, yellow:false } },
+    { role:'WNG', name:'Finn O\'Malley', club:'Green Isle', minutes:90, result:'loss',
+      stats:{ dribbles:2, keyPasses:1, goals:0, assists:0, shotsOnTarget:0, touchesBox:2, dispossessed:4, progressiveCarries:3, passAcc:71 },
+      context:{ goalsConceded:2, errorsToGoal:0, sentOff:false, yellow:false } }
+  ],
+  cricket: [
+    { role:'BAT', name:'Arjun Patel', club:'Riverside CC',
+      stats:{ runs:67, balls:48, fours:8, sixes:1, dismissed:true } },
+    { role:'BAT', name:'Sophie Lang', club:'Meadow CC',
+      stats:{ runs:112, balls:95, fours:12, sixes:2, dismissed:false } },
+    { role:'BAT', name:'Dev Rahman', club:'Canal Road',
+      stats:{ runs:18, balls:32, fours:1, sixes:0, dismissed:true } },
+    { role:'BWL', name:'Liam Croft', club:'Harbour CC',
+      stats:{ overs:8, runsConceded:28, wickets:3, maidens:1, wides:2 } },
+    { role:'BWL', name:'Aisha Khan', club:'Summit CC',
+      stats:{ overs:10, runsConceded:41, wickets:1, maidens:0, wides:4 } },
+    { role:'BWL', name:'Tom Bradley', club:'Hillside',
+      stats:{ overs:6, runsConceded:15, wickets:4, maidens:2, wides:0 } },
+    { role:'AR', name:'Mei Chen', club:'Eastside CC',
+      stats:{ runs:42, balls:31, fours:5, sixes:1, overs:6, runsConceded:22, wickets:2, dismissed:false } },
+    { role:'AR', name:'Jake Moretti', club:'Bayview',
+      stats:{ runs:8, balls:12, fours:1, sixes:0, overs:9, runsConceded:35, wickets:1, dismissed:true, maidens:0 } },
+    { role:'WK', name:'Noah Grant', club:'Valley CC',
+      stats:{ runs:38, balls:29, catches:2, stumpings:1, fours:4, sixes:0, dismissed:true } },
+    { role:'WK', name:'Priya Desai', club:'Lotus CC',
+      stats:{ runs:55, balls:41, catches:3, stumpings:0, fours:6, sixes:1, dismissed:false, byes:1 } }
+  ]
+};
+
+function tryExample(){
+  // Switch to calculator section if needed
+  document.querySelectorAll('#mainNav button').forEach(b=>b.classList.toggle('active', b.dataset.section==='calc'));
+  document.querySelectorAll('.app-section').forEach(s=>s.classList.toggle('active', s.id==='section-calc'));
+
+  const sport = currentSport === 'cricket' ? 'cricket' : 'soccer';
+  const pool = EXAMPLE_POOL[sport];
+  const ex = pool[Math.floor(Math.random() * pool.length)];
+
+  // Ensure sport is selected
+  if(currentSport !== sport){
+    document.querySelectorAll('#sportSwitch button').forEach(b=>{
+      if(b.dataset.sport === sport) b.click();
+    });
+  }
+
+  // Wait a tick for role fields to render
+  setTimeout(()=>{
+    // Role
+    const roleSel = document.getElementById('role');
+    if(roleSel){
+      roleSel.value = ex.role;
+      roleSel.dispatchEvent(new Event('change'));
+    }
+
+    // Name / club
+    const nameEl = document.getElementById('playerName');
+    const clubEl = document.getElementById('clubName');
+    if(nameEl) nameEl.value = ex.name;
+    if(clubEl) clubEl.value = ex.club || '';
+
+    // Minutes (soccer)
+    if(sport === 'soccer'){
+      const mins = document.getElementById('minutes');
+      if(mins) mins.value = fiveAsideMode ? Math.min(40, ex.minutes || 40) : (ex.minutes || 90);
+    }
+
+    // Fill stats after role fields re-render
+    setTimeout(()=>{
+      Object.entries(ex.stats || {}).forEach(([id, val])=>{
+        const el = document.getElementById('stat_' + id);
+        if(!el) return;
+        if(el.type === 'checkbox') el.checked = !!val;
+        else el.value = val;
+      });
+
+      // Context
+      if(sport === 'soccer' && ex.context){
+        const gc = document.getElementById('goalsConceded');
+        const er = document.getElementById('errorsToGoal');
+        const so = document.getElementById('sentOff');
+        const yl = document.getElementById('yellow');
+        if(gc) gc.value = ex.context.goalsConceded ?? 0;
+        if(er) er.value = ex.context.errorsToGoal ?? 0;
+        if(so) so.checked = !!ex.context.sentOff;
+        if(yl) yl.checked = !!ex.context.yellow;
+
+        // Result toggle
+        if(ex.result){
+          resultVal = ex.result;
+          document.querySelectorAll('#resultToggle button').forEach(b=>{
+            b.classList.toggle('active', b.dataset.val === ex.result);
+          });
+        }
+      }
+
+      // Grade it
+      setTimeout(()=> grade(), 80);
+    }, 120);
+  }, 80);
+}
+
+/* =========================================================
+   5-A-SIDE MODE
+========================================================= */
+const FIVE_ASIDE_KEY = 'matchgrade_5aside_v1';
+
+function loadFiveAside(){
+  try{ fiveAsideMode = localStorage.getItem(FIVE_ASIDE_KEY) === '1'; }catch(e){ fiveAsideMode = false; }
+  const sw = document.getElementById('fiveAsideSwitch');
+  if(sw) sw.classList.toggle('on', fiveAsideMode);
+  updateFiveAsideUI();
+}
+
+function toggleFiveAside(){
+  fiveAsideMode = !fiveAsideMode;
+  try{ localStorage.setItem(FIVE_ASIDE_KEY, fiveAsideMode ? '1' : '0'); }catch(e){}
+  const sw = document.getElementById('fiveAsideSwitch');
+  if(sw) sw.classList.toggle('on', fiveAsideMode);
+  updateFiveAsideUI();
+  // Re-render current sport so minutes default updates
+  if(currentSport === 'soccer') renderSport('soccer', true);
+}
+
+function updateFiveAsideUI(){
+  // Subtle badge near sport switcher when active
+  let badge = document.getElementById('fiveAsideBadge');
+  if(fiveAsideMode && currentSport === 'soccer'){
+    if(!badge){
+      badge = document.createElement('div');
+      badge.id = 'fiveAsideBadge';
+      badge.style.cssText = 'font-family:Special Elite,monospace;font-size:0.68rem;color:var(--accent);margin:-12px 0 12px;letter-spacing:0.5px;';
+      badge.textContent = '5-a-side mode active — ratings tuned for small-sided games';
+      const sw = document.getElementById('sportSwitch');
+      if(sw && sw.parentNode) sw.parentNode.insertBefore(badge, sw.nextSibling);
+    }
+  } else if(badge){
+    badge.remove();
+  }
+}
+
+/* =========================================================
+   CUSTOM SEASON DATES
+========================================================= */
+const SEASONS_KEY = 'matchgrade_seasons_v1';
+let seasonNameVal = '';
+
+function loadSeasons(){
+  try{ return JSON.parse(localStorage.getItem(SEASONS_KEY)||'[]'); }catch(e){ return []; }
+}
+function saveSeasons(list){
+  try{ localStorage.setItem(SEASONS_KEY, JSON.stringify(list.slice(0,30))); }catch(e){}
+}
+
+function onSeasonDatesChanged(){
+  const fromEl = document.getElementById('seasonFrom');
+  const toEl = document.getElementById('seasonTo');
+  seasonFromDate = fromEl && fromEl.value ? fromEl.value : null;
+  seasonToDate = toEl && toEl.value ? toEl.value : null;
+  renderSeasonSummary();
+}
+
+function filterMatchesBySeasonDates(list){
+  if(!seasonFromDate && !seasonToDate) return list;
+  return list.filter(m=>{
+    const d = (m.date || '').slice(0,10);
+    if(!d) return false;
+    if(seasonFromDate && d < seasonFromDate) return false;
+    if(seasonToDate && d > seasonToDate) return false;
+    return true;
+  });
+}
+
+function saveCurrentSeason(){
+  const name = (document.getElementById('seasonName')?.value || '').trim() || 'Unnamed season';
+  const from = document.getElementById('seasonFrom')?.value || '';
+  const to = document.getElementById('seasonTo')?.value || '';
+  if(!from && !to){
+    alert('Set at least a start or end date before saving a season.');
+    return;
+  }
+  const list = loadSeasons();
+  const id = 's_' + Date.now();
+  list.unshift({ id, name, from, to, savedAt: new Date().toISOString() });
+  saveSeasons(list);
+  renderSavedSeasonsList();
+  alert('Season saved: ' + name);
+}
+
+function startNewSeason(){
+  const today = new Date().toISOString().slice(0,10);
+  const fromEl = document.getElementById('seasonFrom');
+  const toEl = document.getElementById('seasonTo');
+  const nameEl = document.getElementById('seasonName');
+  if(fromEl) fromEl.value = today;
+  if(toEl) toEl.value = '';
+  if(nameEl) nameEl.value = '';
+  seasonFromDate = today;
+  seasonToDate = null;
+  renderSeasonSummary();
+  renderSavedSeasonsList();
+}
+
+function loadSavedSeason(id){
+  const s = loadSeasons().find(x=>x.id===id);
+  if(!s) return;
+  const fromEl = document.getElementById('seasonFrom');
+  const toEl = document.getElementById('seasonTo');
+  const nameEl = document.getElementById('seasonName');
+  if(fromEl) fromEl.value = s.from || '';
+  if(toEl) toEl.value = s.to || '';
+  if(nameEl) nameEl.value = s.name || '';
+  seasonFromDate = s.from || null;
+  seasonToDate = s.to || null;
+  renderSeasonSummary();
+}
+
+function deleteSavedSeason(id){
+  if(!confirm('Delete this saved season?')) return;
+  saveSeasons(loadSeasons().filter(x=>x.id!==id));
+  renderSavedSeasonsList();
+}
+
+function renderSavedSeasonsList(){
+  const el = document.getElementById('savedSeasonsList');
+  if(!el) return;
+  const list = loadSeasons();
+  if(!list.length){ el.innerHTML = ''; return; }
+  el.innerHTML = '<div style="font-family:Oswald,sans-serif;font-size:0.72rem;letter-spacing:0.5px;color:var(--ink-soft);margin-bottom:6px;">SAVED SEASONS</div>' +
+    list.map(s=>{
+      const range = [s.from, s.to].filter(Boolean).join(' → ') || 'no dates';
+      return `<div style="display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px dotted var(--line);font-size:0.88rem;">
+        <button type="button" onclick="loadSavedSeason('${s.id}')" style="background:none;border:none;color:var(--accent);cursor:pointer;font-family:inherit;text-align:left;flex:1;">${esc(s.name)} <span style="color:var(--ink-soft);font-family:Special Elite,monospace;font-size:0.72rem;">(${esc(range)})</span></button>
+        <button type="button" onclick="deleteSavedSeason('${s.id}')" style="background:none;border:1px solid var(--line);color:var(--red);cursor:pointer;font-size:0.7rem;padding:3px 8px;">Delete</button>
+      </div>`;
+    }).join('');
+}
+
 
 /* =========================================================
    SEASON SUMMARY GENERATOR
@@ -4294,19 +4668,25 @@ function computeSeasonStats(list){
 }
 
 function renderSeasonSummary(){
-  const list = getHistoryList();
+  const allList = getHistoryList();
   const empty = document.getElementById('seasonEmpty');
   const filled = document.getElementById('seasonFilled');
 
-  if(!list.length){
+  // Always show the filled UI if we have any history OR if user is setting up a season
+  if(!allList.length){
     empty.style.display = 'block';
     filled.style.display = 'none';
+    renderSavedSeasonsList();
     return;
   }
   empty.style.display = 'none';
   filled.style.display = 'block';
+  renderSavedSeasonsList();
 
-  const sports = seasonSportOptions(list);
+  // Apply custom season date range first
+  const dateFiltered = filterMatchesBySeasonDates(allList);
+
+  const sports = seasonSportOptions(dateFiltered.length ? dateFiltered : allList);
   const filterEl = document.getElementById('seasonSportFilter');
   const filterButtons = ['all', ...sports].map(s=>{
     const lbl = s === 'all' ? 'All sports' : s.charAt(0).toUpperCase()+s.slice(1);
@@ -4317,7 +4697,7 @@ function renderSeasonSummary(){
     btn.onclick = ()=>{ seasonSportFilter = btn.dataset.sport; renderSeasonSummary(); };
   });
 
-  const filtered = seasonSportFilter === 'all' ? list : list.filter(m=>m.sport === seasonSportFilter);
+  let filtered = seasonSportFilter === 'all' ? dateFiltered : dateFiltered.filter(m=>m.sport === seasonSportFilter);
   const stats = computeSeasonStats(filtered);
 
   if(!stats){
@@ -4335,7 +4715,11 @@ function renderSeasonSummary(){
   document.getElementById('ssAvg').textContent = stats.avg.toFixed(1);
   document.getElementById('ssMotm').textContent = stats.motm;
   document.getElementById('ssExcellent').textContent = stats.excellent;
-  document.getElementById('seasonRange').textContent = stats.rangeText;
+  const customRange = [seasonFromDate, seasonToDate].filter(Boolean).join(' → ');
+  const namePrefix = (document.getElementById('seasonName')?.value || '').trim();
+  document.getElementById('seasonRange').textContent = namePrefix
+    ? (namePrefix + (customRange ? ' · ' + customRange : (stats.rangeText ? ' · ' + stats.rangeText : '')))
+    : (customRange || stats.rangeText);
   document.getElementById('seasonLine').innerHTML =
     `<span class="accent">${stats.count}</span> matches · <span class="accent">${stats.avg.toFixed(1)}</span> average · <span class="accent">${stats.motm}</span> MOTM · <span class="accent">${stats.excellent}</span> excellent performances`;
 
