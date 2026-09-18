@@ -1571,12 +1571,56 @@
         </div>
 
         <div class="settings-section">
+          <div class="settings-section-title">Privacy &amp; Data</div>
+          <div class="settings-row">
+            <div>
+              <div class="settings-row-label">Delete all my data</div>
+              <div class="settings-row-sub">Permanently erases matches, logos, settings &amp; your cloud account, if signed in</div>
+            </div>
+            <button type="button" class="settings-action-btn danger" onclick="requestDeleteAllData()">Delete Data</button>
+          </div>
+        </div>
+
+        <div class="settings-section">
           <div class="settings-btn-row">
             <button type="button" class="settings-action-btn danger" onclick="resetSettings()">Reset Settings</button>
           </div>
           <div class="settings-toast" id="settingsToast"></div>
         </div>
 
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== DELETE DATA CONFIRMATION MODAL ========== -->
+  <div class="settings-modal" id="deleteDataModal" aria-hidden="true">
+    <div class="settings-dialog" style="max-width:440px;">
+      <div class="settings-head">
+        <h2 style="color:var(--red);">Delete all data?</h2>
+        <button type="button" class="settings-close" onclick="closeDeleteDataModal()">Close</button>
+      </div>
+      <div class="settings-body">
+        <p style="font-size:0.9rem;line-height:1.6;color:var(--ink-soft);margin:0 0 14px;">
+          This permanently deletes:
+        </p>
+        <ul style="font-size:0.88rem;line-height:1.7;color:var(--ink-soft);margin:0 0 16px;padding-left:20px;">
+          <li>All saved matches and history on this device</li>
+          <li>Saved club logos</li>
+          <li>Saved seasons and formula/appearance settings</li>
+          <li id="cloudDeleteNote" style="display:none;">Your cloud account and all matches synced to it</li>
+        </ul>
+        <p style="font-size:0.85rem;line-height:1.6;color:var(--red);margin:0 0 16px;font-weight:600;">
+          This cannot be undone.
+        </p>
+        <div class="field" style="margin-bottom:16px;">
+          <label style="display:block;font-size:0.82rem;color:var(--ink-soft);margin-bottom:6px;">Type DELETE to confirm</label>
+          <input type="text" id="deleteConfirmInput" placeholder="DELETE" style="width:100%;background:transparent;border:none;border-bottom:1.5px solid var(--ink);padding:8px 2px;font-family:'Source Serif 4',serif;font-size:1rem;color:var(--ink);outline:none;" autocomplete="off">
+        </div>
+        <div class="settings-btn-row">
+          <button type="button" class="settings-action-btn" onclick="closeDeleteDataModal()">Cancel</button>
+          <button type="button" class="settings-action-btn danger" id="confirmDeleteBtn" onclick="confirmDeleteAllData()" disabled>Permanently Delete</button>
+        </div>
+        <div class="settings-toast" id="deleteDataToast"></div>
       </div>
     </div>
   </div>
@@ -2590,12 +2634,12 @@ function renderResult(rawRating, rawBreakdown, roleLabelText){
 
   const cardClubLogoImg = document.getElementById('cardClubLogo');
   if(cardClubLogoImg){
-    if(logoState.main && cardPrefs.club){ cardClubLogoImg.src = logoState.main; cardClubLogoImg.style.display = 'inline-block'; }
+    if(logoState.main && cardPrefs.club && isSafeImageDataUrl(logoState.main)){ cardClubLogoImg.src = logoState.main; cardClubLogoImg.style.display = 'inline-block'; }
     else { cardClubLogoImg.style.display = 'none'; }
   }
   const posClubLogo = document.getElementById('rPosLogo');
   if(posClubLogo){
-    if(logoState.main){ posClubLogo.src = logoState.main; posClubLogo.style.display = 'inline-block'; }
+    if(logoState.main && isSafeImageDataUrl(logoState.main)){ posClubLogo.src = logoState.main; posClubLogo.style.display = 'inline-block'; }
     else { posClubLogo.style.display = 'none'; }
   }
 
@@ -2661,17 +2705,46 @@ const LOGO_STORE_KEY = 'matchgrade_club_logos_v1';
 let logoState = { main: null, A: null, B: null };
 
 function loadLogoStore(){
-  try{ return JSON.parse(localStorage.getItem(LOGO_STORE_KEY) || '{}'); }
+  let store;
+  try{ store = JSON.parse(localStorage.getItem(LOGO_STORE_KEY) || '{}'); }
   catch(e){ return {}; }
+  // Defense in depth: filter out any entry that isn't a safe raster image
+  // data URL, in case older data or an imported file slipped something
+  // unsafe in before this validation existed.
+  const clean = {};
+  Object.keys(store||{}).forEach(k=>{
+    if(isSafeImageDataUrl(store[k])) clean[k] = store[k];
+  });
+  return clean;
 }
 function saveLogoStore(store){
   try{ localStorage.setItem(LOGO_STORE_KEY, JSON.stringify(store)); }catch(e){}
 }
 function clubKey(name){ return (name||'').trim().toLowerCase(); }
 
+// Only these raster image types are accepted for club logos. SVG is
+// deliberately excluded: an SVG can embed <script>/<foreignObject> markup
+// that executes when the file is opened directly (e.g. from a downloaded
+// share card) or rendered in certain contexts, so it is not safe to accept
+// as a "logo image" from user input.
+const SAFE_LOGO_MIME_TYPES = ['image/png', 'image/jpeg', 'image/webp', 'image/gif'];
+
+function isSafeImageDataUrl(url){
+  if(typeof url !== 'string') return false;
+  const match = /^data:(image\/[a-zA-Z0-9.+-]+);base64,/.exec(url);
+  if(!match) return false;
+  return SAFE_LOGO_MIME_TYPES.includes(match[1].toLowerCase());
+}
+
 function handleLogoUpload(evt, slot){
   const file = evt.target.files && evt.target.files[0];
   if(!file) return;
+
+  if(!SAFE_LOGO_MIME_TYPES.includes(file.type)){
+    alert('Please upload a PNG, JPEG, WEBP, or GIF image. SVG and other file types are not supported for logos.');
+    evt.target.value = '';
+    return;
+  }
   if(file.size > 900*1024){
     alert('Logo image is a bit large — please use one under 900KB.');
     evt.target.value = '';
@@ -2680,6 +2753,13 @@ function handleLogoUpload(evt, slot){
   const reader = new FileReader();
   reader.onload = function(e){
     const dataUrl = e.target.result;
+    // Belt-and-braces: re-check the actual data URL prefix matches a safe
+    // image MIME type, in case a file's reported .type was spoofed.
+    if(!isSafeImageDataUrl(dataUrl)){
+      alert('That file could not be processed as a safe image.');
+      evt.target.value = '';
+      return;
+    }
     logoState[slot] = dataUrl;
     setLogoPreview(slot, dataUrl);
     const nameFieldId = slot==='main' ? 'clubName' : ('cmp'+slot+'_club');
@@ -2759,9 +2839,9 @@ function shareRatingCard(){
  const showBrand = cardPrefs.branding;
 
  const accent=getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()||'#2F5233',paper=getComputedStyle(document.documentElement).getPropertyValue('--paper').trim()||'#EDEAE2',ink=getComputedStyle(document.documentElement).getPropertyValue('--ink').trim()||'#1B1B18',soft=getComputedStyle(document.documentElement).getPropertyValue('--ink-soft').trim()||'#4A473F',line=getComputedStyle(document.documentElement).getPropertyValue('--line').trim()||'#c9c3b2',stamp=getComputedStyle(document.getElementById('cardStamp')).borderTopColor||accent;
- const logoUrl = cardPrefs.club ? logoState.main : null;
+ const logoUrl = (cardPrefs.club && isSafeImageDataUrl(logoState.main)) ? logoState.main : null;
  const clubTextX = logoUrl ? 1090 : 1130;
- const logoSvg = (logoUrl && club) ? `<image href="${logoUrl}" x="${clubTextX-46}" y="998" width="42" height="42" preserveAspectRatio="xMidYMid slice"/>` : '';
+ const logoSvg = (logoUrl && club) ? `<image href="${escapeXml(logoUrl)}" x="${clubTextX-46}" y="998" width="42" height="42" preserveAspectRatio="xMidYMid slice"/>` : '';
 
  const brandSvg = showBrand ? `<text x="70" y="120" font-family="Arial,sans-serif" font-size="58" font-weight="700" fill="${ink}">Match<tspan fill="${accent}">Grade</tspan></text>` : '';
  const extraLineSvg = extraLine ? `<text x="70" y="345" font-family="monospace" font-size="20" fill="${soft}">${extraLine}</text>` : '';
@@ -3647,19 +3727,36 @@ function renderHistory(){
     const d = new Date(m.date);
     const dateStr = isNaN(d) ? '' : d.toLocaleDateString(undefined,{month:'short',day:'numeric'});
     const color = m.rating >= 8 ? 'var(--gold)' : m.rating < 5.6 ? 'var(--red)' : 'var(--accent)';
-    const logoImg = m.clubLogo ? `<img class="club-logo-inline" src="${m.clubLogo}" style="width:16px;height:16px;vertical-align:-3px;">` : '';
-    return `<div class="match-item" onclick="showMatchDetail('${m.id}')">
+    const safeLogo = isSafeImageDataUrl(m.clubLogo) ? m.clubLogo : null;
+    const logoImg = safeLogo ? `<img class="club-logo-inline" src="${esc(safeLogo)}" style="width:16px;height:16px;vertical-align:-3px;">` : '';
+    return `<div class="match-item" data-match-id="${esc(m.id)}">
       <div>
         <div class="m-name">${esc(m.name)} · ${logoImg}${esc(m.opponent||m.club||'')}</div>
         <div class="m-meta">${esc(m.roleLabel||m.sport)} · ${dateStr}${m.cloud?' · cloud':''}</div>
       </div>
       <div style="display:flex;align-items:center;gap:10px;">
         <div class="m-rating" style="color:${color}">${Number(m.rating).toFixed(1)}</div>
-        <button class="m-del" onclick="deleteMatch('${m.id}',event)" title="Delete">✕</button>
+        <button class="m-del" data-delete-id="${esc(m.id)}" title="Delete">✕</button>
       </div>
     </div>`;
   }).join('');
 }
+
+// Delegated, injection-safe event binding for match list items.
+// Using data-* attributes + addEventListener instead of inline
+// onclick="...('${id}')" means a crafted id can never break out of
+// the attribute or execute arbitrary script.
+document.getElementById('matchList')?.addEventListener('click', function(e){
+  const delBtn = e.target.closest('[data-delete-id]');
+  if(delBtn){
+    deleteMatch(delBtn.dataset.deleteId, e);
+    return;
+  }
+  const item = e.target.closest('[data-match-id]');
+  if(item){
+    showMatchDetail(item.dataset.matchId);
+  }
+});
 
 function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
@@ -3672,7 +3769,7 @@ function showMatchDetail(id){
   document.getElementById('mdMeta').textContent = `${m.roleLabel||''} · ${m.sport} · ${new Date(m.date).toLocaleString()}`;
   document.getElementById('mdRating').textContent = Number(m.rating).toFixed(1);
   const bd = document.getElementById('mdBreakdown');
-  bd.innerHTML = `<div class="bd-row"><span style="font-style:italic;">${m.tier||''}</span><span class="amt zero">${m.verdict||''}</span></div>`;
+  bd.innerHTML = `<div class="bd-row"><span style="font-style:italic;">${esc(m.tier||'')}</span><span class="amt zero">${esc(m.verdict||'')}</span></div>`;
   (m.breakdown||[]).forEach(row=>{
     const cls = row.amount > 0.02 ? 'pos' : row.amount < -0.02 ? 'neg' : 'zero';
     const sign = row.amount > 0 ? '+' : '';
@@ -3910,8 +4007,8 @@ function populateCompareCard(){
 
   const logoAEl = document.getElementById('cmpCardLogoA');
   const logoBEl = document.getElementById('cmpCardLogoB');
-  if(logoA){ logoAEl.src = logoA; logoAEl.style.display = 'inline-block'; } else { logoAEl.style.display = 'none'; }
-  if(logoB){ logoBEl.src = logoB; logoBEl.style.display = 'inline-block'; } else { logoBEl.style.display = 'none'; }
+  if(logoA && isSafeImageDataUrl(logoA)){ logoAEl.src = logoA; logoAEl.style.display = 'inline-block'; } else { logoAEl.style.display = 'none'; }
+  if(logoB && isSafeImageDataUrl(logoB)){ logoBEl.src = logoB; logoBEl.style.display = 'inline-block'; } else { logoBEl.style.display = 'none'; }
 
   document.getElementById('cmpCardCats').innerHTML = cats.map(c=>{
     const aCls = c.winner==='A'?'cw':(c.winner==='tie'?'cl':'cl');
@@ -3950,8 +4047,8 @@ function shareComparisonCard(){
   const clubAX = escapeXml(clubA||''), clubBX = escapeXml(clubB||'');
   const colorA = ratingColorHexFor(a.rating, accent), colorB = ratingColorHexFor(b.rating, accent);
 
-  const logoAImg = logoA ? `<image href="${logoA}" x="200" y="188" width="40" height="40" preserveAspectRatio="xMidYMid slice"/>` : '';
-  const logoBImg = logoB ? `<image href="${logoB}" x="960" y="188" width="40" height="40" preserveAspectRatio="xMidYMid slice"/>` : '';
+  const logoAImg = isSafeImageDataUrl(logoA) ? `<image href="${escapeXml(logoA)}" x="200" y="188" width="40" height="40" preserveAspectRatio="xMidYMid slice"/>` : '';
+  const logoBImg = isSafeImageDataUrl(logoB) ? `<image href="${escapeXml(logoB)}" x="960" y="188" width="40" height="40" preserveAspectRatio="xMidYMid slice"/>` : '';
   const clubATextX = logoA ? 260 : 220;
   const clubBTextX = logoB ? 940 : 980;
 
@@ -4264,6 +4361,104 @@ function resetSettings(){
   applySportTheme(currentSport);
   syncSettingsUI();
   showSettingsToast('Settings reset to default.');
+}
+
+/* =========================================================
+   DELETE ALL DATA (privacy / right-to-erasure request)
+   Wipes every localStorage key MatchGrade uses, and if the
+   person is signed in, also deletes their rows from the cloud
+   matches table. Requires typing DELETE to confirm since this
+   is irreversible and there is no undo or trash.
+========================================================= */
+const ALL_STORAGE_KEYS = [
+  'matchgrade_club_logos_v1',
+  'matchgrade_formula_weights_v1',
+  'matchgrade_history_v1',
+  'matchgrade_theme_v1',
+  'matchgrade_accent_override_v1',
+  'matchgrade_density_v1',
+  'matchgrade_card_prefs_v1',
+  'matchgrade_5aside_v1',
+  'matchgrade_seasons_v1'
+];
+
+function requestDeleteAllData(){
+  closeSettings();
+  const modal = document.getElementById('deleteDataModal');
+  const cloudNote = document.getElementById('cloudDeleteNote');
+  cloudNote.style.display = currentUser ? 'list-item' : 'none';
+  document.getElementById('deleteConfirmInput').value = '';
+  document.getElementById('confirmDeleteBtn').disabled = true;
+  document.getElementById('deleteDataToast').classList.remove('show');
+  modal.classList.add('show');
+  modal.setAttribute('aria-hidden', 'false');
+}
+
+function closeDeleteDataModal(){
+  const modal = document.getElementById('deleteDataModal');
+  modal.classList.remove('show');
+  modal.setAttribute('aria-hidden', 'true');
+}
+document.getElementById('deleteDataModal')?.addEventListener('click', function(e){
+  if(e.target === this) closeDeleteDataModal();
+});
+document.getElementById('deleteConfirmInput')?.addEventListener('input', function(){
+  document.getElementById('confirmDeleteBtn').disabled = this.value.trim().toUpperCase() !== 'DELETE';
+});
+
+async function confirmDeleteAllData(){
+  const input = document.getElementById('deleteConfirmInput');
+  if(input.value.trim().toUpperCase() !== 'DELETE') return;
+
+  const btn = document.getElementById('confirmDeleteBtn');
+  btn.disabled = true;
+  btn.textContent = 'Deleting…';
+
+  let cloudError = null;
+
+  // Delete cloud-side matches first, while we still have a valid session.
+  if(sb && currentUser){
+    try{
+      const {error} = await sb.from('matches').delete().eq('user_id', currentUser.id);
+      if(error) cloudError = error.message;
+    }catch(e){
+      cloudError = e.message || 'Could not reach the server.';
+    }
+    try{ await sb.auth.signOut(); }catch(e){}
+  }
+
+  // Wipe every local storage key MatchGrade uses, regardless of cloud outcome,
+  // since local data belongs entirely to this device either way.
+  try{
+    ALL_STORAGE_KEYS.forEach(k => localStorage.removeItem(k));
+  }catch(e){}
+
+  // Reset in-memory state so the current page reflects the wipe immediately
+  // without needing a manual reload.
+  currentUser = null;
+  historyCache = [];
+  logoState = { main:null, A:null, B:null };
+  applyTheme('light');
+  setDensity('comfortable');
+  applySportTheme(currentSport);
+
+  btn.textContent = 'Permanently Delete';
+  btn.disabled = false;
+
+  const toast = document.getElementById('deleteDataToast');
+  if(cloudError){
+    toast.textContent = `Local data deleted. Cloud deletion had an issue: ${cloudError}. Your account is signed out; contact support if cloud data remains.`;
+  } else {
+    toast.textContent = 'All your data has been deleted from this device' + (currentUser ? ' and the cloud' : '') + '.';
+  }
+  toast.classList.add('show');
+
+  setTimeout(()=>{
+    closeDeleteDataModal();
+    renderHistory();
+    updateAuthUI();
+    location.reload();
+  }, 2200);
 }
 
 /* ---- Init on load ---- */
@@ -4627,11 +4822,17 @@ function renderSavedSeasonsList(){
     list.map(s=>{
       const range = [s.from, s.to].filter(Boolean).join(' → ') || 'no dates';
       return `<div style="display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px dotted var(--line);font-size:0.88rem;">
-        <button type="button" onclick="loadSavedSeason('${s.id}')" style="background:none;border:none;color:var(--accent);cursor:pointer;font-family:inherit;text-align:left;flex:1;">${esc(s.name)} <span style="color:var(--ink-soft);font-family:Special Elite,monospace;font-size:0.72rem;">(${esc(range)})</span></button>
-        <button type="button" onclick="deleteSavedSeason('${s.id}')" style="background:none;border:1px solid var(--line);color:var(--red);cursor:pointer;font-size:0.7rem;padding:3px 8px;">Delete</button>
+        <button type="button" data-load-season="${esc(s.id)}" style="background:none;border:none;color:var(--accent);cursor:pointer;font-family:inherit;text-align:left;flex:1;">${esc(s.name)} <span style="color:var(--ink-soft);font-family:Special Elite,monospace;font-size:0.72rem;">(${esc(range)})</span></button>
+        <button type="button" data-delete-season="${esc(s.id)}" style="background:none;border:1px solid var(--line);color:var(--red);cursor:pointer;font-size:0.7rem;padding:3px 8px;">Delete</button>
       </div>`;
     }).join('');
 }
+document.getElementById('savedSeasonsList')?.addEventListener('click', function(e){
+  const loadBtn = e.target.closest('[data-load-season]');
+  if(loadBtn){ loadSavedSeason(loadBtn.dataset.loadSeason); return; }
+  const delBtn = e.target.closest('[data-delete-season]');
+  if(delBtn){ deleteSavedSeason(delBtn.dataset.deleteSeason); }
+});
 
 
 /* =========================================================
