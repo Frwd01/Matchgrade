@@ -713,20 +713,6 @@
   .result-body{display:none;}
   .result-body.show{display:block;}
 
-  @keyframes stampImpact{
-    0%{ transform:scale(0.5) rotate(-24deg); opacity:0; }
-    55%{ transform:scale(1.08) rotate(-3deg); opacity:1; }
-    75%{ transform:scale(0.97) rotate(-8deg); }
-    100%{ transform:scale(1) rotate(-6deg); }
-  }
-  .stamp.impact{
-    animation:stampImpact 0.5s cubic-bezier(.25,.6,.3,1.3) both;
-  }
-  @media (prefers-reduced-motion: reduce){
-    .stamp.impact{ animation:none; }
-    .radar-data-poly, .radar-dot{ animation:none; }
-  }
-
   .player-line{
     font-family:'Oswald', sans-serif;
     font-size:0.95rem;
@@ -755,7 +741,6 @@
     justify-content:center;
     transform:rotate(-6deg);
     flex-direction:column;
-    box-shadow: 3px 4px 0 rgba(27,27,24,0.06), 0 1px 2px rgba(27,27,24,0.04);
   }
 
   .stamp::before{
@@ -871,6 +856,111 @@
 
   /* ---------- COMPARISON SHARE CARD ---------- */
   .cmp-share-actions{margin-top:18px;}
+
+  /* ---------- COMPARISON RADAR ---------- */
+  .cmp-radar-wrap{
+    border-top:1px dashed var(--line);
+    padding-top:18px;
+    margin-top:20px;
+    text-align:center;
+    position:relative;
+  }
+  .cmp-radar-wrap svg{max-width:340px;width:100%;height:auto;overflow:visible;touch-action:manipulation;}
+  .cmp-radar-legend{
+    display:flex;
+    justify-content:center;
+    gap:18px;
+    margin-top:10px;
+    font-family:'Special Elite',monospace;
+    font-size:0.72rem;
+  }
+  .cmp-radar-legend span{display:inline-flex;align-items:center;gap:6px;}
+  .cmp-radar-legend .swatch{width:11px;height:11px;border-radius:50%;display:inline-block;}
+  .cmp-radar-tooltip{
+    position:absolute;
+    pointer-events:none;
+    transform:translate(-50%,-100%);
+    background:var(--ink);
+    color:var(--paper);
+    font-family:'Oswald',sans-serif;
+    font-size:0.76rem;
+    white-space:nowrap;
+    padding:6px 11px;
+    border-radius:2px;
+    opacity:0;
+    transition:opacity 0.12s ease;
+    z-index:20;
+    top:0;
+    left:0;
+  }
+  .cmp-radar-tooltip.show{opacity:1;}
+  .cmp-radar-tooltip::after{
+    content:"";
+    position:absolute;
+    top:100%;
+    left:50%;
+    transform:translateX(-50%);
+    border:5px solid transparent;
+    border-top-color:var(--ink);
+  }
+  .cmp-radar-hit{cursor:pointer;-webkit-tap-highlight-color:transparent;}
+  @keyframes cmpPolyInA{ from{transform:scale(0.3);opacity:0;} to{transform:scale(1);opacity:1;} }
+  @keyframes cmpPolyInB{ from{transform:scale(0.3);opacity:0;} to{transform:scale(1);opacity:1;} }
+  .cmp-poly-a{transform-origin:140px 130px;animation:cmpPolyInA 0.5s cubic-bezier(.2,.9,.3,1.2) both;}
+  .cmp-poly-b{transform-origin:140px 130px;animation:cmpPolyInB 0.5s cubic-bezier(.2,.9,.3,1.2) 0.12s both;}
+  @media (prefers-reduced-motion: reduce){
+    .cmp-poly-a, .cmp-poly-b{animation:none;}
+  }
+
+  /* ---------- DIVERGING BAR CHART ---------- */
+  .cmp-bars-wrap{
+    border-top:1px dashed var(--line);
+    padding-top:18px;
+    margin-top:20px;
+  }
+  .cmp-bar-row{
+    margin-bottom:13px;
+  }
+  .cmp-bar-row:last-child{margin-bottom:0;}
+  .cmp-bar-labels{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    font-family:'Oswald',sans-serif;
+    font-size:0.78rem;
+    margin-bottom:4px;
+  }
+  .cmp-bar-labels .bar-val{font-weight:600;}
+  .cmp-bar-labels .bar-val.win{color:var(--accent);}
+  .cmp-bar-name{
+    text-align:center;
+    font-family:'Special Elite',monospace;
+    font-size:0.66rem;
+    color:var(--ink-soft);
+    flex:1;
+  }
+  .cmp-bar-track{
+    position:relative;
+    display:flex;
+    height:9px;
+    background:var(--paper-dark);
+    border:1px solid var(--line);
+  }
+  .cmp-bar-track .half{
+    width:50%;
+    position:relative;
+    overflow:hidden;
+  }
+  .cmp-bar-track .half.left{border-right:1px solid var(--line);}
+  .cmp-bar-fill{
+    position:absolute;
+    top:0;
+    bottom:0;
+    width:0%;
+    transition:width 0.5s cubic-bezier(.2,.8,.3,1);
+  }
+  .cmp-bar-fill.left{right:0;}
+  .cmp-bar-fill.right{left:0;}
   .cmp-card{width:100%;max-width:820px;margin:0 auto;padding:32px 36px 28px;background:var(--paper);color:var(--ink);border:1px solid var(--ink);position:relative;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.08);}
   .cmp-card::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at top left,rgba(47,82,51,.04),transparent 45%),repeating-linear-gradient(0deg,rgba(0,0,0,.012) 0,rgba(0,0,0,.012) 1px,transparent 1px,transparent 3px);}
   .cmp-card-inner{position:relative;z-index:1;}
@@ -1307,75 +1397,28 @@
   /* ---------- MATCHGRADE RADAR ---------- */
   .radar-wrap{
     border-top:1px dashed var(--line);
-    padding-top:18px;
+    padding-top:16px;
     margin-top:16px;
     text-align:center;
-    position:relative;
   }
   .radar-title{
     font-family:'Oswald',sans-serif;
-    font-size:0.7rem;
+    font-size:0.68rem;
     letter-spacing:0.6px;
     color:var(--ink-soft);
-    margin-bottom:6px;
+    margin-bottom:10px;
     text-align:left;
   }
-  .radar-hint{
-    font-family:'Special Elite',monospace;
-    font-size:0.64rem;
-    color:var(--ink-soft);
-    opacity:0.75;
+  .radar-wrap svg{max-width:280px;width:100%;height:auto;}
+  .radar-legend{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:8px 14px;
     margin-top:8px;
-  }
-  .radar-wrap svg{max-width:340px;width:100%;height:auto;overflow:visible;touch-action:manipulation;}
-  .radar-hit{
-    cursor:pointer;
-    -webkit-tap-highlight-color:transparent;
-  }
-  .radar-tooltip{
-    position:absolute;
-    pointer-events:none;
-    transform:translate(-50%,-100%);
-    background:var(--ink);
-    color:var(--paper);
-    font-family:'Oswald',sans-serif;
-    font-size:0.78rem;
-    white-space:nowrap;
-    padding:6px 11px;
-    border-radius:2px;
-    opacity:0;
-    transition:opacity 0.12s ease;
-    z-index:20;
-    top:0;
-    left:0;
-  }
-  .radar-tooltip.show{opacity:1;}
-  .radar-tooltip b{color:var(--gold);font-weight:600;margin-left:5px;}
-  .radar-tooltip::after{
-    content:"";
-    position:absolute;
-    top:100%;
-    left:50%;
-    transform:translateX(-50%);
-    border:5px solid transparent;
-    border-top-color:var(--ink);
-  }
-  @keyframes radarPolyIn{
-    from{ transform:scale(0.3); opacity:0; }
-    to{ transform:scale(1); opacity:1; }
-  }
-  @keyframes radarDotIn{
-    from{ opacity:0; transform:scale(0); }
-    to{ opacity:1; transform:scale(1); }
-  }
-  .radar-data-poly{
-    transform-origin:140px 130px;
-    animation:radarPolyIn 0.55s cubic-bezier(.2,.9,.3,1.2) both;
-  }
-  .radar-dot{
-    transform-box:fill-box;
-    transform-origin:center;
-    animation:radarDotIn 0.4s ease both;
+    font-family:'Special Elite',monospace;
+    font-size:0.68rem;
+    color:var(--ink-soft);
   }
 
   /* ---------- CUSTOM FORMULA MODE ---------- */
@@ -1834,11 +1877,10 @@
           <div id="bdList"></div>
         </div>
         <div class="formula-active-note" id="formulaActiveNote">Custom formula applied  this rating uses your weights, not the default MatchGrade formula.</div>
-        <div class="radar-wrap" id="radarWrap">
+        <div class="radar-wrap">
           <div class="radar-title">MATCHGRADE RADAR</div>
           <svg id="radarSvg" viewBox="0 0 280 260"></svg>
-          <div class="radar-tooltip" id="radarTooltip"></div>
-          <div class="radar-hint">tap or hover a point for its score</div>
+          <div class="radar-legend" id="radarLegend"></div>
         </div>
         <div class="tier-line" id="rTier"></div>
         <div class="share-card-actions">
@@ -1903,7 +1945,10 @@
       </div>
     </div>
 
-    <button class="go-btn" style="margin-top:18px;" onclick="runComparison()">Compare performances</button>
+    <div style="display:flex;gap:10px;margin-top:18px;flex-wrap:wrap;">
+      <button class="go-btn" style="flex:1;margin-top:0;" onclick="runComparison()">Compare performances</button>
+      <button type="button" class="go-btn" style="flex:0 0 auto;margin-top:0;background:transparent;color:var(--ink);border:1.5px solid var(--ink);padding:14px 16px;" onclick="tryCompareExample()" title="Fill two realistic sample performances and compare them">Try an example</button>
+    </div>
 
     <div class="compare-result" id="compareResult" style="display:none;">
       <div class="compare-summary">
@@ -1919,6 +1964,19 @@
       </div>
       <div class="compare-winner" id="cmpWinner"></div>
       <div class="compare-diff" id="cmpDiff"></div>
+
+      <div class="cmp-radar-wrap" id="cmpRadarWrap">
+        <div class="radar-title">HEAD-TO-HEAD RADAR</div>
+        <svg id="cmpRadarSvg" viewBox="0 0 280 265"></svg>
+        <div class="cmp-radar-tooltip" id="cmpRadarTooltip"></div>
+        <div class="cmp-radar-legend" id="cmpRadarLegend"></div>
+      </div>
+
+      <div class="cmp-bars-wrap" id="cmpBarsWrap">
+        <div class="radar-title">STAT BY STAT</div>
+        <div id="cmpBarsList"></div>
+      </div>
+
       <div id="cmpCategories"></div>
       <div class="cmp-share-actions">
         <button type="button" class="share-card-btn" onclick="openCompareShareCard()">Share comparison card</button>
@@ -2645,12 +2703,6 @@ function renderResult(rawRating, rawBreakdown, roleLabelText){
   if(rating < 5.6) color = 'var(--red)';
   else if(rating >= 8.0) color = 'var(--gold)';
   stamp.style.setProperty('--stamp-color', color);
-
-  // Restart the impact animation each time a rating is (re)calculated,
-  // even if the class is already present from a previous grade.
-  stamp.classList.remove('impact');
-  void stamp.offsetWidth;
-  stamp.classList.add('impact');
 
   const club = document.getElementById('clubName').value.trim() || 'No club entered';
   const cardPrefs = loadCardPrefs();
@@ -3423,16 +3475,11 @@ function drawRadar(categories){
   const labels = Object.keys(categories);
   const values = Object.values(categories);
   const n = labels.length;
-  const cx = 140, cy = 130, maxR = 100;
+  const cx = 140, cy = 120, maxR = 88;
   const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#2F5233';
-  const goldColor = getComputedStyle(document.documentElement).getPropertyValue('--gold').trim() || '#B8933F';
   const lineColor = getComputedStyle(document.documentElement).getPropertyValue('--line').trim() || '#c9c3b2';
-  const softColor = getComputedStyle(document.documentElement).getPropertyValue('--ink-soft').trim() || '#4A473F';
   const inkColor = getComputedStyle(document.documentElement).getPropertyValue('--ink').trim() || '#1B1B18';
-  const paperColor = getComputedStyle(document.documentElement).getPropertyValue('--paper').trim() || '#EDEAE2';
-
-  const overallAvg = values.reduce((a,b)=>a+b,0) / values.length;
-  const peakColor = overallAvg >= 7.3 ? goldColor : accentColor;
+  const softColor = getComputedStyle(document.documentElement).getPropertyValue('--ink-soft').trim() || '#4A473F';
 
   function pointFor(i, value, radius){
     const angle = (Math.PI * 2 * i / n) - Math.PI/2;
@@ -3440,27 +3487,10 @@ function drawRadar(categories){
     return [cx + r*Math.cos(angle), cy + r*Math.sin(angle)];
   }
 
-  const uid = 'radarGrad' + Math.random().toString(36).slice(2,8);
-  const defs = `<defs>
-    <radialGradient id="${uid}" cx="50%" cy="50%" r="65%">
-      <stop offset="0%" stop-color="${peakColor}" stop-opacity="0.42"/>
-      <stop offset="100%" stop-color="${peakColor}" stop-opacity="0.10"/>
-    </radialGradient>
-    <filter id="${uid}-glow" x="-60%" y="-60%" width="220%" height="220%">
-      <feGaussianBlur stdDeviation="3.2" result="blur"/>
-      <feMerge>
-        <feMergeNode in="blur"/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
-    </filter>
-  </defs>`;
-
-  // Alternating ring fill for subtle depth, plus ring strokes
   let rings = '';
-  [1,0.75,0.5,0.25].forEach((f,idx)=>{
+  [0.25,0.5,0.75,1].forEach(f=>{
     const pts = labels.map((_,i)=>pointFor(i,10*f,maxR).join(',')).join(' ');
-    const fillTone = idx % 2 === 0 ? 'transparent' : (getComputedStyle(document.documentElement).getPropertyValue('--paper-dark').trim() || '#00000006');
-    rings += `<polygon points="${pts}" fill="${fillTone}" fill-opacity="0.35" stroke="${lineColor}" stroke-width="1"/>`;
+    rings += `<polygon points="${pts}" fill="none" stroke="${lineColor}" stroke-width="1"/>`;
   });
 
   let spokes = '';
@@ -3468,72 +3498,23 @@ function drawRadar(categories){
   labels.forEach((lab,i)=>{
     const [x,y] = pointFor(i,10,maxR);
     spokes += `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="${lineColor}" stroke-width="1"/>`;
-    const [lx,ly] = pointFor(i,13.2,maxR);
-    labelSvg += `<text x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="middle" font-family="Oswald,sans-serif" font-weight="500" font-size="10.5" fill="${inkColor}">${esc(lab)}</text>`;
+    const [lx,ly] = pointFor(i,12.4,maxR);
+    labelSvg += `<text x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="middle" font-family="Special Elite,monospace" font-size="9" fill="${softColor}">${esc(lab)}</text>`;
   });
 
   const dataPts = labels.map((lab,i)=>pointFor(i, values[i], maxR).join(',')).join(' ');
-  const dataPoly = `<polygon class="radar-data-poly" points="${dataPts}" fill="url(#${uid})" stroke="${peakColor}" stroke-width="2.5" stroke-linejoin="round" filter="url(#${uid}-glow)"/>`;
+  const dataPoly = `<polygon points="${dataPts}" fill="${accentColor}" fill-opacity="0.22" stroke="${accentColor}" stroke-width="2"/>`;
 
   let dots = '';
-  let hitTargets = '';
   labels.forEach((lab,i)=>{
     const [x,y] = pointFor(i, values[i], maxR);
-    const delay = (i * 0.05).toFixed(2);
-    dots += `<circle class="radar-dot" cx="${x}" cy="${y}" r="4.5" fill="${paperColor}" stroke="${peakColor}" stroke-width="2.5" style="animation-delay:${delay}s"/>`;
-    // Larger invisible circle on top for an actually tappable target
-    // (44px+ recommended touch target; the visible dot alone is too small).
-    hitTargets += `<circle class="radar-hit" cx="${x}" cy="${y}" r="16" fill="transparent" data-label="${esc(lab)}" data-value="${values[i].toFixed(1)}"/>`;
+    dots += `<circle cx="${x}" cy="${y}" r="3" fill="${accentColor}"/>`;
   });
 
-  // Center point for visual anchor
-  const centerDot = `<circle cx="${cx}" cy="${cy}" r="2" fill="${lineColor}"/>`;
+  svg.innerHTML = rings + spokes + dataPoly + dots + labelSvg;
 
-  svg.setAttribute('viewBox', '0 0 280 265');
-  svg.innerHTML = defs + rings + spokes + centerDot + dataPoly + dots + labelSvg + hitTargets;
-
-  attachRadarTooltipEvents(svg);
-}
-
-/* Tooltip on hover (desktop) and tap (mobile) for each radar point.
-   Uses pointer events so one code path covers mouse and touch. */
-function attachRadarTooltipEvents(svg){
-  const wrap = document.getElementById('radarWrap');
-  const tooltip = document.getElementById('radarTooltip');
-  if(!wrap || !tooltip) return;
-
-  function showTooltip(target){
-    const label = target.dataset.label;
-    const value = target.dataset.value;
-    tooltip.innerHTML = `${esc(label)}<b>${esc(value)}</b>`;
-    const wrapRect = wrap.getBoundingClientRect();
-    const targetRect = target.getBoundingClientRect();
-    const x = targetRect.left + targetRect.width/2 - wrapRect.left;
-    const y = targetRect.top - wrapRect.top - 8;
-    tooltip.style.left = x + 'px';
-    tooltip.style.top = y + 'px';
-    tooltip.classList.add('show');
-  }
-  function hideTooltip(){
-    tooltip.classList.remove('show');
-  }
-
-  svg.querySelectorAll('.radar-hit').forEach(hit=>{
-    hit.addEventListener('pointerenter', ()=>showTooltip(hit));
-    hit.addEventListener('pointerleave', hideTooltip);
-    hit.addEventListener('pointerdown', (e)=>{
-      e.stopPropagation();
-      showTooltip(hit);
-    });
-  });
-
-  // Tapping anywhere else on the page dismisses an open tooltip on mobile.
-  if(!wrap.dataset.dismissBound){
-    wrap.dataset.dismissBound = '1';
-    document.addEventListener('pointerdown', (e)=>{
-      if(!wrap.contains(e.target)) hideTooltip();
-    });
-  }
+  const legend = document.getElementById('radarLegend');
+  legend.innerHTML = labels.map((lab,i)=>`<span>${esc(lab)}: ${values[i].toFixed(1)}</span>`).join('');
 }
 
 /* =========================================================
@@ -4046,11 +4027,15 @@ function runComparison(){
   const a = rateFromInputs('A', compareSport);
   const b = rateFromInputs('B', compareSport);
 
+  const firstName = (full)=> (full||'').trim().split(/\s+/)[0] || full;
+  const aFirst = firstName(a.name);
+  const bFirst = firstName(b.name);
+
   document.getElementById('compareResult').style.display = 'block';
   document.getElementById('cmpScoreA').textContent = a.rating.toFixed(1);
   document.getElementById('cmpScoreB').textContent = b.rating.toFixed(1);
-  document.getElementById('cmpLabelA').textContent = a.name;
-  document.getElementById('cmpLabelB').textContent = b.name;
+  document.getElementById('cmpLabelA').textContent = aFirst;
+  document.getElementById('cmpLabelB').textContent = bFirst;
 
   const diff = a.rating - b.rating;
   let winnerText, diffText;
@@ -4058,10 +4043,10 @@ function runComparison(){
     winnerText = 'TIE';
     diffText = 'Performances essentially level';
   } else if(diff>0){
-    winnerText = a.name.toUpperCase() + ' WINS';
+    winnerText = aFirst.toUpperCase() + ' WINS';
     diffText = `+${diff.toFixed(1)} rating difference`;
   } else {
-    winnerText = b.name.toUpperCase() + ' WINS';
+    winnerText = bFirst.toUpperCase() + ' WINS';
     diffText = `+${Math.abs(diff).toFixed(1)} rating difference`;
   }
   document.getElementById('cmpWinner').textContent = winnerText;
@@ -4071,12 +4056,22 @@ function runComparison(){
   const cats = [];
   const allKeys = new Set([...Object.keys(a.raw), ...Object.keys(b.raw)]);
   const labelMap = {
-    goals:'Goals', assists:'Assists',
-    tackles:'Tackles', interceptions:'Interceptions', clearances:'Clearances',
-    keyPasses:'Key passes', dribbles:'Dribbles', saves:'Saves',
-    runs:'Runs', wickets:'Wickets', overs:'Overs', balls:'Balls faced',
-    runsConceded:'Runs conceded', catches:'Catches', stumpings:'Stumpings',
-    passAcc:'Pass accuracy', shotsOnTarget:'Shots on target', shotsTotal:'Shots'
+    aerialsTotal:'Aerials contested', aerialsWon:'Aerials won', assists:'Assists',
+    balls:'Balls faced', blocks:'Blocks', byes:'Byes conceded', catches:'Catches taken',
+    claims:'Crosses claimed', cleanSheet:'Clean sheet', clearances:'Clearances',
+    crosses:'Accurate crosses', dismissed:'Got out', dispossessed:'Times dispossessed',
+    dribbles:'Successful dribbles', duelsTotal:'Duels contested', duelsWon:'Duels won',
+    foulsCommitted:'Fouls committed', foulsWon:'Fouls won', fours:'Boundaries (4s)',
+    goals:'Goals', holdUp:'Hold-up duels won', interceptions:'Interceptions',
+    keyPasses:'Key passes', longBalls:'Long balls completed', maidens:'Maiden overs',
+    offsides:'Offsides', overs:'Overs bowled', passAcc:'Pass accuracy %',
+    passesCompleted:'Passes completed', penSaved:'Penalties saved',
+    progressiveCarries:'Progressive carries', progressivePasses:'Progressive passes',
+    recoveries:'Recoveries', runs:'Runs scored', runsConceded:'Runs conceded',
+    saves:'Saves made', shotsFaced:'Shots faced', shotsOnTarget:'Shots on target',
+    shotsTotal:'Shots taken', sixes:'Sixes', stumpings:'Stumpings',
+    sweeperActions:'Sweeper actions', tackles:'Tackles won', touchesBox:'Touches in box',
+    wickets:'Wickets taken', wides:'Wides + no-balls'
   };
   allKeys.forEach(k=>{
     if(['minutes'].includes(k)) return;
@@ -4097,21 +4092,157 @@ function runComparison(){
     winner: Math.abs(diff)<0.05 ? 'tie' : (diff>0?'A':'B')
   });
 
-  document.getElementById('cmpCategories').innerHTML = cats.map(c=>{
-    const aCls = c.winner==='A'?'winner':(c.winner==='tie'?'tie':'loser');
-    const bCls = c.winner==='B'?'winner':(c.winner==='tie'?'tie':'loser');
-    return `<div class="cat-row">
-      <div class="${aCls}" style="text-align:right">${c.aVal}</div>
-      <div class="cat-name">${esc(c.label)}</div>
-      <div class="${bCls}" style="text-align:left">${c.bVal}</div>
-    </div>`;
-  }).join('');
+  drawComparisonRadar(a.breakdown, b.breakdown, aFirst, bFirst);
+  drawComparisonBars(cats);
+
+  // Old flat text list is superseded by the radar + bar chart above;
+  // left empty rather than removed so nothing else that references
+  // #cmpCategories breaks.
+  document.getElementById('cmpCategories').innerHTML = '';
 
   const clubA = document.getElementById('cmpA_club') ? document.getElementById('cmpA_club').value.trim() : '';
   const clubB = document.getElementById('cmpB_club') ? document.getElementById('cmpB_club').value.trim() : '';
-  lastComparison = { a, b, diff, winnerText, diffText, cats, sport: compareSport, clubA, clubB, logoA: logoState.A, logoB: logoState.B };
+  lastComparison = { a: {...a, name: aFirst}, b: {...b, name: bFirst}, diff, winnerText, diffText, cats, sport: compareSport, clubA, clubB, logoA: logoState.A, logoB: logoState.B };
 
   document.getElementById('compareResult').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+/* =========================================================
+   COMPARISON RADAR
+   Two overlaid polygons (Player A / Player B) using the same
+   six-category system as the calculator's own radar, so the
+   shapes are directly comparable and built from the exact same
+   rating breakdown that produced each player's score.
+========================================================= */
+function drawComparisonRadar(breakdownA, breakdownB, nameA, nameB){
+  const svg = document.getElementById('cmpRadarSvg');
+  if(!svg) return;
+  const catsA = computeRadarCategories(breakdownA);
+  const catsB = computeRadarCategories(breakdownB);
+  const labels = Object.keys(catsA);
+  const valuesA = Object.values(catsA);
+  const valuesB = Object.values(catsB);
+  const n = labels.length;
+  const cx = 140, cy = 130, maxR = 100;
+
+  const colorA = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#2F5233';
+  const colorB = '#B23A2F';
+  const lineColor = getComputedStyle(document.documentElement).getPropertyValue('--line').trim() || '#c9c3b2';
+  const inkColor = getComputedStyle(document.documentElement).getPropertyValue('--ink').trim() || '#1B1B18';
+  const paperColor = getComputedStyle(document.documentElement).getPropertyValue('--paper').trim() || '#EDEAE2';
+
+  function pointFor(i, value, radius){
+    const angle = (Math.PI * 2 * i / n) - Math.PI/2;
+    const r = (value/10) * radius;
+    return [cx + r*Math.cos(angle), cy + r*Math.sin(angle)];
+  }
+
+  let rings = '';
+  [1,0.75,0.5,0.25].forEach(f=>{
+    const pts = labels.map((_,i)=>pointFor(i,10*f,maxR).join(',')).join(' ');
+    rings += `<polygon points="${pts}" fill="none" stroke="${lineColor}" stroke-width="1"/>`;
+  });
+
+  let spokes = '', labelSvg = '';
+  labels.forEach((lab,i)=>{
+    const [x,y] = pointFor(i,10,maxR);
+    spokes += `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="${lineColor}" stroke-width="1"/>`;
+    const [lx,ly] = pointFor(i,13.2,maxR);
+    labelSvg += `<text x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="middle" font-family="Oswald,sans-serif" font-weight="500" font-size="10.5" fill="${inkColor}">${esc(lab)}</text>`;
+  });
+
+  const ptsA = labels.map((_,i)=>pointFor(i, valuesA[i], maxR).join(',')).join(' ');
+  const ptsB = labels.map((_,i)=>pointFor(i, valuesB[i], maxR).join(',')).join(' ');
+  const polyA = `<polygon class="cmp-poly-a" points="${ptsA}" fill="${colorA}" fill-opacity="0.20" stroke="${colorA}" stroke-width="2.5"/>`;
+  const polyB = `<polygon class="cmp-poly-b" points="${ptsB}" fill="${colorB}" fill-opacity="0.16" stroke="${colorB}" stroke-width="2.5" stroke-dasharray="5 3"/>`;
+
+  let dotsA = '', dotsB = '', hits = '';
+  labels.forEach((lab,i)=>{
+    const [xa,ya] = pointFor(i, valuesA[i], maxR);
+    const [xb,yb] = pointFor(i, valuesB[i], maxR);
+    dotsA += `<circle cx="${xa}" cy="${ya}" r="4" fill="${paperColor}" stroke="${colorA}" stroke-width="2.5"/>`;
+    dotsB += `<circle cx="${xb}" cy="${yb}" r="4" fill="${paperColor}" stroke="${colorB}" stroke-width="2.5"/>`;
+    hits += `<circle class="cmp-radar-hit" cx="${xa}" cy="${ya}" r="14" fill="transparent" data-label="${esc(nameA)} · ${esc(lab)}" data-value="${valuesA[i].toFixed(1)}"/>`;
+    hits += `<circle class="cmp-radar-hit" cx="${xb}" cy="${yb}" r="14" fill="transparent" data-label="${esc(nameB)} · ${esc(lab)}" data-value="${valuesB[i].toFixed(1)}"/>`;
+  });
+
+  const centerDot = `<circle cx="${cx}" cy="${cy}" r="2" fill="${lineColor}"/>`;
+
+  svg.innerHTML = rings + spokes + centerDot + polyA + polyB + dotsA + dotsB + labelSvg + hits;
+
+  const legend = document.getElementById('cmpRadarLegend');
+  if(legend){
+    legend.innerHTML = `<span><span class="swatch" style="background:${colorA};"></span>${esc(nameA)}</span><span><span class="swatch" style="background:${colorB};border:1.5px dashed ${colorB};background:transparent;"></span>${esc(nameB)}</span>`;
+  }
+
+  attachCmpRadarTooltipEvents(svg);
+}
+
+function attachCmpRadarTooltipEvents(svg){
+  const wrap = document.getElementById('cmpRadarWrap');
+  const tooltip = document.getElementById('cmpRadarTooltip');
+  if(!wrap || !tooltip) return;
+
+  function showTooltip(target){
+    const label = target.dataset.label;
+    const value = target.dataset.value;
+    tooltip.innerHTML = `${esc(label)}<b style="color:var(--gold);margin-left:5px;">${esc(value)}</b>`;
+    const wrapRect = wrap.getBoundingClientRect();
+    const targetRect = target.getBoundingClientRect();
+    const x = targetRect.left + targetRect.width/2 - wrapRect.left;
+    const y = targetRect.top - wrapRect.top - 8;
+    tooltip.style.left = x + 'px';
+    tooltip.style.top = y + 'px';
+    tooltip.classList.add('show');
+  }
+  function hideTooltip(){ tooltip.classList.remove('show'); }
+
+  svg.querySelectorAll('.cmp-radar-hit').forEach(hit=>{
+    hit.addEventListener('pointerenter', ()=>showTooltip(hit));
+    hit.addEventListener('pointerleave', hideTooltip);
+    hit.addEventListener('pointerdown', (e)=>{ e.stopPropagation(); showTooltip(hit); });
+  });
+
+  if(!wrap.dataset.dismissBound){
+    wrap.dataset.dismissBound = '1';
+    document.addEventListener('pointerdown', (e)=>{
+      if(!wrap.contains(e.target)) hideTooltip();
+    });
+  }
+}
+
+/* =========================================================
+   DIVERGING BAR CHART
+   One row per stat category. Each player's value is scaled
+   against the larger of the two so the bars are always
+   readable regardless of the stat's natural range.
+========================================================= */
+function drawComparisonBars(cats){
+  const list = document.getElementById('cmpBarsList');
+  if(!list) return;
+
+  const rows = cats.filter(c => c.label !== 'Overall Rating').map(c=>{
+    const aNum = parseFloat(c.aVal) || 0;
+    const bNum = parseFloat(c.bVal) || 0;
+    const maxVal = Math.max(aNum, bNum, 0.0001);
+    const aPct = Math.max(0, Math.min(100, (aNum / maxVal) * 100));
+    const bPct = Math.max(0, Math.min(100, (bNum / maxVal) * 100));
+    const aWin = c.winner === 'A';
+    const bWin = c.winner === 'B';
+    return `<div class="cmp-bar-row">
+      <div class="cmp-bar-labels">
+        <span class="bar-val ${aWin?'win':''}">${esc(String(c.aVal))}</span>
+        <span class="cmp-bar-name">${esc(c.label)}</span>
+        <span class="bar-val ${bWin?'win':''}">${esc(String(c.bVal))}</span>
+      </div>
+      <div class="cmp-bar-track">
+        <div class="half left"><div class="cmp-bar-fill left" style="width:${aPct}%;background:${aWin ? 'var(--accent)' : 'var(--line)'};"></div></div>
+        <div class="half right"><div class="cmp-bar-fill right" style="width:${bPct}%;background:${bWin ? '#B23A2F' : 'var(--line)'};"></div></div>
+      </div>
+    </div>`;
+  }).join('');
+
+  list.innerHTML = rows;
 }
 
 /* =========================================================
@@ -4983,6 +5114,325 @@ function tryExample(){
       setTimeout(()=> grade(), 80);
     }, 120);
   }, 80);
+}
+
+
+/* =========================================================
+   COMPARE TRY AN EXAMPLE
+   20 soccer + 20 cricket head-to-head pairs. Cycles through a
+   shuffled deck so the same pair is not repeated until the full
+   set has been shown, then reshuffles (same idea as random but
+   without immediate repeats).
+========================================================= */
+const COMPARE_EXAMPLE_POOL = {
+  soccer: [
+    {
+      a: { name:'Alex Rivera', club:'Riverside FC', role:'ST', minutes:90,
+        stats:{ goals:2, assists:1, shotsTotal:5, shotsOnTarget:3, touchesBox:7, holdUp:3, dispossessed:1, aerialsWon:2 } },
+      b: { name:'Kian Doyle', club:'Ashford Town', role:'ST', minutes:90,
+        stats:{ goals:1, assists:0, shotsTotal:4, shotsOnTarget:2, touchesBox:5, holdUp:1, dispossessed:3, progressiveCarries:2 } }
+    },
+    {
+      a: { name:'Sam Okonkwo', club:'Harbour United', role:'GK', minutes:90,
+        stats:{ saves:7, shotsFaced:9, claims:3, penSaved:0, sweeperActions:2, longBalls:6, passAcc:72 } },
+      b: { name:'Elena Vos', club:'Northgate', role:'GK', minutes:90,
+        stats:{ saves:5, shotsFaced:11, claims:1, penSaved:1, sweeperActions:0, longBalls:3, passAcc:58 } }
+    },
+    {
+      a: { name:'Marcus Hale', club:'Northbridge', role:'CB', minutes:90,
+        stats:{ tackles:4, interceptions:3, clearances:6, passAcc:88, duelsWon:7, duelsTotal:9, aerialsWon:4, blocks:2 } },
+      b: { name:'Ben Cartwright', club:'Milltown', role:'CB', minutes:90,
+        stats:{ tackles:1, interceptions:1, clearances:4, passAcc:79, duelsWon:3, duelsTotal:7, aerialsWon:2, blocks:0 } }
+    },
+    {
+      a: { name:'Lucas Berg', club:'Fjell FC', role:'FB', minutes:90,
+        stats:{ tackles:5, interceptions:3, keyPasses:1, passAcc:86, dribbles:4, assists:0, goals:1, duelsWon:8, duelsTotal:10, crosses:2 } },
+      b: { name:'Prince', club:'Coastal FC', role:'FB', minutes:90,
+        stats:{ tackles:3, interceptions:2, keyPasses:2, passAcc:81, dribbles:2, assists:1, duelsWon:5, duelsTotal:8, crosses:3 } }
+    },
+    {
+      a: { name:'Chen Wei', club:'Pearl City', role:'DM', minutes:90,
+        stats:{ tackles:7, interceptions:6, passAcc:93, passesCompleted:61, duelsWon:9, duelsTotal:11, keyPasses:2, progressivePasses:5 } },
+      b: { name:'Owen', club:'Steelworks', role:'DM', minutes:90,
+        stats:{ tackles:5, interceptions:4, passAcc:90, passesCompleted:48, duelsWon:6, duelsTotal:9, keyPasses:1, recoveries:7 } }
+    },
+    {
+      a: { name:'Mateo Silva', club:'Campo Verde', role:'CM', minutes:90,
+        stats:{ passAcc:84, keyPasses:5, passesCompleted:44, tackles:1, interceptions:1, dribbles:4, goals:1, assists:1, shotsTotal:3 } },
+      b: { name:'Jordan Lee', club:'Eastside Athletic', role:'CM', minutes:88,
+        stats:{ passAcc:89, keyPasses:3, passesCompleted:52, tackles:2, interceptions:2, dribbles:2, goals:0, assists:1, progressivePasses:6 } }
+    },
+    {
+      a: { name:'Diego Santos', club:'Metro City', role:'AM', minutes:78,
+        stats:{ keyPasses:4, dribbles:3, goals:1, assists:2, shotsOnTarget:2, dispossessed:1, progressiveCarries:5, touchesBox:4 } },
+      b: { name:'Ravi Kapoor', club:'Lotus FC', role:'AM', minutes:62,
+        stats:{ keyPasses:2, dribbles:1, goals:1, assists:0, shotsOnTarget:2, dispossessed:3, touchesBox:3, passAcc:81 } }
+    },
+    {
+      a: { name:'Zara Al-Farsi', club:'Oasis SC', role:'WNG', minutes:90,
+        stats:{ dribbles:8, keyPasses:2, goals:2, assists:0, shotsOnTarget:4, touchesBox:6, dispossessed:1, crosses:1, shotsTotal:6 } },
+      b: { name:'Theo Nash', club:'Valley Rovers', role:'WNG', minutes:82,
+        stats:{ dribbles:5, keyPasses:3, goals:1, assists:1, shotsOnTarget:2, touchesBox:5, dispossessed:2, progressiveCarries:6, crosses:2 } }
+    },
+    {
+      a: { name:'Yara Mbeki', club:'Summit Athletic', role:'ST', minutes:90,
+        stats:{ goals:3, assists:0, shotsTotal:7, shotsOnTarget:5, touchesBox:9, holdUp:4, dispossessed:0, aerialsWon:3 } },
+      b: { name:'Nora Lindqvist', club:'Vikings IK', role:'ST', minutes:90,
+        stats:{ goals:0, assists:0, shotsTotal:2, shotsOnTarget:0, touchesBox:3, holdUp:1, dispossessed:2, offsides:1 } }
+    },
+    {
+      a: { name:'Tariq Hassan', club:'Desert Lions', role:'GK', minutes:90,
+        stats:{ saves:12, shotsFaced:14, claims:4, penSaved:0, sweeperActions:3, longBalls:8, passAcc:65 } },
+      b: { name:'Jonas', club:'Alpen SC', role:'GK', minutes:90,
+        stats:{ saves:4, shotsFaced:5, claims:2, penSaved:0, sweeperActions:1, longBalls:9, passAcc:78 } }
+    },
+    {
+      a: { name:'Sofia Ruiz', club:'Iberia FC', role:'CB', minutes:90,
+        stats:{ tackles:2, interceptions:5, clearances:8, passAcc:91, duelsWon:5, duelsTotal:8, aerialsWon:6, blocks:1, goals:1 } },
+      b: { name:'Tommy Walsh', club:'Dockers FC', role:'CB', minutes:90,
+        stats:{ tackles:6, interceptions:2, clearances:9, passAcc:82, duelsWon:8, duelsTotal:11, aerialsWon:5, blocks:3 } }
+    },
+    {
+      a: { name:'Amara Nwosu', club:'Lagos United', role:'FB', minutes:78,
+        stats:{ tackles:2, interceptions:1, keyPasses:4, passAcc:77, dribbles:6, assists:2, duelsWon:4, duelsTotal:6, crosses:5, progressiveCarries:7 } },
+      b: { name:'Elif Yilmaz', club:'Bosphorus SK', role:'FB', minutes:70,
+        stats:{ tackles:1, interceptions:1, keyPasses:2, passAcc:74, dribbles:2, assists:0, duelsWon:3, duelsTotal:7, crosses:1 } }
+    },
+    {
+      a: { name:'Bruno', club:'Setubal SC', role:'DM', minutes:90,
+        stats:{ tackles:6, interceptions:5, passAcc:91, passesCompleted:55, duelsWon:8, duelsTotal:10, keyPasses:1, recoveries:9, blocks:3 } },
+      b: { name:'Peter Ndlovu', club:'Zambezi United', role:'DM', minutes:90,
+        stats:{ tackles:5, interceptions:3, passAcc:83, passesCompleted:38, duelsWon:6, duelsTotal:9, keyPasses:0, recoveries:5, blocks:1 } }
+    },
+    {
+      a: { name:'Zoe MacAllister', club:'Lochside', role:'CM', minutes:90,
+        stats:{ passAcc:90, keyPasses:3, passesCompleted:47, tackles:1, interceptions:1, dribbles:2, goals:1, assists:1, progressiveCarries:4 } },
+      b: { name:'Hannah Cole', club:'Westfield', role:'CM', minutes:90,
+        stats:{ passAcc:76, keyPasses:1, passesCompleted:33, tackles:4, interceptions:3, dribbles:0, goals:0, assists:0 } }
+    },
+    {
+      a: { name:'Ines Dubois', club:'Lyonette', role:'AM', minutes:90,
+        stats:{ keyPasses:6, dribbles:5, goals:0, assists:3, shotsOnTarget:1, dispossessed:2, shotsTotal:3, progressivePasses:4 } },
+      b: { name:'Nathan Brooks', club:'Kingston FC', role:'AM', minutes:80,
+        stats:{ keyPasses:1, dribbles:1, goals:0, assists:0, shotsOnTarget:0, dispossessed:4, shotsTotal:2, passAcc:72 } }
+    },
+    {
+      a: { name:'Jamal Carter', club:'Metro Wolves', role:'WNG', minutes:90,
+        stats:{ dribbles:9, keyPasses:3, goals:2, assists:1, shotsOnTarget:3, touchesBox:7, dispossessed:1, crosses:2, shotsTotal:5 } },
+      b: { name:"Finn O'Malley", club:'Green Isle', role:'WNG', minutes:90,
+        stats:{ dribbles:2, keyPasses:1, goals:0, assists:0, shotsOnTarget:0, touchesBox:2, dispossessed:4, progressiveCarries:3, passAcc:71 } }
+    },
+    {
+      a: { name:'Gabriel Santos', club:'Copa FC', role:'ST', minutes:90,
+        stats:{ goals:4, assists:0, shotsTotal:8, shotsOnTarget:6, touchesBox:10, holdUp:3, dispossessed:0, aerialsWon:2 } },
+      b: { name:'Victor Adeyemi', club:'Gateway FC', role:'ST', minutes:90,
+        stats:{ goals:1, assists:0, shotsTotal:3, shotsOnTarget:1, touchesBox:4, holdUp:2, dispossessed:4, foulsWon:2 } }
+    },
+    {
+      a: { name:'Maya Costa', club:'Algarve United', role:'GK', minutes:90,
+        stats:{ saves:6, shotsFaced:7, claims:4, penSaved:0, sweeperActions:2, longBalls:5, passAcc:70 } },
+      b: { name:'Andre Kovac', club:'Delta FC', role:'GK', minutes:90,
+        stats:{ saves:8, shotsFaced:13, claims:2, penSaved:0, sweeperActions:0, longBalls:4, passAcc:61 } }
+    },
+    {
+      a: { name:'Lena Hoffmann', club:'Rhein SC', role:'CB', minutes:90,
+        stats:{ tackles:3, interceptions:4, clearances:5, passAcc:90, duelsWon:6, duelsTotal:8, aerialsWon:3, blocks:1, progressivePasses:4, assists:1 } },
+      b: { name:'Sebastian Stan', club:'Nordkap FK', role:'CB', minutes:90,
+        stats:{ tackles:2, interceptions:1, clearances:6, passAcc:80, duelsWon:4, duelsTotal:9, aerialsWon:2, blocks:1 } }
+    },
+    {
+      a: { name:'Felix Braun', club:'Kaiser SC', role:'AM', minutes:90,
+        stats:{ keyPasses:5, dribbles:4, goals:2, assists:1, shotsOnTarget:3, dispossessed:2, progressiveCarries:6, touchesBox:6 } },
+      b: { name:'Selin Aydin', club:'Anadolu FK', role:'AM', minutes:90,
+        stats:{ keyPasses:3, dribbles:2, goals:0, assists:1, shotsOnTarget:1, dispossessed:2, shotsTotal:2, progressivePasses:5, passAcc:83 } }
+    }
+  ],
+  cricket: [
+    {
+      a: { name:'Arjun Patel', club:'Riverside CC', role:'BAT',
+        stats:{ runs:67, balls:48, fours:8, sixes:1, dismissed:true } },
+      b: { name:'Dev Rahman', club:'Canal Road', role:'BAT',
+        stats:{ runs:18, balls:32, fours:1, sixes:0, dismissed:true } }
+    },
+    {
+      a: { name:'Sophie Lang', club:'Meadow CC', role:'BAT',
+        stats:{ runs:112, balls:95, fours:12, sixes:2, dismissed:false } },
+      b: { name:'Arjun Patel', club:'Riverside CC', role:'BAT',
+        stats:{ runs:42, balls:55, fours:4, sixes:0, dismissed:true } }
+    },
+    {
+      a: { name:'Liam Croft', club:'Harbour CC', role:'BWL',
+        stats:{ overs:8, runsConceded:28, wickets:3, maidens:1, wides:2 } },
+      b: { name:'Aisha Khan', club:'Summit CC', role:'BWL',
+        stats:{ overs:10, runsConceded:41, wickets:1, maidens:0, wides:4 } }
+    },
+    {
+      a: { name:'Tom Bradley', club:'Hillside', role:'BWL',
+        stats:{ overs:6, runsConceded:15, wickets:4, maidens:2, wides:0 } },
+      b: { name:'Liam Croft', club:'Harbour CC', role:'BWL',
+        stats:{ overs:9, runsConceded:38, wickets:2, maidens:0, wides:1 } }
+    },
+    {
+      a: { name:'Mei Chen', club:'Eastside CC', role:'AR',
+        stats:{ runs:42, balls:31, fours:5, sixes:1, overs:6, runsConceded:22, wickets:2, dismissed:false } },
+      b: { name:'Jake Moretti', club:'Bayview', role:'AR',
+        stats:{ runs:8, balls:12, fours:1, sixes:0, overs:9, runsConceded:35, wickets:1, dismissed:true, maidens:0 } }
+    },
+    {
+      a: { name:'Noah Grant', club:'Valley CC', role:'WK',
+        stats:{ runs:38, balls:29, catches:2, stumpings:1, fours:4, sixes:0, dismissed:true } },
+      b: { name:'Priya Desai', club:'Lotus CC', role:'WK',
+        stats:{ runs:55, balls:41, catches:3, stumpings:0, fours:6, sixes:1, dismissed:false, byes:1 } }
+    },
+    {
+      a: { name:'Ravi Menon', club:'Coastal CC', role:'BAT',
+        stats:{ runs:88, balls:72, fours:9, sixes:2, dismissed:false } },
+      b: { name:'Ollie Shaw', club:'Millfield', role:'BAT',
+        stats:{ runs:24, balls:41, fours:2, sixes:0, dismissed:true } }
+    },
+    {
+      a: { name:'Haroon Ali', club:'Desert CC', role:'BWL',
+        stats:{ overs:10, runsConceded:22, wickets:5, maidens:3, wides:0 } },
+      b: { name:'Ben Price', club:'Riverside CC', role:'BWL',
+        stats:{ overs:7, runsConceded:45, wickets:0, maidens:0, wides:3 } }
+    },
+    {
+      a: { name:'Sara Iqbal', club:'Summit CC', role:'AR',
+        stats:{ runs:55, balls:40, fours:6, sixes:1, overs:4, runsConceded:18, wickets:2, dismissed:false } },
+      b: { name:'Chris Doyle', club:'Harbour CC', role:'AR',
+        stats:{ runs:15, balls:22, fours:1, sixes:0, overs:8, runsConceded:40, wickets:1, dismissed:true } }
+    },
+    {
+      a: { name:'Emma Walsh', club:'Meadow CC', role:'WK',
+        stats:{ runs:72, balls:58, catches:1, stumpings:2, fours:8, sixes:1, dismissed:false } },
+      b: { name:'Noah Grant', club:'Valley CC', role:'WK',
+        stats:{ runs:12, balls:18, catches:0, stumpings:0, fours:1, sixes:0, dismissed:true, byes:4 } }
+    },
+    {
+      a: { name:'Imran Shah', club:'Canal Road', role:'BAT',
+        stats:{ runs:51, balls:38, fours:5, sixes:2, dismissed:true } },
+      b: { name:'Sophie Lang', club:'Meadow CC', role:'BAT',
+        stats:{ runs:33, balls:48, fours:3, sixes:0, dismissed:true } }
+    },
+    {
+      a: { name:'Jack Turner', club:'Bayview', role:'BWL',
+        stats:{ overs:8, runsConceded:19, wickets:3, maidens:2, wides:1 } },
+      b: { name:'Aisha Khan', club:'Summit CC', role:'BWL',
+        stats:{ overs:6, runsConceded:32, wickets:1, maidens:0, wides:2 } }
+    },
+    {
+      a: { name:'Anya Kapoor', club:'Lotus CC', role:'AR',
+        stats:{ runs:61, balls:45, fours:7, sixes:1, overs:5, runsConceded:25, wickets:3, dismissed:false } },
+      b: { name:'Mei Chen', club:'Eastside CC', role:'AR',
+        stats:{ runs:20, balls:28, fours:2, sixes:0, overs:7, runsConceded:30, wickets:1, dismissed:true } }
+    },
+    {
+      a: { name:'Leo Martins', club:'Hillside', role:'BAT',
+        stats:{ runs:95, balls:80, fours:10, sixes:3, dismissed:false } },
+      b: { name:'Dev Rahman', club:'Canal Road', role:'BAT',
+        stats:{ runs:7, balls:15, fours:0, sixes:0, dismissed:true } }
+    },
+    {
+      a: { name:'Fatima Noor', club:'Desert CC', role:'BWL',
+        stats:{ overs:9, runsConceded:26, wickets:4, maidens:1, wides:0 } },
+      b: { name:'Tom Bradley', club:'Hillside', role:'BWL',
+        stats:{ overs:10, runsConceded:48, wickets:1, maidens:0, wides:2 } }
+    },
+    {
+      a: { name:'Daniel Ortiz', club:'Coastal CC', role:'WK',
+        stats:{ runs:44, balls:36, catches:2, stumpings:1, fours:5, sixes:0, dismissed:true } },
+      b: { name:'Priya Desai', club:'Lotus CC', role:'WK',
+        stats:{ runs:28, balls:35, catches:1, stumpings:0, fours:2, sixes:0, dismissed:true, byes:2 } }
+    },
+    {
+      a: { name:'Harry Cole', club:'Millfield', role:'AR',
+        stats:{ runs:35, balls:30, fours:3, sixes:1, overs:8, runsConceded:24, wickets:2, dismissed:false } },
+      b: { name:'Jake Moretti', club:'Bayview', role:'AR',
+        stats:{ runs:5, balls:9, fours:0, sixes:0, overs:6, runsConceded:38, wickets:0, dismissed:true } }
+    },
+    {
+      a: { name:'Nina Brooks', club:'Valley CC', role:'BAT',
+        stats:{ runs:78, balls:62, fours:8, sixes:1, dismissed:true } },
+      b: { name:'Ollie Shaw', club:'Millfield', role:'BAT',
+        stats:{ runs:41, balls:50, fours:4, sixes:0, dismissed:false } }
+    },
+    {
+      a: { name:'Yusuf Khan', club:'Summit CC', role:'BWL',
+        stats:{ overs:10, runsConceded:31, wickets:3, maidens:1, wides:1 } },
+      b: { name:'Ben Price', club:'Riverside CC', role:'BWL',
+        stats:{ overs:8, runsConceded:52, wickets:0, maidens:0, wides:5 } }
+    },
+    {
+      a: { name:'Clara Jensen', club:'Meadow CC', role:'WK',
+        stats:{ runs:60, balls:48, catches:3, stumpings:1, fours:7, sixes:0, dismissed:false } },
+      b: { name:'Emma Walsh', club:'Meadow CC', role:'WK',
+        stats:{ runs:19, balls:25, catches:0, stumpings:0, fours:2, sixes:0, dismissed:true, byes:3 } }
+    }
+  ]
+};
+
+let compareExampleQueues = { soccer: [], cricket: [] };
+
+function shuffleArray(arr){
+  const a = arr.slice();
+  for(let i = a.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function nextCompareExample(sport){
+  if(!compareExampleQueues[sport] || compareExampleQueues[sport].length === 0){
+    compareExampleQueues[sport] = shuffleArray(COMPARE_EXAMPLE_POOL[sport] || []);
+  }
+  return compareExampleQueues[sport].pop();
+}
+
+function fillCompareSide(side, data, sport){
+  const nameEl = document.getElementById('cmp' + side + '_name');
+  const clubEl = document.getElementById('cmp' + side + '_club');
+  const roleEl = document.getElementById('cmp' + side + '_role');
+  if(nameEl) nameEl.value = data.name || '';
+  if(clubEl) clubEl.value = data.club || '';
+  if(roleEl){
+    roleEl.value = data.role;
+    roleEl.dispatchEvent(new Event('change'));
+  }
+  if(sport === 'soccer'){
+    const mins = document.getElementById('cmp' + side + '_minutes');
+    if(mins) mins.value = data.minutes || 90;
+  }
+  // Stats filled after role re-render
+  setTimeout(()=>{
+    Object.entries(data.stats || {}).forEach(([id, val])=>{
+      const el = document.getElementById('cmp' + side + '_' + id);
+      if(!el) return;
+      if(el.type === 'checkbox') el.checked = !!val;
+      else el.value = val;
+    });
+  }, 80);
+}
+
+function tryCompareExample(){
+  // Stay on / switch to compare section
+  document.querySelectorAll('#mainNav button').forEach(b=>b.classList.toggle('active', b.dataset.section==='compare'));
+  document.querySelectorAll('.app-section').forEach(s=>s.classList.toggle('active', s.id==='section-compare'));
+
+  const sport = compareSport === 'cricket' ? 'cricket' : 'soccer';
+  const pair = nextCompareExample(sport);
+  if(!pair) return;
+
+  // Ensure compare sport matches
+  if(compareSport !== sport){
+    setCompareSport(sport);
+  }
+
+  setTimeout(()=>{
+    fillCompareSide('A', pair.a, sport);
+    fillCompareSide('B', pair.b, sport);
+    setTimeout(()=> runComparison(), 160);
+  }, 100);
 }
 
 /* =========================================================
