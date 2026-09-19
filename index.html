@@ -713,6 +713,20 @@
   .result-body{display:none;}
   .result-body.show{display:block;}
 
+  @keyframes stampImpact{
+    0%{ transform:scale(0.5) rotate(-24deg); opacity:0; }
+    55%{ transform:scale(1.08) rotate(-3deg); opacity:1; }
+    75%{ transform:scale(0.97) rotate(-8deg); }
+    100%{ transform:scale(1) rotate(-6deg); }
+  }
+  .stamp.impact{
+    animation:stampImpact 0.5s cubic-bezier(.25,.6,.3,1.3) both;
+  }
+  @media (prefers-reduced-motion: reduce){
+    .stamp.impact{ animation:none; }
+    .radar-data-poly, .radar-dot{ animation:none; }
+  }
+
   .player-line{
     font-family:'Oswald', sans-serif;
     font-size:0.95rem;
@@ -741,6 +755,7 @@
     justify-content:center;
     transform:rotate(-6deg);
     flex-direction:column;
+    box-shadow: 3px 4px 0 rgba(27,27,24,0.06), 0 1px 2px rgba(27,27,24,0.04);
   }
 
   .stamp::before{
@@ -1292,28 +1307,75 @@
   /* ---------- MATCHGRADE RADAR ---------- */
   .radar-wrap{
     border-top:1px dashed var(--line);
-    padding-top:16px;
+    padding-top:18px;
     margin-top:16px;
     text-align:center;
+    position:relative;
   }
   .radar-title{
     font-family:'Oswald',sans-serif;
-    font-size:0.68rem;
+    font-size:0.7rem;
     letter-spacing:0.6px;
     color:var(--ink-soft);
-    margin-bottom:10px;
+    margin-bottom:6px;
     text-align:left;
   }
-  .radar-wrap svg{max-width:280px;width:100%;height:auto;}
-  .radar-legend{
-    display:flex;
-    flex-wrap:wrap;
-    justify-content:center;
-    gap:8px 14px;
-    margin-top:8px;
+  .radar-hint{
     font-family:'Special Elite',monospace;
-    font-size:0.68rem;
+    font-size:0.64rem;
     color:var(--ink-soft);
+    opacity:0.75;
+    margin-top:8px;
+  }
+  .radar-wrap svg{max-width:340px;width:100%;height:auto;overflow:visible;touch-action:manipulation;}
+  .radar-hit{
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .radar-tooltip{
+    position:absolute;
+    pointer-events:none;
+    transform:translate(-50%,-100%);
+    background:var(--ink);
+    color:var(--paper);
+    font-family:'Oswald',sans-serif;
+    font-size:0.78rem;
+    white-space:nowrap;
+    padding:6px 11px;
+    border-radius:2px;
+    opacity:0;
+    transition:opacity 0.12s ease;
+    z-index:20;
+    top:0;
+    left:0;
+  }
+  .radar-tooltip.show{opacity:1;}
+  .radar-tooltip b{color:var(--gold);font-weight:600;margin-left:5px;}
+  .radar-tooltip::after{
+    content:"";
+    position:absolute;
+    top:100%;
+    left:50%;
+    transform:translateX(-50%);
+    border:5px solid transparent;
+    border-top-color:var(--ink);
+  }
+  @keyframes radarPolyIn{
+    from{ transform:scale(0.3); opacity:0; }
+    to{ transform:scale(1); opacity:1; }
+  }
+  @keyframes radarDotIn{
+    from{ opacity:0; transform:scale(0); }
+    to{ opacity:1; transform:scale(1); }
+  }
+  .radar-data-poly{
+    transform-origin:140px 130px;
+    animation:radarPolyIn 0.55s cubic-bezier(.2,.9,.3,1.2) both;
+  }
+  .radar-dot{
+    transform-box:fill-box;
+    transform-origin:center;
+    animation:radarDotIn 0.4s ease both;
   }
 
   /* ---------- CUSTOM FORMULA MODE ---------- */
@@ -1772,10 +1834,11 @@
           <div id="bdList"></div>
         </div>
         <div class="formula-active-note" id="formulaActiveNote">Custom formula applied  this rating uses your weights, not the default MatchGrade formula.</div>
-        <div class="radar-wrap">
+        <div class="radar-wrap" id="radarWrap">
           <div class="radar-title">MATCHGRADE RADAR</div>
           <svg id="radarSvg" viewBox="0 0 280 260"></svg>
-          <div class="radar-legend" id="radarLegend"></div>
+          <div class="radar-tooltip" id="radarTooltip"></div>
+          <div class="radar-hint">tap or hover a point for its score</div>
         </div>
         <div class="tier-line" id="rTier"></div>
         <div class="share-card-actions">
@@ -2583,6 +2646,12 @@ function renderResult(rawRating, rawBreakdown, roleLabelText){
   else if(rating >= 8.0) color = 'var(--gold)';
   stamp.style.setProperty('--stamp-color', color);
 
+  // Restart the impact animation each time a rating is (re)calculated,
+  // even if the class is already present from a previous grade.
+  stamp.classList.remove('impact');
+  void stamp.offsetWidth;
+  stamp.classList.add('impact');
+
   const club = document.getElementById('clubName').value.trim() || 'No club entered';
   const cardPrefs = loadCardPrefs();
 
@@ -3354,11 +3423,16 @@ function drawRadar(categories){
   const labels = Object.keys(categories);
   const values = Object.values(categories);
   const n = labels.length;
-  const cx = 140, cy = 120, maxR = 88;
+  const cx = 140, cy = 130, maxR = 100;
   const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#2F5233';
+  const goldColor = getComputedStyle(document.documentElement).getPropertyValue('--gold').trim() || '#B8933F';
   const lineColor = getComputedStyle(document.documentElement).getPropertyValue('--line').trim() || '#c9c3b2';
-  const inkColor = getComputedStyle(document.documentElement).getPropertyValue('--ink').trim() || '#1B1B18';
   const softColor = getComputedStyle(document.documentElement).getPropertyValue('--ink-soft').trim() || '#4A473F';
+  const inkColor = getComputedStyle(document.documentElement).getPropertyValue('--ink').trim() || '#1B1B18';
+  const paperColor = getComputedStyle(document.documentElement).getPropertyValue('--paper').trim() || '#EDEAE2';
+
+  const overallAvg = values.reduce((a,b)=>a+b,0) / values.length;
+  const peakColor = overallAvg >= 7.3 ? goldColor : accentColor;
 
   function pointFor(i, value, radius){
     const angle = (Math.PI * 2 * i / n) - Math.PI/2;
@@ -3366,10 +3440,27 @@ function drawRadar(categories){
     return [cx + r*Math.cos(angle), cy + r*Math.sin(angle)];
   }
 
+  const uid = 'radarGrad' + Math.random().toString(36).slice(2,8);
+  const defs = `<defs>
+    <radialGradient id="${uid}" cx="50%" cy="50%" r="65%">
+      <stop offset="0%" stop-color="${peakColor}" stop-opacity="0.42"/>
+      <stop offset="100%" stop-color="${peakColor}" stop-opacity="0.10"/>
+    </radialGradient>
+    <filter id="${uid}-glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="3.2" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>`;
+
+  // Alternating ring fill for subtle depth, plus ring strokes
   let rings = '';
-  [0.25,0.5,0.75,1].forEach(f=>{
+  [1,0.75,0.5,0.25].forEach((f,idx)=>{
     const pts = labels.map((_,i)=>pointFor(i,10*f,maxR).join(',')).join(' ');
-    rings += `<polygon points="${pts}" fill="none" stroke="${lineColor}" stroke-width="1"/>`;
+    const fillTone = idx % 2 === 0 ? 'transparent' : (getComputedStyle(document.documentElement).getPropertyValue('--paper-dark').trim() || '#00000006');
+    rings += `<polygon points="${pts}" fill="${fillTone}" fill-opacity="0.35" stroke="${lineColor}" stroke-width="1"/>`;
   });
 
   let spokes = '';
@@ -3377,23 +3468,72 @@ function drawRadar(categories){
   labels.forEach((lab,i)=>{
     const [x,y] = pointFor(i,10,maxR);
     spokes += `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="${lineColor}" stroke-width="1"/>`;
-    const [lx,ly] = pointFor(i,12.4,maxR);
-    labelSvg += `<text x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="middle" font-family="Special Elite,monospace" font-size="9" fill="${softColor}">${esc(lab)}</text>`;
+    const [lx,ly] = pointFor(i,13.2,maxR);
+    labelSvg += `<text x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="middle" font-family="Oswald,sans-serif" font-weight="500" font-size="10.5" fill="${inkColor}">${esc(lab)}</text>`;
   });
 
   const dataPts = labels.map((lab,i)=>pointFor(i, values[i], maxR).join(',')).join(' ');
-  const dataPoly = `<polygon points="${dataPts}" fill="${accentColor}" fill-opacity="0.22" stroke="${accentColor}" stroke-width="2"/>`;
+  const dataPoly = `<polygon class="radar-data-poly" points="${dataPts}" fill="url(#${uid})" stroke="${peakColor}" stroke-width="2.5" stroke-linejoin="round" filter="url(#${uid}-glow)"/>`;
 
   let dots = '';
+  let hitTargets = '';
   labels.forEach((lab,i)=>{
     const [x,y] = pointFor(i, values[i], maxR);
-    dots += `<circle cx="${x}" cy="${y}" r="3" fill="${accentColor}"/>`;
+    const delay = (i * 0.05).toFixed(2);
+    dots += `<circle class="radar-dot" cx="${x}" cy="${y}" r="4.5" fill="${paperColor}" stroke="${peakColor}" stroke-width="2.5" style="animation-delay:${delay}s"/>`;
+    // Larger invisible circle on top for an actually tappable target
+    // (44px+ recommended touch target; the visible dot alone is too small).
+    hitTargets += `<circle class="radar-hit" cx="${x}" cy="${y}" r="16" fill="transparent" data-label="${esc(lab)}" data-value="${values[i].toFixed(1)}"/>`;
   });
 
-  svg.innerHTML = rings + spokes + dataPoly + dots + labelSvg;
+  // Center point for visual anchor
+  const centerDot = `<circle cx="${cx}" cy="${cy}" r="2" fill="${lineColor}"/>`;
 
-  const legend = document.getElementById('radarLegend');
-  legend.innerHTML = labels.map((lab,i)=>`<span>${esc(lab)}: ${values[i].toFixed(1)}</span>`).join('');
+  svg.setAttribute('viewBox', '0 0 280 265');
+  svg.innerHTML = defs + rings + spokes + centerDot + dataPoly + dots + labelSvg + hitTargets;
+
+  attachRadarTooltipEvents(svg);
+}
+
+/* Tooltip on hover (desktop) and tap (mobile) for each radar point.
+   Uses pointer events so one code path covers mouse and touch. */
+function attachRadarTooltipEvents(svg){
+  const wrap = document.getElementById('radarWrap');
+  const tooltip = document.getElementById('radarTooltip');
+  if(!wrap || !tooltip) return;
+
+  function showTooltip(target){
+    const label = target.dataset.label;
+    const value = target.dataset.value;
+    tooltip.innerHTML = `${esc(label)}<b>${esc(value)}</b>`;
+    const wrapRect = wrap.getBoundingClientRect();
+    const targetRect = target.getBoundingClientRect();
+    const x = targetRect.left + targetRect.width/2 - wrapRect.left;
+    const y = targetRect.top - wrapRect.top - 8;
+    tooltip.style.left = x + 'px';
+    tooltip.style.top = y + 'px';
+    tooltip.classList.add('show');
+  }
+  function hideTooltip(){
+    tooltip.classList.remove('show');
+  }
+
+  svg.querySelectorAll('.radar-hit').forEach(hit=>{
+    hit.addEventListener('pointerenter', ()=>showTooltip(hit));
+    hit.addEventListener('pointerleave', hideTooltip);
+    hit.addEventListener('pointerdown', (e)=>{
+      e.stopPropagation();
+      showTooltip(hit);
+    });
+  });
+
+  // Tapping anywhere else on the page dismisses an open tooltip on mobile.
+  if(!wrap.dataset.dismissBound){
+    wrap.dataset.dismissBound = '1';
+    document.addEventListener('pointerdown', (e)=>{
+      if(!wrap.contains(e.target)) hideTooltip();
+    });
+  }
 }
 
 /* =========================================================
@@ -4542,7 +4682,7 @@ const EXAMPLE_POOL = {
       context:{ goalsConceded:2, errorsToGoal:1, sentOff:false, yellow:false } },
 
     // --- Full-backs ---
-    { role:'FB', name:'Priya Shah', club:'Coastal FC', minutes:90, result:'loss',
+    { role:'FB', name:'Prince', club:'Coastal FC', minutes:90, result:'loss',
       stats:{ tackles:3, interceptions:2, keyPasses:2, passAcc:81, dribbles:2, assists:1, duelsWon:5, duelsTotal:8, crosses:3, progressiveCarries:4 },
       context:{ goalsConceded:2, errorsToGoal:0, sentOff:false, yellow:true } },
     { role:'FB', name:'Lucas Berg', club:'Fjell FC', minutes:90, result:'win',
@@ -4553,7 +4693,7 @@ const EXAMPLE_POOL = {
       context:{ goalsConceded:1, errorsToGoal:0, sentOff:false, yellow:false } },
 
     // --- Defensive mids ---
-    { role:'DM', name:'Owen Briggs', club:'Steelworks', minutes:90, result:'draw',
+    { role:'DM', name:'Owen', club:'Steelworks', minutes:90, result:'draw',
       stats:{ tackles:5, interceptions:4, passAcc:90, passesCompleted:48, duelsWon:6, duelsTotal:9, keyPasses:1, recoveries:7, blocks:2 },
       context:{ goalsConceded:1, errorsToGoal:0, sentOff:false, yellow:false } },
     { role:'DM', name:'Chen Wei', club:'Pearl City', minutes:90, result:'win',
@@ -4594,8 +4734,161 @@ const EXAMPLE_POOL = {
       context:{ goalsConceded:0, errorsToGoal:0, sentOff:false, yellow:false } },
     { role:'WNG', name:'Finn O\'Malley', club:'Green Isle', minutes:90, result:'loss',
       stats:{ dribbles:2, keyPasses:1, goals:0, assists:0, shotsOnTarget:0, touchesBox:2, dispossessed:4, progressiveCarries:3, passAcc:71 },
-      context:{ goalsConceded:2, errorsToGoal:0, sentOff:false, yellow:false } }
+      context:{ goalsConceded:2, errorsToGoal:0, sentOff:false, yellow:false } },
+    // --- Strikers ---
+    { role:'ST', name:'Mateo', club:'Portside FC', minutes:90, result:'win',
+      stats:{ goals:1, assists:1, shotsTotal:4, shotsOnTarget:3, touchesBox:8, holdUp:5, dispossessed:1, aerialsWon:4, foulsWon:3 },
+      context:{ goalsConceded:1, errorsToGoal:0, sentOff:false, yellow:false } },
+    { role:'ST', name:'Chloe Finch', club:'Willowbrook', minutes:67, result:'win',
+      stats:{ goals:2, assists:0, shotsTotal:3, shotsOnTarget:2, touchesBox:5, holdUp:2, dispossessed:2, progressiveCarries:3, foulsWon:1 },
+      context:{ goalsConceded:0, errorsToGoal:0, sentOff:false, yellow:false } },
+    { role:'ST', name:'Ibrahim Diallo', club:'Sahel Stars', minutes:90, result:'draw',
+      stats:{ goals:0, assists:1, shotsTotal:6, shotsOnTarget:2, touchesBox:9, holdUp:6, dispossessed:1, aerialsWon:5, foulsWon:4 },
+      context:{ goalsConceded:1, errorsToGoal:0, sentOff:false, yellow:true } },
+    { role:'ST', name:'Nora Lindqvist', club:'Vikings IK', minutes:45, result:'loss',
+      stats:{ goals:0, assists:0, shotsTotal:2, shotsOnTarget:0, touchesBox:3, holdUp:1, dispossessed:2, offsides:1, passAcc:68 },
+      context:{ goalsConceded:2, errorsToGoal:0, sentOff:false, yellow:false } },
+    { role:'ST', name:'Gabriel Santos', club:'Copa FC', minutes:90, result:'win',
+      stats:{ goals:4, assists:0, shotsTotal:8, shotsOnTarget:6, touchesBox:10, holdUp:3, dispossessed:0, aerialsWon:2, foulsWon:2 },
+      context:{ goalsConceded:2, errorsToGoal:0, sentOff:false, yellow:false } },
+    { role:'ST', name:'Amelie Fournier', club:'Croix Blanche', minutes:82, result:'draw',
+      stats:{ goals:1, assists:0, shotsTotal:5, shotsOnTarget:2, touchesBox:7, holdUp:3, dispossessed:3, offsides:3, passAcc:75 },
+      context:{ goalsConceded:1, errorsToGoal:0, sentOff:false, yellow:false } },
+    { role:'ST', name:'Victor Adeyemi', club:'Gateway FC', minutes:90, result:'loss',
+      stats:{ goals:1, assists:0, shotsTotal:3, shotsOnTarget:1, touchesBox:4, holdUp:2, dispossessed:4, foulsWon:2, foulsCommitted:1 },
+      context:{ goalsConceded:3, errorsToGoal:0, sentOff:false, yellow:false } },
+
+    // --- Goalkeepers ---
+    { role:'GK', name:'Jonas', club:'Alpen SC', minutes:90, result:'draw',
+      stats:{ saves:4, shotsFaced:5, cleanSheet:true, claims:2, penSaved:0, sweeperActions:1, longBalls:9, passAcc:78 },
+      context:{ goalsConceded:0, errorsToGoal:0, sentOff:false, yellow:false } },
+    { role:'GK', name:'Maya Costa', club:'Algarve United', minutes:90, result:'win',
+      stats:{ saves:6, shotsFaced:7, cleanSheet:true, claims:4, penSaved:0, sweeperActions:2, longBalls:5, passAcc:70 },
+      context:{ goalsConceded:0, errorsToGoal:0, sentOff:false, yellow:false } },
+    { role:'GK', name:'Andre Kovač', club:'Delta FC', minutes:90, result:'loss',
+      stats:{ saves:8, shotsFaced:13, cleanSheet:false, claims:2, penSaved:0, sweeperActions:0, longBalls:4, passAcc:61 },
+      context:{ goalsConceded:4, errorsToGoal:0, sentOff:false, yellow:true } },
+    { role:'GK', name:'Sofia Petrova', club:'Baltic Rovers', minutes:90, result:'draw',
+      stats:{ saves:9, shotsFaced:10, cleanSheet:false, claims:3, penSaved:0, sweeperActions:1, longBalls:7, passAcc:66 },
+      context:{ goalsConceded:1, errorsToGoal:0, sentOff:false, yellow:false } },
+    { role:'GK', name:'David Mensah', club:'Gold Coast', minutes:76, result:'win',
+      stats:{ saves:3, shotsFaced:4, cleanSheet:true, claims:1, penSaved:0, sweeperActions:0, longBalls:3, passAcc:74 },
+      context:{ goalsConceded:0, errorsToGoal:0, sentOff:false, yellow:false } },
+
+    // --- Centre-backs ---
+    { role:'CB', name:'Tommy Walsh', club:'Dockers FC', minutes:90, result:'draw',
+      stats:{ tackles:6, interceptions:2, clearances:9, passAcc:82, duelsWon:8, duelsTotal:11, aerialsWon:5, blocks:3, recoveries:6, goals:0, assists:0 },
+      context:{ goalsConceded:1, errorsToGoal:0, sentOff:false, yellow:true } },
+    { role:'CB', name:'Lena Hoffmann', club:'Rhein SC', minutes:90, result:'win',
+      stats:{ tackles:3, interceptions:4, clearances:5, passAcc:90, duelsWon:6, duelsTotal:8, aerialsWon:3, blocks:1, progressivePasses:4, assists:1 },
+      context:{ goalsConceded:0, errorsToGoal:0, sentOff:false, yellow:false } },
+    { role:'CB', name:'Boateng', club:'Anansi FC', minutes:90, result:'win',
+      stats:{ tackles:5, interceptions:5, clearances:7, passAcc:86, duelsWon:9, duelsTotal:12, aerialsWon:7, blocks:2, recoveries:8 },
+      context:{ goalsConceded:1, errorsToGoal:0, sentOff:false, yellow:false } },
+    { role:'CB', name:'Isabella Romano', club:'Serenissima', minutes:58, result:'draw',
+      stats:{ tackles:2, interceptions:2, clearances:3, passAcc:84, duelsWon:3, duelsTotal:5, aerialsWon:2, blocks:0 },
+      context:{ goalsConceded:0, errorsToGoal:0, sentOff:false, yellow:false } },
+    { role:'CB', name:'Sebastian Stan', club:'Nordkap FK', minutes:90, result:'loss',
+      stats:{ tackles:2, interceptions:1, clearances:6, passAcc:80, duelsWon:4, duelsTotal:9, aerialsWon:2, blocks:1, foulsCommitted:2 },
+      context:{ goalsConceded:3, errorsToGoal:1, sentOff:false, yellow:true } },
+    { role:'CB', name:'Grace', club:'Pinnacle FC', minutes:90, result:'win',
+      stats:{ tackles:4, interceptions:6, clearances:4, passAcc:89, duelsWon:7, duelsTotal:10, aerialsWon:4, blocks:2, goals:1, assists:0 },
+      context:{ goalsConceded:1, errorsToGoal:0, sentOff:false, yellow:false } },
+
+    // --- Full-backs ---
+    { role:'FB', name:'Marco Vitale', club:'Turris FC', minutes:90, result:'win',
+      stats:{ tackles:4, interceptions:2, keyPasses:3, passAcc:83, dribbles:3, assists:1, duelsWon:6, duelsTotal:9, crosses:4, progressiveCarries:5, recoveries:4 },
+      context:{ goalsConceded:1, errorsToGoal:0, sentOff:false, yellow:false } },
+    { role:'FB', name:'Keira Donnelly', club:'Harbor City', minutes:90, result:'draw',
+      stats:{ tackles:3, interceptions:3, keyPasses:1, passAcc:85, dribbles:2, assists:0, goals:0, duelsWon:5, duelsTotal:7, crosses:2, blocks:1 },
+      context:{ goalsConceded:1, errorsToGoal:0, sentOff:false, yellow:false } },
+    { role:'FB', name:'Yusuf Karim', club:'Crescent AC', minutes:85, result:'win',
+      stats:{ tackles:6, interceptions:4, keyPasses:2, passAcc:88, dribbles:5, assists:0, duelsWon:9, duelsTotal:12, crosses:3, recoveries:7 },
+      context:{ goalsConceded:0, errorsToGoal:0, sentOff:false, yellow:true } },
+    { role:'FB', name:'Elif Yilmaz', club:'Bosphorus SK', minutes:70, result:'loss',
+      stats:{ tackles:1, interceptions:1, keyPasses:2, passAcc:74, dribbles:2, assists:0, duelsWon:3, duelsTotal:7, crosses:1, foulsCommitted:2 },
+      context:{ goalsConceded:3, errorsToGoal:0, sentOff:false, yellow:false } },
+    { role:'FB', name:'Callum Reid', club:'Thistle Rovers', minutes:90, result:'draw',
+      stats:{ tackles:4, interceptions:2, keyPasses:2, passAcc:82, dribbles:4, assists:1, duelsWon:6, duelsTotal:8, crosses:3, progressiveCarries:6, goals:1 },
+      context:{ goalsConceded:1, errorsToGoal:0, sentOff:false, yellow:false } },
+    { role:'FB', name:'Zahra', club:'Atlas FC', minutes:90, result:'win',
+      stats:{ tackles:3, interceptions:2, keyPasses:5, passAcc:79, dribbles:6, assists:2, duelsWon:5, duelsTotal:7, crosses:6, progressiveCarries:8 },
+      context:{ goalsConceded:2, errorsToGoal:0, sentOff:false, yellow:false } },
+
+    // --- Defensive mids ---
+    { role:'DM', name:'Bruno', club:'Setubal SC', minutes:90, result:'draw',
+      stats:{ tackles:6, interceptions:5, passAcc:91, passesCompleted:55, duelsWon:8, duelsTotal:10, keyPasses:1, recoveries:9, blocks:3, goals:0, assists:0 },
+      context:{ goalsConceded:1, errorsToGoal:0, sentOff:false, yellow:true } },
+    { role:'DM', name:'Haal', club:'Sakura FC', minutes:90, result:'win',
+      stats:{ tackles:4, interceptions:3, passAcc:88, passesCompleted:42, duelsWon:6, duelsTotal:8, keyPasses:2, progressivePasses:4, recoveries:6, dribbles:2 },
+      context:{ goalsConceded:0, errorsToGoal:0, sentOff:false, yellow:false } },
+    { role:'DM', name:'Peter Ndlovu', club:'Zambezi United', minutes:90, result:'loss',
+      stats:{ tackles:5, interceptions:3, passAcc:83, passesCompleted:38, duelsWon:6, duelsTotal:9, keyPasses:0, recoveries:5, blocks:1, foulsCommitted:3 },
+      context:{ goalsConceded:2, errorsToGoal:0, sentOff:false, yellow:true } },
+    { role:'DM', name:'Anouk de Vries', club:'Oranje Jez', minutes:64, result:'win',
+      stats:{ tackles:2, interceptions:2, passAcc:86, passesCompleted:25, duelsWon:3, duelsTotal:4, keyPasses:1, recoveries:3, dribbles:1 },
+      context:{ goalsConceded:1, errorsToGoal:0, sentOff:false, yellow:false } },
+    { role:'DM', name:'Samuel Eze', club:'Highlanders', minutes:90, result:'draw',
+      stats:{ tackles:7, interceptions:5, passAcc:87, passesCompleted:50, duelsWon:10, duelsTotal:13, keyPasses:1, progressivePasses:3, recoveries:8, foulsCommitted:2 },
+      context:{ goalsConceded:2, errorsToGoal:0, sentOff:false, yellow:false } },
+
+    // --- Central mids ---
+    { role:'CM', name:'Emil Sorensen', club:'Fjord FK', minutes:90, result:'win',
+      stats:{ passAcc:92, keyPasses:2, passesCompleted:58, tackles:2, interceptions:2, dribbles:1, goals:0, assists:1, progressivePasses:5, progressiveCarries:2 },
+      context:{ goalsConceded:1, errorsToGoal:0, sentOff:false, yellow:false } },
+    { role:'CM', name:'Layla Haddad', club:'Phoenix FC', minutes:88, result:'draw',
+      stats:{ passAcc:81, keyPasses:4, passesCompleted:39, tackles:3, interceptions:2, dribbles:3, goals:1, assists:0, shotsTotal:2, progressivePasses:4 },
+      context:{ goalsConceded:1, errorsToGoal:0, sentOff:false, yellow:false } },
+    { role:'CM', name:'Dmitri Volkov', club:'Zenith City', minutes:90, result:'loss',
+      stats:{ passAcc:78, keyPasses:1, passesCompleted:36, tackles:5, interceptions:3, dribbles:0, goals:0, assists:0, foulsCommitted:2, foulsWon:1 },
+      context:{ goalsConceded:4, errorsToGoal:0, sentOff:false, yellow:false } },
+    { role:'CM', name:'Zoe MacAllister', club:'Lochside', minutes:90, result:'win',
+      stats:{ passAcc:90, keyPasses:3, passesCompleted:47, tackles:1, interceptions:1, dribbles:2, goals:1, assists:1, progressiveCarries:4, shotsTotal:2 },
+      context:{ goalsConceded:0, errorsToGoal:0, sentOff:false, yellow:false } },
+    { role:'CM', name:'Rafael Duarte', club:'Sol FC', minutes:45, result:'draw',
+      stats:{ passAcc:85, keyPasses:1, passesCompleted:21, tackles:1, interceptions:0, dribbles:1, goals:0, assists:0 },
+      context:{ goalsConceded:0, errorsToGoal:0, sentOff:false, yellow:false } },
+    { role:'CM', name:'Curry Baker', club:'Tulip City', minutes:90, result:'win',
+      stats:{ passAcc:88, keyPasses:2, passesCompleted:45, tackles:4, interceptions:3, dribbles:2, goals:0, assists:2, progressivePasses:3, foulsWon:2 },
+      context:{ goalsConceded:1, errorsToGoal:0, sentOff:false, yellow:false } },
+
+    // --- Attacking mids ---
+    { role:'AM', name:'Felix Braun', club:'Kaiser SC', minutes:90, result:'win',
+      stats:{ keyPasses:5, dribbles:4, goals:2, assists:1, shotsOnTarget:3, dispossessed:2, progressiveCarries:6, touchesBox:6, foulsWon:3 },
+      context:{ goalsConceded:2, errorsToGoal:0, sentOff:false, yellow:false } },
+    { role:'AM', name:'Selin Aydin', club:'Anadolu FK', minutes:90, result:'draw',
+      stats:{ keyPasses:3, dribbles:2, goals:0, assists:1, shotsOnTarget:1, dispossessed:2, shotsTotal:2, progressivePasses:5, passAcc:83, touchesBox:3 },
+      context:{ goalsConceded:1, errorsToGoal:0, sentOff:false, yellow:false } },
+    { role:'AM', name:'Nathan Brooks', club:'Kingston FC', minutes:80, result:'loss',
+      stats:{ keyPasses:1, dribbles:1, goals:0, assists:0, shotsOnTarget:0, dispossessed:4, shotsTotal:2, passAcc:72, foulsCommitted:1 },
+      context:{ goalsConceded:2, errorsToGoal:0, sentOff:false, yellow:false } },
+    { role:'AM', name:'Valentina Cruz', club:'Porteno FC', minutes:90, result:'win',
+      stats:{ keyPasses:7, dribbles:3, goals:1, assists:2, shotsOnTarget:2, dispossessed:1, progressiveCarries:4, progressivePasses:6, foulsWon:2 },
+      context:{ goalsConceded:1, errorsToGoal:0, sentOff:false, yellow:true } },
+    { role:'AM', name:'Omar Farouk', club:'Nile SC', minutes:73, result:'draw',
+      stats:{ keyPasses:2, dribbles:3, goals:1, assists:0, shotsOnTarget:1, dispossessed:2, touchesBox:4, passAcc:79 },
+      context:{ goalsConceded:1, errorsToGoal:0, sentOff:false, yellow:false } },
+
+    // --- Wingers ---
+    { role:'WNG', name:'Jonas Falk', club:'Polaris FK', minutes:90, result:'win',
+      stats:{ dribbles:6, keyPasses:4, goals:1, assists:2, shotsOnTarget:2, touchesBox:6, dispossessed:2, progressiveCarries:7, crosses:3, foulsWon:3 },
+      context:{ goalsConceded:1, errorsToGoal:0, sentOff:false, yellow:false } },
+    { role:'WNG', name:'Aiko Tanaka', club:'Fuji Athletic', minutes:84, result:'draw',
+      stats:{ dribbles:4, keyPasses:3, goals:0, assists:1, shotsOnTarget:1, touchesBox:4, dispossessed:3, crosses:2, passAcc:77, progressiveCarries:4 },
+      context:{ goalsConceded:1, errorsToGoal:0, sentOff:false, yellow:false } },
+    { role:'WNG', name:'Jamal Carter', club:'Metro Wolves', minutes:90, result:'win',
+      stats:{ dribbles:9, keyPasses:3, goals:2, assists:1, shotsOnTarget:3, touchesBox:7, dispossessed:1, crosses:2, shotsTotal:5, foulsWon:4 },
+      context:{ goalsConceded:0, errorsToGoal:0, sentOff:false, yellow:false } },
+    { role:'WNG', name:'Bianca Silva', club:'Aurora FC', minutes:68, result:'loss',
+      stats:{ dribbles:3, keyPasses:1, goals:0, assists:0, shotsOnTarget:1, touchesBox:3, dispossessed:3, passAcc:74, foulsCommitted:1 },
+      context:{ goalsConceded:2, errorsToGoal:0, sentOff:false, yellow:false } },
+    { role:'WNG', name:'Leo Moreau', club:'Riviera SC', minutes:90, result:'draw',
+      stats:{ dribbles:5, keyPasses:2, goals:1, assists:0, shotsOnTarget:2, touchesBox:5, dispossessed:2, crosses:4, progressiveCarries:5 },
+      context:{ goalsConceded:2, errorsToGoal:0, sentOff:false, yellow:true } }
+
+
   ],
+
   cricket: [
     { role:'BAT', name:'Arjun Patel', club:'Riverside CC',
       stats:{ runs:67, balls:48, fours:8, sixes:1, dismissed:true } },
