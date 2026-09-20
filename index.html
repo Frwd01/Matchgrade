@@ -865,7 +865,8 @@
     text-align:center;
     position:relative;
   }
-  .cmp-radar-wrap svg{max-width:340px;width:100%;height:auto;overflow:visible;touch-action:manipulation;}
+  .cmp-radar-wrap svg{max-width:340px;width:100%;height:auto;overflow:visible;touch-action:manipulation;transition:transform 0.35s cubic-bezier(.2,.8,.25,1);transform-origin:center center;margin-bottom:14px;}
+  .cmp-radar-wrap:hover svg, .cmp-radar-wrap.touched svg{transform:scale(1.08);}
   .cmp-radar-legend{
     display:flex;
     justify-content:center;
@@ -879,7 +880,7 @@
   .cmp-radar-tooltip{
     position:absolute;
     pointer-events:none;
-    transform:translate(-50%,-100%);
+    transform:translate(-50%,-100%) translateY(4px);
     background:var(--ink);
     color:var(--paper);
     font-family:'Oswald',sans-serif;
@@ -888,12 +889,15 @@
     padding:6px 11px;
     border-radius:2px;
     opacity:0;
-    transition:opacity 0.12s ease;
+    transition: opacity 0.18s ease, transform 0.18s cubic-bezier(.2,.8,.3,1.2);
     z-index:20;
     top:0;
     left:0;
   }
-  .cmp-radar-tooltip.show{opacity:1;}
+  .cmp-radar-tooltip.show{
+    opacity:1;
+    transform:translate(-50%,-100%) translateY(-4px);
+  }
   .cmp-radar-tooltip::after{
     content:"";
     position:absolute;
@@ -904,12 +908,22 @@
     border-top-color:var(--ink);
   }
   .cmp-radar-hit{cursor:pointer;-webkit-tap-highlight-color:transparent;}
+  .cmp-radar-dot{
+    transition: r 0.2s cubic-bezier(.3,.8,.4,1.4), stroke-width 0.2s ease, filter 0.2s ease;
+  }
+  .cmp-radar-dot.hovered{
+    r:6.5;
+    filter:drop-shadow(0 0 4px currentColor);
+  }
   @keyframes cmpPolyInA{ from{transform:scale(0.3);opacity:0;} to{transform:scale(1);opacity:1;} }
   @keyframes cmpPolyInB{ from{transform:scale(0.3);opacity:0;} to{transform:scale(1);opacity:1;} }
   .cmp-poly-a{transform-origin:140px 130px;animation:cmpPolyInA 0.5s cubic-bezier(.2,.9,.3,1.2) both;}
   .cmp-poly-b{transform-origin:140px 130px;animation:cmpPolyInB 0.5s cubic-bezier(.2,.9,.3,1.2) 0.12s both;}
   @media (prefers-reduced-motion: reduce){
     .cmp-poly-a, .cmp-poly-b{animation:none;}
+    .cmp-radar-dot{transition:none;}
+    .cmp-radar-wrap svg{transition:none;}
+    .cmp-radar-wrap:hover svg, .cmp-radar-wrap.touched svg{transform:none;}
   }
 
   /* ---------- DIVERGING BAR CHART ---------- */
@@ -1397,28 +1411,107 @@
   /* ---------- MATCHGRADE RADAR ---------- */
   .radar-wrap{
     border-top:1px dashed var(--line);
-    padding-top:16px;
+    padding-top:18px;
     margin-top:16px;
     text-align:center;
+    position:relative;
   }
   .radar-title{
     font-family:'Oswald',sans-serif;
-    font-size:0.68rem;
+    font-size:0.7rem;
     letter-spacing:0.6px;
     color:var(--ink-soft);
-    margin-bottom:10px;
+    margin-bottom:6px;
     text-align:left;
   }
-  .radar-wrap svg{max-width:280px;width:100%;height:auto;}
-  .radar-legend{
-    display:flex;
-    flex-wrap:wrap;
-    justify-content:center;
-    gap:8px 14px;
-    margin-top:8px;
+  .radar-hint{
     font-family:'Special Elite',monospace;
-    font-size:0.68rem;
+    font-size:0.64rem;
     color:var(--ink-soft);
+    opacity:0.75;
+    margin-top:8px;
+  }
+  .radar-wrap svg{max-width:340px;width:100%;height:auto;overflow:visible;touch-action:manipulation;transition:transform 0.35s cubic-bezier(.2,.8,.25,1);transform-origin:center center;margin-bottom:14px;}
+  .radar-wrap:hover svg, .radar-wrap.touched svg{transform:scale(1.08);}
+
+  /* ---------- FLUID HOVER MOTION ---------- */
+  /* The whole data shape breathes very slightly toward the cursor's
+     general area, dots grow and glow on hover/focus, and the polygon
+     stroke widens a touch — small, physical-feeling responses rather
+     than a flat tooltip snapping in with no other reaction. */
+  .radar-data-poly, .cmp-poly-a, .cmp-poly-b{
+    transition: stroke-width 0.25s ease, fill-opacity 0.25s ease, filter 0.25s ease;
+  }
+  .radar-wrap:hover .radar-data-poly,
+  .cmp-radar-wrap:hover .cmp-poly-a,
+  .cmp-radar-wrap:hover .cmp-poly-b{
+    fill-opacity:0.3;
+  }
+  .radar-dot, .cmp-radar-dot{
+    transition: r 0.2s cubic-bezier(.3,.8,.4,1.4), stroke-width 0.2s ease, filter 0.2s ease;
+  }
+  .radar-dot.hovered, .cmp-radar-dot.hovered{
+    r:7;
+    filter:drop-shadow(0 0 4px currentColor);
+  }
+  .radar-hit{
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+  }
+
+  .radar-tooltip{
+    position:absolute;
+    pointer-events:none;
+    transform:translate(-50%,-100%) translateY(4px);
+    background:var(--ink);
+    color:var(--paper);
+    font-family:'Oswald',sans-serif;
+    font-size:0.78rem;
+    white-space:nowrap;
+    padding:6px 11px;
+    border-radius:2px;
+    opacity:0;
+    transition: opacity 0.18s ease, transform 0.18s cubic-bezier(.2,.8,.3,1.2);
+    z-index:20;
+    top:0;
+    left:0;
+  }
+  .radar-tooltip.show{
+    opacity:1;
+    transform:translate(-50%,-100%) translateY(-4px);
+  }
+  .radar-tooltip b{color:var(--gold);font-weight:600;margin-left:5px;}
+  .radar-tooltip::after{
+    content:"";
+    position:absolute;
+    top:100%;
+    left:50%;
+    transform:translateX(-50%);
+    border:5px solid transparent;
+    border-top-color:var(--ink);
+  }
+
+  @keyframes radarPolyIn{
+    from{ transform:scale(0.3); opacity:0; }
+    to{ transform:scale(1); opacity:1; }
+  }
+  @keyframes radarDotIn{
+    from{ opacity:0; transform:scale(0); }
+    to{ opacity:1; transform:scale(1); }
+  }
+  .radar-data-poly{
+    transform-origin:140px 130px;
+    animation:radarPolyIn 0.55s cubic-bezier(.2,.9,.3,1.2) both;
+  }
+  .radar-dot{
+    transform-box:fill-box;
+    transform-origin:center;
+    animation:radarDotIn 0.4s ease both;
+  }
+  @media (prefers-reduced-motion: reduce){
+    .radar-data-poly, .radar-dot, .cmp-poly-a, .cmp-poly-b{ animation:none; transition:none; }
+    .radar-wrap svg{transition:none;}
+    .radar-wrap:hover svg, .radar-wrap.touched svg{transform:none;}
   }
 
   /* ---------- CUSTOM FORMULA MODE ---------- */
@@ -1877,10 +1970,11 @@
           <div id="bdList"></div>
         </div>
         <div class="formula-active-note" id="formulaActiveNote">Custom formula applied  this rating uses your weights, not the default MatchGrade formula.</div>
-        <div class="radar-wrap">
+        <div class="radar-wrap" id="radarWrap">
           <div class="radar-title">MATCHGRADE RADAR</div>
-          <svg id="radarSvg" viewBox="0 0 280 260"></svg>
-          <div class="radar-legend" id="radarLegend"></div>
+          <svg id="radarSvg" viewBox="0 0 280 265"></svg>
+          <div class="radar-tooltip" id="radarTooltip"></div>
+          <div class="radar-hint">tap or hover a point for its score</div>
         </div>
         <div class="tier-line" id="rTier"></div>
         <div class="share-card-actions">
@@ -3475,11 +3569,15 @@ function drawRadar(categories){
   const labels = Object.keys(categories);
   const values = Object.values(categories);
   const n = labels.length;
-  const cx = 140, cy = 120, maxR = 88;
+  const cx = 140, cy = 130, maxR = 100;
   const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#2F5233';
+  const goldColor = getComputedStyle(document.documentElement).getPropertyValue('--gold').trim() || '#B8933F';
   const lineColor = getComputedStyle(document.documentElement).getPropertyValue('--line').trim() || '#c9c3b2';
   const inkColor = getComputedStyle(document.documentElement).getPropertyValue('--ink').trim() || '#1B1B18';
-  const softColor = getComputedStyle(document.documentElement).getPropertyValue('--ink-soft').trim() || '#4A473F';
+  const paperColor = getComputedStyle(document.documentElement).getPropertyValue('--paper').trim() || '#EDEAE2';
+
+  const overallAvg = values.reduce((a,b)=>a+b,0) / values.length;
+  const peakColor = overallAvg >= 7.3 ? goldColor : accentColor;
 
   function pointFor(i, value, radius){
     const angle = (Math.PI * 2 * i / n) - Math.PI/2;
@@ -3487,8 +3585,23 @@ function drawRadar(categories){
     return [cx + r*Math.cos(angle), cy + r*Math.sin(angle)];
   }
 
+  const uid = 'radarGrad' + Math.random().toString(36).slice(2,8);
+  const defs = `<defs>
+    <radialGradient id="${uid}" cx="50%" cy="50%" r="65%">
+      <stop offset="0%" stop-color="${peakColor}" stop-opacity="0.42"/>
+      <stop offset="100%" stop-color="${peakColor}" stop-opacity="0.10"/>
+    </radialGradient>
+    <filter id="${uid}-glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="3.2" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>`;
+
   let rings = '';
-  [0.25,0.5,0.75,1].forEach(f=>{
+  [1,0.75,0.5,0.25].forEach((f,idx)=>{
     const pts = labels.map((_,i)=>pointFor(i,10*f,maxR).join(',')).join(' ');
     rings += `<polygon points="${pts}" fill="none" stroke="${lineColor}" stroke-width="1"/>`;
   });
@@ -3498,23 +3611,82 @@ function drawRadar(categories){
   labels.forEach((lab,i)=>{
     const [x,y] = pointFor(i,10,maxR);
     spokes += `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="${lineColor}" stroke-width="1"/>`;
-    const [lx,ly] = pointFor(i,12.4,maxR);
-    labelSvg += `<text x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="middle" font-family="Special Elite,monospace" font-size="9" fill="${softColor}">${esc(lab)}</text>`;
+    const [lx,ly] = pointFor(i,13.2,maxR);
+    labelSvg += `<text x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="middle" font-family="Oswald,sans-serif" font-weight="500" font-size="10.5" fill="${inkColor}">${esc(lab)}</text>`;
   });
 
   const dataPts = labels.map((lab,i)=>pointFor(i, values[i], maxR).join(',')).join(' ');
-  const dataPoly = `<polygon points="${dataPts}" fill="${accentColor}" fill-opacity="0.22" stroke="${accentColor}" stroke-width="2"/>`;
+  const dataPoly = `<polygon class="radar-data-poly" points="${dataPts}" fill="url(#${uid})" stroke="${peakColor}" stroke-width="2.5" stroke-linejoin="round" filter="url(#${uid}-glow)"/>`;
 
   let dots = '';
+  let hitTargets = '';
   labels.forEach((lab,i)=>{
     const [x,y] = pointFor(i, values[i], maxR);
-    dots += `<circle cx="${x}" cy="${y}" r="3" fill="${accentColor}"/>`;
+    const delay = (i * 0.05).toFixed(2);
+    const dotId = `${uid}-dot-${i}`;
+    dots += `<circle class="radar-dot" id="${dotId}" cx="${x}" cy="${y}" r="4.5" fill="${paperColor}" stroke="${peakColor}" stroke-width="2.5" style="animation-delay:${delay}s;color:${peakColor};"/>`;
+    // Larger invisible circle on top for an actually tappable/hoverable
+    // target; paired to its visible dot by id so hover can grow just that dot.
+    hitTargets += `<circle class="radar-hit" cx="${x}" cy="${y}" r="16" fill="transparent" data-dot="${dotId}" data-label="${esc(lab)}" data-value="${values[i].toFixed(1)}"/>`;
   });
 
-  svg.innerHTML = rings + spokes + dataPoly + dots + labelSvg;
+  const centerDot = `<circle cx="${cx}" cy="${cy}" r="2" fill="${lineColor}"/>`;
 
-  const legend = document.getElementById('radarLegend');
-  legend.innerHTML = labels.map((lab,i)=>`<span>${esc(lab)}: ${values[i].toFixed(1)}</span>`).join('');
+  svg.setAttribute('viewBox', '0 0 280 265');
+  svg.innerHTML = defs + rings + spokes + centerDot + dataPoly + dots + labelSvg + hitTargets;
+
+  attachRadarTooltipEvents(svg);
+}
+
+/* Tooltip + fluid hover on the calculator radar. Hovering or tapping a
+   point grows that exact dot (via its paired id) and eases the tooltip
+   in with a slight upward drift, rather than a flat instant snap. */
+function attachRadarTooltipEvents(svg){
+  const wrap = document.getElementById('radarWrap');
+  const tooltip = document.getElementById('radarTooltip');
+  if(!wrap || !tooltip) return;
+
+  function showTooltip(target){
+    const label = target.dataset.label;
+    const value = target.dataset.value;
+    tooltip.innerHTML = `${esc(label)}<b>${esc(value)}</b>`;
+    const wrapRect = wrap.getBoundingClientRect();
+    const targetRect = target.getBoundingClientRect();
+    const x = targetRect.left + targetRect.width/2 - wrapRect.left;
+    const y = targetRect.top - wrapRect.top - 8;
+    tooltip.style.left = x + 'px';
+    tooltip.style.top = y + 'px';
+    tooltip.classList.add('show');
+
+    const dot = document.getElementById(target.dataset.dot);
+    if(dot) dot.classList.add('hovered');
+  }
+  function hideTooltip(target){
+    tooltip.classList.remove('show');
+    if(target){
+      const dot = document.getElementById(target.dataset.dot);
+      if(dot) dot.classList.remove('hovered');
+    } else {
+      svg.querySelectorAll('.radar-dot.hovered').forEach(d=>d.classList.remove('hovered'));
+    }
+  }
+
+  svg.querySelectorAll('.radar-hit').forEach(hit=>{
+    hit.addEventListener('pointerenter', ()=>showTooltip(hit));
+    hit.addEventListener('pointerleave', ()=>hideTooltip(hit));
+    hit.addEventListener('pointerdown', (e)=>{
+      e.stopPropagation();
+      showTooltip(hit);
+      wrap.classList.add('touched');
+    });
+  });
+
+  if(!wrap.dataset.dismissBound){
+    wrap.dataset.dismissBound = '1';
+    document.addEventListener('pointerdown', (e)=>{
+      if(!wrap.contains(e.target)){ hideTooltip(null); wrap.classList.remove('touched'); }
+    });
+  }
 }
 
 /* =========================================================
@@ -4156,14 +4328,17 @@ function drawComparisonRadar(breakdownA, breakdownB, nameA, nameB){
   const polyA = `<polygon class="cmp-poly-a" points="${ptsA}" fill="${colorA}" fill-opacity="0.20" stroke="${colorA}" stroke-width="2.5"/>`;
   const polyB = `<polygon class="cmp-poly-b" points="${ptsB}" fill="${colorB}" fill-opacity="0.16" stroke="${colorB}" stroke-width="2.5" stroke-dasharray="5 3"/>`;
 
+  const uid = 'cmpRadar' + Math.random().toString(36).slice(2,8);
   let dotsA = '', dotsB = '', hits = '';
   labels.forEach((lab,i)=>{
     const [xa,ya] = pointFor(i, valuesA[i], maxR);
     const [xb,yb] = pointFor(i, valuesB[i], maxR);
-    dotsA += `<circle cx="${xa}" cy="${ya}" r="4" fill="${paperColor}" stroke="${colorA}" stroke-width="2.5"/>`;
-    dotsB += `<circle cx="${xb}" cy="${yb}" r="4" fill="${paperColor}" stroke="${colorB}" stroke-width="2.5"/>`;
-    hits += `<circle class="cmp-radar-hit" cx="${xa}" cy="${ya}" r="14" fill="transparent" data-label="${esc(nameA)} · ${esc(lab)}" data-value="${valuesA[i].toFixed(1)}"/>`;
-    hits += `<circle class="cmp-radar-hit" cx="${xb}" cy="${yb}" r="14" fill="transparent" data-label="${esc(nameB)} · ${esc(lab)}" data-value="${valuesB[i].toFixed(1)}"/>`;
+    const dotIdA = `${uid}-a-${i}`;
+    const dotIdB = `${uid}-b-${i}`;
+    dotsA += `<circle class="cmp-radar-dot" id="${dotIdA}" cx="${xa}" cy="${ya}" r="4" fill="${paperColor}" stroke="${colorA}" stroke-width="2.5" style="color:${colorA};"/>`;
+    dotsB += `<circle class="cmp-radar-dot" id="${dotIdB}" cx="${xb}" cy="${yb}" r="4" fill="${paperColor}" stroke="${colorB}" stroke-width="2.5" style="color:${colorB};"/>`;
+    hits += `<circle class="cmp-radar-hit" cx="${xa}" cy="${ya}" r="14" fill="transparent" data-dot="${dotIdA}" data-label="${esc(nameA)} · ${esc(lab)}" data-value="${valuesA[i].toFixed(1)}"/>`;
+    hits += `<circle class="cmp-radar-hit" cx="${xb}" cy="${yb}" r="14" fill="transparent" data-dot="${dotIdB}" data-label="${esc(nameB)} · ${esc(lab)}" data-value="${valuesB[i].toFixed(1)}"/>`;
   });
 
   const centerDot = `<circle cx="${cx}" cy="${cy}" r="2" fill="${lineColor}"/>`;
@@ -4194,19 +4369,34 @@ function attachCmpRadarTooltipEvents(svg){
     tooltip.style.left = x + 'px';
     tooltip.style.top = y + 'px';
     tooltip.classList.add('show');
+
+    const dot = document.getElementById(target.dataset.dot);
+    if(dot) dot.classList.add('hovered');
   }
-  function hideTooltip(){ tooltip.classList.remove('show'); }
+  function hideTooltip(target){
+    tooltip.classList.remove('show');
+    if(target){
+      const dot = document.getElementById(target.dataset.dot);
+      if(dot) dot.classList.remove('hovered');
+    } else {
+      svg.querySelectorAll('.cmp-radar-dot.hovered').forEach(d=>d.classList.remove('hovered'));
+    }
+  }
 
   svg.querySelectorAll('.cmp-radar-hit').forEach(hit=>{
     hit.addEventListener('pointerenter', ()=>showTooltip(hit));
-    hit.addEventListener('pointerleave', hideTooltip);
-    hit.addEventListener('pointerdown', (e)=>{ e.stopPropagation(); showTooltip(hit); });
+    hit.addEventListener('pointerleave', ()=>hideTooltip(hit));
+    hit.addEventListener('pointerdown', (e)=>{
+      e.stopPropagation();
+      showTooltip(hit);
+      wrap.classList.add('touched');
+    });
   });
 
   if(!wrap.dataset.dismissBound){
     wrap.dataset.dismissBound = '1';
     document.addEventListener('pointerdown', (e)=>{
-      if(!wrap.contains(e.target)) hideTooltip();
+      if(!wrap.contains(e.target)){ hideTooltip(null); wrap.classList.remove('touched'); }
     });
   }
 }
