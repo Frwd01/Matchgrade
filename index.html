@@ -10,12 +10,12 @@
 <title>Player Rating Calculator — Soccer & Cricket Stats to a Score Out of 10</title>
 <meta name="description" content="Enter match stats — goals, assists, runs, wickets — and get an honest player rating out of 10, calculated per position or role. Free tool for soccer and cricket.">
 <meta name="keywords" content="player rating calculator, football rating out of 10, cricket player rating, match rating generator, soccer stats calculator">
-<link rel="canonical" href="https://matchgrade.netlify.app/">
+<link rel="canonical" href="https://matchgrade.inolt.workers.dev/">
 
 <meta property="og:title" content="MatchGrade  Rate Any Player's Performance">
 <meta property="og:description" content="Turn match stats into an honest rating out of 10, for soccer or cricket.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://matchgrade.netlify.app/">
+<meta property="og:url" content="https://matchgrade.inolt.workers.dev/">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MatchGrade  Rate Any Player's Performance">
 <meta name="twitter:description" content="Stat sheet in, honest rating out. Soccer and cricket.">
@@ -864,8 +864,16 @@
     margin-top:20px;
     text-align:center;
     position:relative;
+    -webkit-user-select:none !important;
+    user-select:none !important;
+    -webkit-touch-callout:none !important;
   }
-  .cmp-radar-wrap svg{max-width:340px;width:100%;height:auto;overflow:visible;touch-action:manipulation;transition:transform 0.35s cubic-bezier(.2,.8,.25,1);transform-origin:center center;margin-bottom:14px;}
+  .cmp-radar-wrap, .cmp-radar-wrap *{
+    -webkit-user-select:none !important;
+    user-select:none !important;
+    -webkit-touch-callout:none !important;
+  }
+  .cmp-radar-wrap svg{max-width:340px;width:100%;height:auto;overflow:visible;touch-action:manipulation;transition:transform 0.35s cubic-bezier(.2,.8,.25,1);transform-origin:center center;margin-bottom:14px;-webkit-user-select:none !important;user-select:none !important;-webkit-touch-callout:none !important;}
   .cmp-radar-wrap:hover svg, .cmp-radar-wrap.touched svg{transform:scale(1.08);}
   .cmp-radar-legend{
     display:flex;
@@ -893,6 +901,9 @@
     z-index:20;
     top:0;
     left:0;
+    -webkit-user-select:none !important;
+    user-select:none !important;
+    -webkit-touch-callout:none !important;
   }
   .cmp-radar-tooltip.show{
     opacity:1;
@@ -907,7 +918,7 @@
     border:5px solid transparent;
     border-top-color:var(--ink);
   }
-  .cmp-radar-hit{cursor:pointer;-webkit-tap-highlight-color:transparent;}
+  .cmp-radar-hit{cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:none;}
   .cmp-radar-dot{
     transition: r 0.2s cubic-bezier(.3,.8,.4,1.4), stroke-width 0.2s ease, filter 0.2s ease;
   }
@@ -1415,6 +1426,14 @@
     margin-top:16px;
     text-align:center;
     position:relative;
+    -webkit-user-select:none !important;
+    user-select:none !important;
+    -webkit-touch-callout:none !important;
+  }
+  .radar-wrap, .radar-wrap *{
+    -webkit-user-select:none !important;
+    user-select:none !important;
+    -webkit-touch-callout:none !important;
   }
   .radar-title{
     font-family:'Oswald',sans-serif;
@@ -1431,7 +1450,7 @@
     opacity:0.75;
     margin-top:8px;
   }
-  .radar-wrap svg{max-width:340px;width:100%;height:auto;overflow:visible;touch-action:manipulation;transition:transform 0.35s cubic-bezier(.2,.8,.25,1);transform-origin:center center;margin-bottom:14px;}
+  .radar-wrap svg{max-width:340px;width:100%;height:auto;overflow:visible;touch-action:manipulation;transition:transform 0.35s cubic-bezier(.2,.8,.25,1);transform-origin:center center;margin-bottom:14px;-webkit-user-select:none !important;user-select:none !important;-webkit-touch-callout:none !important;}
   .radar-wrap:hover svg, .radar-wrap.touched svg{transform:scale(1.08);}
 
   /* ---------- FLUID HOVER MOTION ---------- */
@@ -1457,6 +1476,7 @@
   .radar-hit{
     cursor:pointer;
     -webkit-tap-highlight-color:transparent;
+    touch-action:none;
   }
 
   .radar-tooltip{
@@ -1475,6 +1495,9 @@
     z-index:20;
     top:0;
     left:0;
+    -webkit-user-select:none !important;
+    user-select:none !important;
+    -webkit-touch-callout:none !important;
   }
   .radar-tooltip.show{
     opacity:1;
@@ -3675,9 +3698,21 @@ function attachRadarTooltipEvents(svg){
     hit.addEventListener('pointerenter', ()=>showTooltip(hit));
     hit.addEventListener('pointerleave', ()=>hideTooltip(hit));
     hit.addEventListener('pointerdown', (e)=>{
+      e.preventDefault();
       e.stopPropagation();
       showTooltip(hit);
       wrap.classList.add('touched');
+    });
+    // iOS: must preventDefault on touchstart (non-passive) to block long-press callout/selection
+    hit.addEventListener('touchstart', (e)=>{
+      e.preventDefault();
+      e.stopPropagation();
+      showTooltip(hit);
+      wrap.classList.add('touched');
+    }, {passive: false});
+    hit.addEventListener('contextmenu', (e)=>{
+      e.preventDefault();
+      e.stopPropagation();
     });
   });
 
@@ -3686,6 +3721,8 @@ function attachRadarTooltipEvents(svg){
     document.addEventListener('pointerdown', (e)=>{
       if(!wrap.contains(e.target)){ hideTooltip(null); wrap.classList.remove('touched'); }
     });
+    wrap.addEventListener('contextmenu', (e)=>{ e.preventDefault(); });
+    wrap.addEventListener('selectstart', (e)=>{ e.preventDefault(); });
   }
 }
 
@@ -4387,9 +4424,21 @@ function attachCmpRadarTooltipEvents(svg){
     hit.addEventListener('pointerenter', ()=>showTooltip(hit));
     hit.addEventListener('pointerleave', ()=>hideTooltip(hit));
     hit.addEventListener('pointerdown', (e)=>{
+      e.preventDefault();
       e.stopPropagation();
       showTooltip(hit);
       wrap.classList.add('touched');
+    });
+    // iOS: must preventDefault on touchstart (non-passive) to block long-press callout/selection
+    hit.addEventListener('touchstart', (e)=>{
+      e.preventDefault();
+      e.stopPropagation();
+      showTooltip(hit);
+      wrap.classList.add('touched');
+    }, {passive: false});
+    hit.addEventListener('contextmenu', (e)=>{
+      e.preventDefault();
+      e.stopPropagation();
     });
   });
 
@@ -4398,6 +4447,8 @@ function attachCmpRadarTooltipEvents(svg){
     document.addEventListener('pointerdown', (e)=>{
       if(!wrap.contains(e.target)){ hideTooltip(null); wrap.classList.remove('touched'); }
     });
+    wrap.addEventListener('contextmenu', (e)=>{ e.preventDefault(); });
+    wrap.addEventListener('selectstart', (e)=>{ e.preventDefault(); });
   }
 }
 
