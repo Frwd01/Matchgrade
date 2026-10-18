@@ -1,0 +1,5 @@
+[[redirects]]
+  from = "/*"
+  to = "https://matchgrade.inolt.workers.dev/:splat"
+  status = 301
+  force = true
