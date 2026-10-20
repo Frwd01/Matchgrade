@@ -4,13 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>How Player Ratings Work — The Method Behind MatchGrade's Scores</title>
-<meta name="description" content="A deep dive into how MatchGrade calculates player ratings out of 10 for soccer, basketball, and cricket — the 6.0 baseline, position weighting, and context modifiers explained.">
+<meta name="description" content="A deep dive into how MatchGrade calculates player ratings out of 10 for soccer and cricket — the 6.0 baseline, position weighting, and context modifiers explained.">
 <meta name="keywords" content="how player ratings work, how are match ratings calculated, player rating methodology, sports rating algorithm explained">
-<link rel="canonical" href="https://matchgrade.inolt.workers.dev/how-player-ratings-work.html">
+<link rel="canonical" href="https://matchgrade.inolt.workers.dev/how-player-ratings-work">
 <meta property="og:title" content="How Player Ratings Work — MatchGrade">
 <meta property="og:description" content="The methodology behind MatchGrade's transparent, position-weighted player ratings.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://matchgrade.inolt.workers.dev/soccer-player-rating-calculator">
+<meta property="og:url" content="https://matchgrade.inolt.workers.dev/how-player-ratings-work">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -18,7 +18,7 @@
   "mainEntity": [
     {"@type":"Question","name":"Why does every rating start at 6.0?","acceptedAnswer":{"@type":"Answer","text":"A 6.0 baseline is the standard starting point used by many professional match-rating services. It represents a neutral, anonymous performance where a player did their job without standing out positively or negatively in either direction."}},
     {"@type":"Question","name":"Why do different positions get different stat weightings?","acceptedAnswer":{"@type":"Answer","text":"Because the same raw stat means something different depending on role. Ten tackles is an excellent game for a full-back and a strange stat line for a striker. Weighting by position keeps the rating meaningful across every role on the pitch or court."}},
-    {"@type":"Question","name":"What happens with a short substitute appearance?","acceptedAnswer":{"@type":"Answer","text":"Stats are scaled to a full-match equivalent (90 minutes for soccer, 32 for basketball) so a 20-minute cameo is judged fairly. Very short appearances are also pulled gently back toward the neutral 6.0 baseline, since a handful of minutes isn't enough to fully judge a performance."}},
+    {"@type":"Question","name":"What happens with a short substitute appearance?","acceptedAnswer":{"@type":"Answer","text":"Stats are scaled to a full-match equivalent (90 minutes for soccer) so a 20-minute cameo is judged fairly. Very short appearances are also pulled gently back toward the neutral 6.0 baseline, since a handful of minutes isn't enough to fully judge a performance."}},
     {"@type":"Question","name":"Is this the same formula WhoScored or SofaScore use?","acceptedAnswer":{"@type":"Answer","text":"MatchGrade uses a similar 6.0 baseline philosophy but is an independent, transparent implementation. It is not affiliated with any major data provider, and the full calculation is visible in the breakdown rather than hidden behind a proprietary score."}}
   ]
 }
@@ -104,16 +104,15 @@ table.stat-table td:first-child, table.stat-table th:first-child{color:var(--ink
   <div class="section">
     <h2>Related pages</h2>
     <div class="pagelinks">
-      <a href="/">Home — all three sports</a>
+      <a href="/">Home — soccer and cricket</a>
       <a href="/soccer-player-rating-calculator">Soccer player rating calculator</a>
-      <a href="/football-player-rating-calculator">Football player rating calculator</a>
-      <a href="/basketball-player-rating-calculator">Basketball player rating calculator</a>
+      <a href="/soccer-player-rating-calculator">Soccer (football) player rating calculator</a>
       <a href="/cricket-player-rating-calculator">Cricket player rating calculator</a>
     </div>
   </div>
 
   <div class="footnote">
-    <a href="/">MatchGrade</a> — free player rating calculator for soccer, basketball, and cricket.
+    <a href="/">MatchGrade</a> — free player rating calculator for soccer and cricket.
   </div>
 </div>
 </body>

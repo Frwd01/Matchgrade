@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Soccer Player Rating Calculator — Rate Any Football Performance Out of 10</title>
-<meta name="description" content="Free soccer player rating calculator. Enter goals, tackles, passes and key stats and get a position-specific rating out of 10 — for goalkeepers, defenders, midfielders, and forwards.">
+<title>Soccer (Football) Rating Calculator: Match Rating Out of 10 | MatchGrade</title>
+<meta name="description" content="Free soccer (football) rating calculator and match rating calculator. Enter goals, tackles, passes and key stats to get a position-specific soccer rating out of 10.">
 <meta name="keywords" content="soccer player rating calculator, football player rating calculator, soccer rating out of 10, player rating soccer game">
 <link rel="canonical" href="https://matchgrade.inolt.workers.dev/soccer-player-rating-calculator">
-<meta property="og:title" content="Soccer Player Rating Calculator — MatchGrade">
+<meta property="og:title" content="Soccer (Football) Rating Calculator — MatchGrade">
 <meta property="og:description" content="Turn a soccer stat line into an honest rating out of 10, weighted by position.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://matchgrade.inolt.workers.dev/soccer-player-rating-calculator">
@@ -19,6 +19,8 @@
     {"@type":"Question","name":"How is a soccer player rating out of 10 calculated?","acceptedAnswer":{"@type":"Answer","text":"MatchGrade starts every player at a 6.0 baseline, representing an anonymous, did-their-job performance. The score then moves up or down based on stats compared to what is typical for that position — tackles and clearances for defenders, key passes and goals for attackers — plus context like goals conceded, cards, and result."}},
     {"@type":"Question","name":"What stats do I need to rate a soccer player?","acceptedAnswer":{"@type":"Answer","text":"It depends on position. Goalkeepers need saves and shots faced. Defenders need tackles, interceptions, and clearances. Midfielders need pass accuracy and key passes. Forwards need goals, assists, and shots on target. MatchGrade only asks for stats relevant to the selected position."}},
     {"@type":"Question","name":"Does a soccer rating calculator account for minutes played?","acceptedAnswer":{"@type":"Answer","text":"Yes. Stats are scaled to a 90-minute equivalent so a player coming on for 20 minutes isn't unfairly punished for having fewer total actions than someone who played the full match. Very short cameos are also pulled gently back toward the neutral 6.0 baseline."}},
+    {"@type":"Question","name":"What is a good soccer or football player rating?","acceptedAnswer":{"@type":"Answer","text":"On a 10-point scale, 6.0 is a neutral, did-their-job performance. Ratings of 7.0 to 7.9 are very good, 8.0 and above are excellent or match-winning, and anything below 5.5 reflects a performance that hurt the team."}},
+    {"@type":"Question","name":"Can this calculator be used for youth or amateur football?","acceptedAnswer":{"@type":"Answer","text":"Yes. It works for any level of football, professional, amateur, school or five-a-side. It only needs the stats from the match, not any league-specific data."}},
     {"@type":"Question","name":"Can I rate goalkeepers with this calculator?","acceptedAnswer":{"@type":"Answer","text":"Yes. Goalkeepers use a separate model based on save ratio (saves divided by shots faced), clean sheets, crosses claimed, and penalty saves, rather than the outfield stats used for other positions."}}
   ]
 }
@@ -74,11 +76,11 @@ table.stat-table td:first-child, table.stat-table th:first-child{color:var(--ink
     <h1><a href="/" style="color:inherit;text-decoration:none;">Match<span>Grade</span></a></h1>
     <div class="tagline">stat sheet in, honest number out</div>
   </div>
-  <div class="breadcrumb"><a href="/">Home</a> / Soccer player rating calculator</div>
+  <div class="breadcrumb"><a href="/">Home</a> / Soccer (football) player rating calculator</div>
 
   <div class="hero">
-    <h2>Soccer player rating calculator</h2>
-    <p>Turn a match stat line into an honest rating out of 10. Every soccer position — goalkeeper, centre-back, full-back, defensive mid, central mid, attacking mid, winger, striker — has its own scoring model, because ten tackles means something different for a full-back than for a striker.</p>
+    <h2>Soccer (football) player rating calculator</h2>
+    <p>MatchGrade is a free match rating calculator for soccer, also known as football. Turn a match stat line into an honest soccer rating out of 10. Every position — goalkeeper, centre-back, full-back, defensive mid, central mid, attacking mid, winger, striker — has its own scoring model, because ten tackles means something different for a full-back than for a striker.</p>
     <p>Enter the numbers from the game and MatchGrade shows exactly which stats pushed the rating up or down, so the score is never a black box.</p>
   </div>
 
@@ -105,6 +107,11 @@ table.stat-table td:first-child, table.stat-table th:first-child{color:var(--ink
       <tr><td>Striker</td><td>Goals, assists, shots on target, touches in the box, shot conversion</td></tr>
     </table>
 
+    <h3>Football or soccer: same calculator</h3>
+    <p>Football is the standard name for the sport outside North America, and this page covers both names. The position weighting, the 6.0 baseline and the stat inputs are identical whichever term you search for, and it works for professional, amateur, school and five-a-side matches.</p>
+    <h3>What makes a rating go up or down</h3>
+    <p>Positive contributions include goals, assists, key passes, successful dribbles, tackles won, interceptions, clean sheets and strong pass accuracy for the position. Negative contributions include goals conceded (weighted more heavily for defensive positions), errors leading to a goal, yellow and red cards, and frequently being dispossessed in advanced positions.</p>
+
     <h3>Worked example</h3>
     <p>A striker plays the full 90 minutes, scores two goals, records one assist, and takes four shots with three on target. Starting from 6.0, the two goals add roughly 2.1 points using diminishing returns per goal, the assist adds around 0.9, and the shot accuracy adds a small bonus for conversion — landing the final rating around 8.6 to 9.0, in the "excellent" tier. A defender with three tackles, two interceptions, and a clean sheet in a 1-0 win would land closer to 7.2 to 7.6 — solidly "very good" without the ceiling a goal-scoring game gives an attacker.</p>
   </div>
@@ -115,20 +122,21 @@ table.stat-table td:first-child, table.stat-table th:first-child{color:var(--ink
     <div class="faq-item"><h3>What stats do I need to rate a soccer player?</h3><p>It depends on position. Goalkeepers need saves and shots faced. Defenders need tackles, interceptions, and clearances. Midfielders need pass accuracy and key passes. Forwards need goals, assists, and shots on target.</p></div>
     <div class="faq-item"><h3>Does the calculator account for minutes played?</h3><p>Yes. Stats are scaled to a 90-minute equivalent so a player coming on as a substitute isn't unfairly judged for having fewer total actions. Very short cameos are pulled gently back toward the neutral 6.0 baseline.</p></div>
     <div class="faq-item"><h3>Can I rate goalkeepers with this calculator?</h3><p>Yes. Goalkeepers use a save-ratio model (saves divided by shots faced) plus clean sheets, crosses claimed, and penalty saves, instead of the outfield stats used for other positions.</p></div>
+    <div class="faq-item"><h3>What is a good soccer or football player rating?</h3><p>On a 10-point scale, 6.0 is a neutral, did-their-job performance. Ratings of 7.0 to 7.9 are very good, 8.0 and above are excellent or match-winning, and anything below 5.5 reflects a performance that hurt the team.</p></div>
+    <div class="faq-item"><h3>Can this calculator be used for youth or amateur football?</h3><p>Yes. It works for any level of football, professional, amateur, school or five-a-side. It only needs the stats from the match, not any league-specific data.</p></div>
   </div>
 
   <div class="section">
     <h2>Related pages</h2>
     <div class="pagelinks">
-      <a href="/">Home — all three sports</a>
-      <a href="/basketball-player-rating-calculator">Basketball player rating calculator</a>
+      <a href="/">Home — soccer and cricket</a>
       <a href="/cricket-player-rating-calculator">Cricket player rating calculator</a>
       <a href="/how-player-ratings-work">How player ratings work</a>
     </div>
   </div>
 
   <div class="footnote">
-    <a href="/">MatchGrade</a> — free player rating calculator for soccer, basketball, and cricket.
+    <a href="/">MatchGrade</a> — free player rating calculator for soccer and cricket.
   </div>
 </div>
 </body>
